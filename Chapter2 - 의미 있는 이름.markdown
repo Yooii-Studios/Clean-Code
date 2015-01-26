@@ -54,13 +54,13 @@ Complex fulcrumPoint = Conplex.FromRealNumber(23.0);
 
 - 기발한 이름은 피하라  
  - 특정 문화에서만 사용되는 재미있는 이름보다 의도를 분명히 표현하는 이름을 사용하라  
-HolyHandGrenade → DeleteItems  
-whack() → kill()  
+     - HolyHandGrenade → DeleteItems  
+     - whack() → kill()  
 
 - 한 개념에 한 단어를 사용하라  
  - 추상적인 개념 하나에 단어 하나를 사용하자.  
-fetch, retrieve, get  
-controller, manager, driver  
+     - fetch, retrieve, get  
+     - controller, manager, driver  
 
 - 말장난을 하지 마라(위 11과 같이 보기)  
  - 한 단어를 두 가지 목적으로 사용하지 말자. 아래와 같은 경우에는 ii를 append 혹은 insert로 바꾸는게 옳겠다.
