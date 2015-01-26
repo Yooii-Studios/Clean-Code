@@ -9,13 +9,12 @@
 
 3. 의미있게 구분하라(불용어-noise word-를 쓰지 말자)  
  - 말이 안되는 단어(한 글자만 바꾼다던지 한 단어), [a1, a2, …]과 같이 숫자로 구분하는 경우 주의  
- - 클래스 이름에 Info, Data와 같은 불용어를 붙이지 말자. 정확한 개념 구분이 되지 않음.
-예시  
-
-Name VS NameString  
-getActiveAccount() VS getActiveAccounts() vs getActiveAccountInfo()  
-money VS moneyAmount  
-message VS theMessage  
+ - 클래스 이름에 Info, Data와 같은 불용어를 붙이지 말자. 정확한 개념 구분이 되지 않음  
+ - 예시  
+    - Name VS NameString  
+    - getActiveAccount() VS getActiveAccounts() vs getActiveAccountInfo()  
+    - money VS moneyAmount  
+    - message VS theMessage  
 
 4. 발음하기 쉬운 이름을 사용하라  
 
