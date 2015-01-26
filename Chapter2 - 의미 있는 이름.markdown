@@ -45,10 +45,10 @@
 - 메서드 이름  
  - 동사 혹은 동사구를 사용하라.(postPayment, deletePayment, deletePage, save 등)  
  - 접근자, 변경자, 조건자는 get, set, is로 시작하자.  
- - 생성자를 오버로드할 경우 정적 팩토리 메서드를 사용하고 해당 생성자를 private으로 선언한다. 아래 i보다 ii가 더 좋은 방법이다.  
+ - 생성자를 오버로드할 경우 정적 팩토리 메서드를 사용하고 해당 생성자를 private으로 선언한다. 첫번째 보다 두 번째 방법이 더 좋다.
 
 ````java 
-Complex fulcrumPoint = new Conplex(23.0);  
+Complex fulcrumPoint = new Complex(23.0);  
 Complex fulcrumPoint = Conplex.FromRealNumber(23.0);  
 ````
 
