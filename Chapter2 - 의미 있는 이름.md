@@ -1,6 +1,41 @@
 - 의도를 분명히 밝혀라  
  - 변수의 존재 이유, 기능, 사용법 등이 변수/함수/클래스명에 드러나야 한다. 따로 주석이 필요하지 않을 정도로.  
  - 의미를 함축하거나 독자(코드를 읽는 사람)가 사전지식을 가지고 있다고 가정하지 말자.
+ - 예시 1
+     - Bad
+       - int d; // elapsed time in days
+     - Good
+       - int elapsedTimeInDays;
+       - int daysSinceCreation;
+       - int daysSinceModification;
+       - int fileAgeInDays;
+ - 예시 2
+
+````java
+// Bad
+public List<int[]> getThem() {
+    List<int[]> list1 = new ArrayList<int[]>();
+    for (int[] x : theList) {
+        if (x[0] == 4) {
+            list1.add(x);
+        }
+    }
+    return list1;
+}
+````
+ 
+````java
+// Good
+public List<int[]> getFlaggedCells() {
+    List<int[]> flaggedCells = new ArrayList<int[]>();
+    for (int[] cell : gameBoard) {
+        if (cell[STATUS_VALUE] == FLAGGED) {
+            flaggedCells.add(cell);
+        }
+    }
+    return flaggedCells;
+}
+````
 
 - 그릇된 정보를 피하라  
  - 중의적으로 해석될 수 있는 이름 지양하기.  
@@ -17,6 +52,26 @@
     - `message` VS `theMessage`
 
 - 발음하기 쉬운 이름을 사용하라  
+
+````java
+// Bad
+class DtaRcrd102 {
+    private Date genymdhms;
+    private Date modymdhms;
+    private final String pszqint = "102";
+    /* ... */
+};
+````
+ 
+````java
+// Good
+class Customer {
+    private Date generationTimestamp;
+    private Date modificationTimestamp;
+    private final String recordId = "102";
+    /* ... */
+};
+````
 
 - 검색하기 쉬운 이름을 사용하라  
  - 상수는 static final과 같이 정의해 쓰자.  
@@ -80,8 +135,8 @@ public List<Element> add(Element element)
  - 클래스, 함수, namespace등으로 감싸서 맥락(Context)을 표현하라  
  - 그래도 불분명하다면 접두어를 사용하자.  
 
-bad
 ````java
+// Bad
 private void printGuessStatistics(char candidate, int count) {
     String number;
     String verb;
@@ -101,8 +156,8 @@ private void printGuessStatistics(char candidate, int count) {
 }
 ````
 
-good
 ````java
+// Good
 public class GuessStatisticsMessage {
     private String number;
     private String verb;
