@@ -81,9 +81,9 @@ switch문은 작게 만들기 어렵지만(if/else의 연속 도 마찬가지!),
 
 많이 쓰는 단항 형식
 인수에 질문을 던지는 경우
-boolean fileExists(“MyFile”);
+`boolean fileExists(“MyFile”);`
 인수를 뭔가로 변환해 결과를 변환하는 경우
-InputStream fileOpen(“MyFile”);
+`InputStream fileOpen(“MyFile”);`
 이벤트 함수일 경우
 이 경우에는 이벤트라는 사실이 코드에 명확하게 드러나야 한다.
 위의 3가지가 아니라면 단항 함수는 가급적 피하는 것이 좋다.
@@ -95,7 +95,7 @@ InputStream fileOpen(“MyFile”);
 단항 함수보다 이해하기가 어렵다.
 Point 클래스의 경우에는 이항 함수가 적절하다.
 2개의 인수간의 자연적인 순서가 있어야함 
-Point p = new Point(x,y);
+`Point p = new Point(x,y);`
 무조건 나쁜 것은 아니지만, 인수가 2개이니 만큼 이해가 어렵고 위험이 따르므로 가능하면 단항으로 바꾸도록
 
 삼항 함수
@@ -112,9 +112,9 @@ String.format의 인수는 List형 인수이기 때문에 이항함수라고 할
 
 동사와 키워드
 단항 함수는 함수와 인수가 동사/명사 쌍을 이뤄야한다.
-writeField(name);
+`writeField(name);`
 함수이름에 키워드(인수 이름)을 추가하면 인수 순서를 기억할 필요가 없어진다.
-assertExpectedEqualsActual(expected, actual);
+`assertExpectedEqualsActual(expected, actual);`
 
 
 
@@ -131,9 +131,8 @@ assertExpectedEqualsActual(expected, actual);
 명령과 조회를 분리하라
 
 함수는 뭔가 객체 상태를 변경하거나, 객체 정보를 반환하거나 둘중 하나다. 둘다 수행해서는 안된다.
-public boolean set(String attribute, String value);같은 경우에는 속성 값 설정 성공 시 true를 반환하므로 괴상한 코드가 작성된다.
-if(set(“username”, “unclebob”))...
-그러므로 명령과 조회를 분리해 혼란을 주지 않도록 한다.
+`public boolean set(String attribute, String value);`같은 경우에는 속성 값 설정 성공 시 true를 반환하므로 괴상한 코드가 작성된다.
+`if(set(“username”, “unclebob”))...` 그러므로 명령과 조회를 분리해 혼란을 주지 않도록 한다.
 
 
 
@@ -143,14 +142,15 @@ try/catch를 사용하면 오류 처리 코드가 원래 코드에서 분리되�
 
 Try/Catch 블록 뽑아내기
 정상 작동과 오류 처리 동작을 뒤섞는 추한 구조이므로 if/else와 마찬가지로 블록을 별도 함수로 뽑아내는 편이 좋다.
+````java
 public void delete(Page page) {
   try {
-     deletePageAndAllReferences(page);
-  }
-  catch (Exception e) {
+    deletePageAndAllReferences(page);
+  } catch (Exception e) {
     logError(e);
   }
 }
+````
 오류 처리도 한가지 작업이다.
 Error.java 의존성 자석
 오류를 처리하는 곳곳에서 오류코드를 사용한다면 enum class를 쓰게 되는데 이런 클래스는 의존성 자석이므로, 새 오류코드를 추가하거나 변경할 때 코스트가 많이 필요하다.
