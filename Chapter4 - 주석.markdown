@@ -60,7 +60,7 @@ if (employee.isEligibleForFullBenefits())
 ####좋은 주석
 
 - 법적인 주석: 각 소스 파일 첫머리에 들어가는 저작권 정보와 소유권 정보 등  
-  `// Copyright (C) 2003, 2004, 2005 by Object Montor, Inc. All right reserved.`
+  `// Copyright (C) 2003, 2004, 2005 by Object Montor, Inc. All right reserved.`  
   `// GNU General Public License`
 
 - 정보를 제공하는 주석   
