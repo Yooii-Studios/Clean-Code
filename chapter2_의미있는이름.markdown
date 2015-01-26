@@ -11,6 +11,7 @@
  - 말이 안되는 단어(한 글자만 바꾼다던지 한 단어), [a1, a2, …]과 같이 숫자로 구분하는 경우 주의  
  - 클래스 이름에 Info, Data와 같은 불용어를 붙이지 말자. 정확한 개념 구분이 되지 않음.
 예시  
+
 Name VS NameString  
 getActiveAccount() VS getActiveAccounts() vs getActiveAccountInfo()  
 money VS moneyAmount  
@@ -26,18 +27,12 @@ message VS theMessage
  - 변수명에 해당 변수의 타입(String, Int 등)을 적지 말자  
  - 맴버 변수 접두어를 붙이지 말자(???)  
  - 인터페이스 클래스와 구현 클래스를 나눠야 한다면 구현 클래스의 이름에 정보를 인코딩하자.  
-Do / Don’t  
-Interface class  
-Concrete(Implementation) class  
-Don’t  
-IShapeFactory  
-ShapeFactory  
-Do  
-ShapeFactory  
-ShapeFactoryImp  
-Do  
-ShapeFactory  
-CShapeFactory  
+ 
+| Do / Don't | Interface class | Concrete(Implementation) class |
+| ---------- | --------------- | ------------------------------ |
+| Don't      | IShapeFactory   | ShapeFactory                   |
+| Do         | ShapeFactory    | ShapeFactoryImp                |
+| Do         | ShapeFactory    | CShapeFactory                  |
 
 7. 자신의 기억력을 자랑하지 마라  
  - 독자가 머리속으로 한번 더 생각해 변환해야 할만한 변수명을 쓰지 말라.(eg, URL에서 호스트와 프로토콜을 제외한 소문자 주소를 r이라는 변수로 명명하는 일 등)  
