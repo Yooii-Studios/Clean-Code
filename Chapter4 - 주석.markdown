@@ -46,7 +46,7 @@
 
 ````java
 // 직원에게 복지 혜택을 받을 자격이 있는지 검사한다. 
-if ((emplotee.flags & HOURLY_FLAGG) && (employee.age > 65)
+if ((emplotee.flags & HOURLY_FLAG) && (employee.age > 65)
 ````
 
 다음 코드는 어떤가?
