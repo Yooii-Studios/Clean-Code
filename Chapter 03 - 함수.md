@@ -36,6 +36,28 @@
 ## 작게 만들어라!
 
 ####함수를 만들 때 최대한 ‘작게!’ 만들어라.
+```java
+public static String renderPageWithSetupsAndTeardowns( PageData pageData, boolean isSuite) throws Exception {
+	boolean isTestPage = pageData.hasAttribute("Test"); 
+	if (isTestPage) {
+		WikiPage testPage = pageData.getWikiPage(); 
+		StringBuffer newPageContent = new StringBuffer(); 
+		includeSetupPages(testPage, newPageContent, isSuite); 
+		newPageContent.append(pageData.getContent()); 
+		includeTeardownPages(testPage, newPageContent, isSuite); 
+		pageData.setContent(newPageContent.toString());
+	}
+	return pageData.getHtml(); 
+}
+```
+ 위 코드도 길다. 되도록 한 함수당 3~5줄 이내로 줄이는 것을 권장한다
+ ```java
+public static String renderPageWithSetupsAndTeardowns( PageData pageData, boolean isSuite) throws Exception { 
+	if (isTestPage(pageData)) 
+		includeSetupAndTeardownPages(pageData, isSuite); 
+	return pageData.getHtml();
+}
+```
 
 ####블록과 들여쓰기  
 중첩구조(if/else, while문 등)에 들어가는 블록은 한 줄이어야 한다. 각 함수 별 들여쓰기 수준이 2단을 넘어서지 않고,  각 함수가 명백하다면 함수는 더욱 읽고 이해하기 쉬워진다.
@@ -61,7 +83,53 @@
 
 
 ## Switch문
-switch문은 작게 만들기 어렵지만(if/else의 연속 도 마찬가지!), 다형성을 이용하여 switch문을 abstract factory에 숨겨 다형적 객체를 생성하는 코드 안에서만 switch를 사용하도록 한다. 하지만 이런 경우에는 불가피하게 써야될 상황이 많다.
+
+```java
+public Money calculatePay(Employee e) throws InvalidEmployeeType {
+	switch (e.type) { 
+		case COMMISSIONED:
+			return calculateCommissionedPay(e); 
+		case HOURLY:
+			return calculateHourlyPay(e); 
+		case SALARIED:
+			return calculateSalariedPay(e); 
+		default:
+			throw new InvalidEmployeeType(e.type); 
+	}
+}
+```
+
+switch문은 작게 만들기 어렵지만(if/else의 연속 도 마찬가지!), 다형성을 이용하여 switch문을 abstract factory에 숨겨 다형적 객체를 생성하는 코드 안에서만 switch를 사용하도록 한다. 
+
+```java
+public abstract class Employee {
+	public abstract public abstract public abstract
+	boolean isPayday();
+	Money calculatePay();
+	void deliverPay(Money pay);
+}
+-----------------
+public interface EmployeeFactory {
+	public Employee makeEmployee(EmployeeRecord r) throws InvalidEmployeeType; 
+}
+-----------------
+public class EmployeeFactoryImpl implements EmployeeFactory {
+	public Employee makeEmployee(EmployeeRecord r) throws InvalidEmployeeType {
+		switch (r.type) {
+			case COMMISSIONED:
+				return new CommissionedEmployee(r) ;
+			case HOURLY:
+				return new HourlyEmployee(r);
+			case SALARIED:
+				return new SalariedEmploye(r);
+			default:
+				throw new InvalidEmployeeType(r.type);
+		} 
+	}
+}
+```
+하지만 switch문은 불가피하게 써야될 상황이 많으므로, 상황에 따라서는 사용 할 수도 있다.
+
 
 ## 서술적인 이름을 사용하라!  
 > “코드를 읽으면서 짐작했던 기능을 각 루틴이 그대로 수행한다면 깨끗한 코드라 불러도 되겠다” - 워드
@@ -113,6 +181,25 @@ String.format의 인수는 List형 인수이기 때문에 이항함수라고 할
 ## 부수 효과를 일으키지 마라!  
 부수효과는 거짓말이다. 함수에서 한가지를 하겠다고 약속하고는 남몰래 다른 짓을 하는 것이므로, 한 함수에서는 딱 한가지만 수행할 것!
 
+아래 코드에서 `Session.initialize();`는 함수명과는 맞지 않는 부수효과이다.
+```java
+public class UserValidator {
+	private Cryptographer cryptographer;
+	public boolean checkPassword(String userName, String password) { 
+		User user = UserGateway.findByName(userName);
+		if (user != User.NULL) {
+			String codedPhrase = user.getPhraseEncodedByPassword(); 
+			String phrase = cryptographer.decrypt(codedPhrase, password); 
+			if ("Valid Password".equals(phrase)) {
+				Session.initialize();
+				return true; 
+			}
+		}
+		return false; 
+	}
+}
+```
+
 #### 출력인수  
    일반적으로 출력 인수는 피해야 한다.   
    함수에서 상태를 변경해야 한다면 함수가 속한 객체 상태를 변경하는 방식을 택하라.
@@ -127,18 +214,55 @@ String.format의 인수는 List형 인수이기 때문에 이항함수라고 할
 try/catch를 사용하면 오류 처리 코드가 원래 코드에서 분리되므로 코드가 깔끔해 진다.
 
 #### Try/Catch 블록 뽑아내기  
+```java
+if (deletePage(page) == E_OK) {
+	if (registry.deleteReference(page.name) == E_OK) {
+		if (configKeys.deleteKey(page.name.makeKey()) == E_OK) {
+			logger.log("page deleted");
+		} else {
+			logger.log("configKey not deleted");
+		}
+	} else {
+		logger.log("deleteReference from registry failed"); 
+	} 
+} else {
+	logger.log("delete failed"); return E_ERROR;
+}
+```
 정상 작동과 오류 처리 동작을 뒤섞는 추한 구조이므로 if/else와 마찬가지로 블록을 별도 함수로 뽑아내는 편이 좋다.
 ````java
 public void delete(Page page) {
-  try {
-    deletePageAndAllReferences(page);
-  } catch (Exception e) {
-    logError(e);
-  }
+	try {
+    		deletePageAndAllReferences(page);
+  	} catch (Exception e) {
+    		logError(e);
+  	}
 }
-````
+
+private void deletePageAndAllReferences(Page page) throws Exception { 
+	deletePage(page);
+	registry.deleteReference(page.name); 
+	configKeys.deleteKey(page.name.makeKey());
+}
+
+private void logError(Exception e) { 
+	logger.log(e.getMessage());
+}
+```
 오류 처리도 한가지 작업이다.
+
 Error.java 의존성 자석
+```java
+public enum Error { 
+	OK,
+	INVALID,
+	NO_SUCH,
+	LOCKED,
+	OUT_OF_RESOURCES, 	
+	WAITING_FOR_EVENT;
+}
+```
+
 오류를 처리하는 곳곳에서 오류코드를 사용한다면 enum class를 쓰게 되는데 이런 클래스는 의존성 자석이므로, 새 오류코드를 추가하거나 변경할 때 코스트가 많이 필요하다.
 그러므로 예외를 사용하는 것이 더 안전하다.
 
