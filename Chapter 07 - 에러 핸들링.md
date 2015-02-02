@@ -72,6 +72,46 @@ public class DeviceController {
 ```
 
 ## Try-Catch-Finally문을 먼저 써라 ##
+- try문은 transaction처럼 동작하는 실행코드로, catch문은 try문에 관계없이 프로그램을 일관적인 상태로 유지하도록 한다.
+- 이렇게 함으로써 코드의 "Scope 정의"가 가능해진다.
+- 예시 : 잘못된 input을 넣을 경우 StorageException을 제대로 던지는지 확인하는 테스트 코드를 작성해보자
+```java
+  // Step 1: StorageExceptio을 던지지 않으므로 이 테스트는 실패한다.
+  
+  @Test(expected = StorageException.class)
+  public void retrieveSectionShouldThrowOnInvalidFileName() {
+    sectionStore.retrieveSection("invalid - file");
+  }
+  
+  public List<RecordedGrip> retrieveSection(String sectionName) {
+    // dummy return until we have a real implementation
+    return new ArrayList<RecordedGrip>();
+  }
+```
+```java
+  // Step 2: 이제 테스트는 통과한다.
+  public List<RecordedGrip> retrieveSection(String sectionName) {
+    try {
+      FileInputStream stream = new FileInputStream(sectionName)
+    } catch (Exception e) {
+      throw new StorageException("retrieval error", e);
+    }
+  return new ArrayList<RecordedGrip>();
+}
+```
+```java
+  // Step 3: Exception의 범위를 FileNotFoundException으로 줄여 정확히 어떤 Exception이 발생한지 체크하자.
+  public List<RecordedGrip> retrieveSection(String sectionName) {
+    try {
+      FileInputStream stream = new FileInputStream(sectionName);
+      stream.close();
+    } catch (FileNotFoundException e) {
+      throw new StorageException("retrieval error”, e);
+    }
+    return new ArrayList<RecordedGrip>();
+  }
+```
+
 ## Unchecked Exceptions를 사용하라 ##
 ## Exceptions로 문맥을 재공하라 ##
 ## 사용에 맞게 Exceptions 클래스를 선언하라 ##
