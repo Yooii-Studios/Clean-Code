@@ -11,8 +11,8 @@
 
 ======================================================
 
-> 오류 처리는 중요하다. 하지만 로직을 헷갈리게 만드는 오류처리는 나쁘다.
-(원문 : Error handling is important, but if it obscures logic, it's wrong.)
+> 오류 처리는 중요하다. 하지만 로직을 헷갈리게 만드는 오류처리는 나쁘다.  
+(Error handling is important, but if it obscures logic, it's wrong.)
 
 ## 리턴코드 대신 Exceptions를 사용하라 ##
 - 예전 프로그래밍 언어들은 exceptions를 제공하지 않았다.
@@ -125,6 +125,7 @@ public class DeviceController {
 
 ## Exceptions로 문맥을 재공하라 ##
 - 예외가 발생한 이유와 타입을 제공하라.
+
 ## 사용에 맞게 Exception 클래스를 선언하라 ##
 - Exception class를 만드는 데에서 가장 중요한 것은 "어떤 방식으로 예외를 잡을까"이다.
 - 써드파티 라이브러리를 사용하는 경우 그것들을 wrapping함으로써
@@ -326,6 +327,8 @@ public class MetricsCalculator {
 
 ## 결론 ##
 깨끗한 코드와 견고한 코드는 대립되는 목표가 아니다. 예외처리를 로직에서 제거하면 각각에 대해 독립적인 사고가 가능해진다.
+
+======================================================
 
 #### 참조 ####
 ##### 1. Checked exception VS Unchecked Exception #####
