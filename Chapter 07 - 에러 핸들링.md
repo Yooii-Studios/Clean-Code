@@ -237,9 +237,95 @@ public class DeviceController {
 ```
 
 ## Null을 리턴하지 마라 ##
-## Null을 넘기지 마라 ##
-## 결론 ##
+- null을 리턴하고 싶은 생각이 들면 위의 Special Case object를 리턴하라.
+- 써드파티 라이브러리에서 null을 리턴할 가능성이 있는 메서드가 있다면 Exception을 던지거나 Special Case object를 리턴하는 매서드로 래핑하라.
+```java
+  // BAD!!!!
 
+  public void registerItem(Item item) {
+    if (item != null) {
+      ItemRegistry registry = peristentStore.getItemRegistry();
+      if (registry != null) {
+        Item existing = registry.getItem(item.getID());
+        if (existing.getBillingPeriod().hasRetailOwner()) {
+          existing.register(item);
+        }
+      }
+    }
+  }
+  
+  
+  // 위 peristentStore가 null인 경우에 대한 예외처리가 안된 것을 눈치챘는가?
+  // 만약 여기서 NullPointerException이 발생했다면 수십단계 위의 메소드에서 처리해줘야 하나?
+  // 이 메소드의 문제점은 null 체크가 부족한게 아니라 null체크가 너무 많다는 것이다.
+```
+```java
+  // Bad
+  
+  List<Employee> employees = getEmployees();
+  if (employees != null) {
+    for(Employee e : employees) {
+      totalPay += e.getPay();
+    }
+  }
+```
+
+```java
+  // Good
+  
+  List<Employee> employees = getEmployees();
+  for(Employee e : employees) {
+    totalPay += e.getPay();
+  }
+  
+  public List<Employee> getEmployees() {
+    if( .. there are no employees .. )
+      return Collections.emptyList();
+    }
+  
+```
+
+## Null을 넘기지 마라 ##
+- null을 리턴하는  것도 나쁘지만 null을 메서드로 넘기는 것은 더 나쁘다.
+- null을 메서드의 파라미터로 넣어야 하는 API를 사용하는 경우가 아니면 null을 메서드로 넘기지 마라.
+- 일반적으로 대다수의 프로그래밍 언어들은 파라미터로 들어온 null에 대해 적절한 방법을 제공하지 못한다.
+- 가장 이성적인 해법은 null을 파라미터로 받지 못하게 하는 것이다.
+```java
+// Bad
+// calculator.xProjection(null, new Point(12, 13));
+// 위와 같이 부를 경우 NullPointerException 발생
+public class MetricsCalculator {
+  public double xProjection(Point p1, Point p2) {
+    return (p2.x – p1.x) * 1.5;
+  }
+  ...
+}
+
+// Bad
+// NullPointerException은 안나지만 윗단계에서 InvalidArgumentException이 발생할 경우 처리해줘야 함.
+public class MetricsCalculator {
+  public double xProjection(Point p1, Point p2) {
+    if(p1 == null || p2 == null){
+      throw InvalidArgumentException("Invalid argument for MetricsCalculator.xProjection");
+    }
+    return (p2.x – p1.x) * 1.5;
+  }
+}
+
+// Bad
+// 좋은 명세이지만 첫번째 예시와 같이 NullPointerException 문제를 해결하지 못한다.
+public class MetricsCalculator {
+  public double xProjection(Point p1, Point p2) {
+    assert p1 != null : "p1 should not be null";
+    assert p2 != null : "p2 should not be null";
+    
+    return (p2.x – p1.x) * 1.5;
+  }
+}
+```
+
+## 결론 ##
+깨끗한 코드와 견고한 코드는 대립되는 목표가 아니다. 예외처리를 로직에서 제거하면 각각에 대해 독립적인 사고가 가능해진다.
 
 #### 참조 ####
 ##### 1. Checked exception VS Unchecked Exception #####
@@ -251,13 +337,3 @@ The Open Close Principle states that the design and writing of the code should b
 ##### 3. Special Case Pattern(by Martin Fowler) #####
 참조 1: http://www.captaindebug.com/2011/04/null-return-values-and-special-case.html#.VM9VUsbLgXR  
 참조 2: http://martinfowler.com/eaaCatalog/specialCase.html
-
-## 제목 ##
-#### 부제목 ####
-내용
-```java
-// comment
-if (someCondition) {
-  statement;
-}
-```
