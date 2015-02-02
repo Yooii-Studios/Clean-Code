@@ -113,6 +113,16 @@ public class DeviceController {
 ```
 
 ## Unchecked Exceptions를 사용하라 ##
+- Checked exception VS Unchecked Exception(참조 1)
+- 예외처리에 드는 비용 대비 이득을 생각해봐야 한다.
+- 예시
+ - 1. 특정 메소드에서 checked exception을 throw하고
+ - 2. 3단계(메소드 콜) 위의 메소드에서 그 exception을 catch한다면
+ - 3. 모든 중간단계 메소드에 exception을 정의해야 한다.(자바의 경우 메소드 선언에 throws 구문을 붙이는 등)
+ - Open/Closed Principle violation(참조 2)
+- 상위 레벨 메소드에서 하위 레벨 메소드의 디테일에 대해 알아야 하기 때문에 캡슐화 또한 깨진다.
+- 필요한 경우 checked exceptions를 사용해야 되지만 일반적인 경우 득보다 실이 많다.
+
 ## Exceptions로 문맥을 재공하라 ##
 ## 사용에 맞게 Exceptions 클래스를 선언하라 ##
 ## 정상적인 상황을 정의하라(Default값을 설정하라) ##
@@ -120,6 +130,14 @@ public class DeviceController {
 ## Null을 넘기지 마라 ##
 ## 결론 ##
 
+
+#### 참조 ####
+##### 1. Checked exception VS Unchecked Exception #####
+Checked Exception과 Unchecked Exception의 가장 명확한 구분 기준은 ‘꼭 처리를 해야 하느냐’이다. Checked Exception이 발생할 가능성이 있는 메소드라면 반드시 로직을 try/catch로 감싸거나 throw로 던져서 처리해야 한다. 반면에 Unchecked Exception은 명시적인 예외처리를 하지 않아도 된다. 이 예외는 피할 수 있지만 개발자가 부주의해서 발생하는 경우가 대부분이고, 미리 예측하지 못했던 상황에서 발생하는 예외가 아니기 때문에 굳이 로직으로 처리를 할 필요가 없도록 만들어져 있다.
+출처: http://www.nextree.co.kr/p3239/
+##### 2. Open/Closed Principle #####
+The Open Close Principle states that the design and writing of the code should be done in a way that new functionality should be added with minimum changes in the existing code. The design should be done in a way to allow the adding of new functionality as new classes, keeping as much as possible existing code unchanged.
+출처: http://www.oodesign.com/open-close-principle.html
 
 ## 제목 ##
 #### 부제목 ####
