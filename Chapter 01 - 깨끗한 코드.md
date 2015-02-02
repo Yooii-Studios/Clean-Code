@@ -8,7 +8,7 @@
  - Clean Code의 미학이란?
  - Clean Code란 무엇인가?
 - Schools of Thought
-- 우리는 작가들이다.
+- 우리는 작가들이다
 - 보이스카우트 규칙
 - Prequel and Principles
 - 정리
@@ -40,19 +40,14 @@
  - 거기다 그 팀은 '새 인력을 투입했으므로 생산성이 늘겠지'라는 압박을 받는다.
  - 결과, 나쁜 코드는 더 쌓인다.
 
+#### The Grand Redesign in the Sky ####
+#### Attitude ####
+#### The Primal Conundrum ####
+#### Clean Code의 미학이란? ####
+#### Clean Code란 무엇인가? ####
 
-
-
-
-
-
-
-```java
-```
-
-======================================================
-
-#### 참조 ####
-##### 1. Title #####
-Content
-출처: http://www.nextree.co.kr/p3239/
+## Schools of Thought ##
+## 우리는 작가들이다 ##
+## 보이스카우트 규칙 ##
+## Prequel and Principles ##
+## 정리 ##
