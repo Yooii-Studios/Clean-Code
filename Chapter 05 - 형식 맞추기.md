@@ -42,7 +42,7 @@
 일반적으로 큰 파일보다는 작은 파일이 이해하기 쉽다.
 
 
-## 신문 기사처럼 작성하라
+#### 신문 기사처럼 작성하라
 좋은 신문 기사는 최상단에 표제(기사를 몇마디로 요약하는 문구),  
 첫 문단에는 전체 기사 내용을 요약하며, 기사를 읽으며 내려갈 수록 세세한 사실이 조금씩 드러나며 세부사항이 나오게 된다.  
 소스파일 이름(표제)는 간단하면서도 설명이 가능하게 지어,  
@@ -51,7 +51,7 @@
 아래로 내려갈수록 의도를 세세하게 묘사하며, 마지막에는 가장 저차원 함수(아마 Getter/Setter?)와 세부 내역이 나온다.  
 신문이 사실, 날짜, 이름 등을 무작위로 뒤섞은 긴 기사 하나만 싣는다면 아무도 신문을 읽지 않을 것이다.  
 
-## 개념은 빈 행으로 분리하라
+#### 개념은 빈 행으로 분리하라
 코드의 각 줄은 수식이나 절을 나타내고, 여러 줄의 묶음은 완결된 생각 하나를 표현한다.  
 생각 사이에는 빈 행을 넣어 분리해야한다. 그렇지 않다면 단지 줄바꿈만 다를 뿐인데도 코드 가독성이 현저히 떨어진다.
 
@@ -102,7 +102,7 @@ public class BoldWidget extends ParentWidget {
 }
 ```
 
-## 세로 밀집도
+#### 세로 밀집도
 줄바꿈이 개념을 분리한다면, 반대로 세로 밀집도는 연관성을 의미한다.  
 즉, 서로 밀집한 코드 행은 세로로 가까이 놓여야 한다.
 
@@ -137,13 +137,13 @@ public class ReporterConfig {
 	}
 ```
 
-## 수직 거리 
+#### 수직 거리 
 서로 밀접한 개념은 세로로 가까이 둬야 한다.  
 두 개념이 서로 다른 파일에 속한다면 규칙이 통하지 않지만,  
 타당한 근거가 없다면 서로 밀접한 개념은 한 파일에 속해야 마땅하다(protected 변수를 피해야 하는 이유)  
 같은 파일에 속할 정도로 밀접한 두 개념은 세로 거리로 연관성_- 한 개념을 이해하는 데 다른 개념이 중요한 정도 -_을 표현한다.  
 
-#### 변수선언
+###### 변수선언
 변수는 사용하는 위치에서 최대한 가까이 선언한다.  
 우리가 만든 함수는 매우 짧으므로 (Chapter3 - 함수를 공부했다면 말이지) 
 
@@ -198,7 +198,7 @@ for (XmlTest test : m_suite.getTests()) {
 ...
 ```
 
-#### 인스턴스 변수
+###### 인스턴스 변수
 인스턴스 변수는 클래스 맨 처음에 선언한다(자바의 경우).  
 변수 간 세로로 거리를 두지 않는다 - 잘 설계한 클래스는 대다수 클래스 메서드가 인스턴스 변수를 사용하기 때문.  
 C++의 경우에는 마지막에 선언하는 것이 일반적이다. 어느 곳이든 잘 알려진 위치에 인스턴스 변수를 모으는 것이 중요하다.
@@ -245,7 +245,7 @@ public class TestSuite implements Test {
 }
 ```
 
-#### 종속 함수
+###### 종속 함수
 한 함수가 다른 함수를 호출한다면(종속 함수) 두 함수는 세로로 가까이 배치한다.
 가능하면 호출되는 함수를 호출하는 함수보다 뒤에 배치한다. (프로그램이 자연스럽게 읽힐 수 있도록)
 이러한 규칙을 일관되게 적용한다면 독자는 방금 함수에서 호출한 함수가 잠시 후에 정의될 것이라고 자연스레 예측한다.
@@ -310,148 +310,231 @@ public class WikiPageResponder implements SecureResponder {
 ...
 ```
 
+###### 개념의 유사성
+개념적인 친화도가 높을 수록 코드를 서로 가까이 배치한다.  
+앞서 살펴보았듯이 한 함수가 다른 함수를 호출하는 종속성, 변수와 그 변수를 사용하는 함수가 그 예다.  
+그 외에도 비슷한 동작을 수행하는 함수 무리 또한 개념의 친화도가 높다.
 
-## 서술적인 이름을 사용하라!  
-> “코드를 읽으면서 짐작했던 기능을 각 루틴이 그대로 수행한다면 깨끗한 코드라 불러도 되겠다” - 워드
-
-작은 함수는 그 기능이 명확하므로 이름을 붙이기가 더 쉬우며, 일관성 있는 서술형 이름을 사용한다면 코드를 순차적으로 이해하기도 쉬워진다.
-
-## 함수 인수  
-함수에서 이상적인 인수 개수는 0개(무항).
-인수는 코드 이해에 방해가 되는 요소이므로 최선은 0개이고, 차선은 1개뿐인 경우이다.
-출력인수(함수의 반환 값이 아닌 입력 인수로 결과를 받는 경우)는 이해하기 어려우므로 왠만하면 쓰지 않는 것이 좋겠다.
-
-#### 많이 쓰는 단항 형식  
-  - 인수에 질문을 던지는 경우  
-	`boolean fileExists(“MyFile”);`  
-  - 인수를 뭔가로 변환해 결과를 변환하는 경우  
-	`InputStream fileOpen(“MyFile”);`  
-  - 이벤트 함수일 경우 (이 경우에는 이벤트라는 사실이 코드에 명확하게 드러나야 한다.)
-
-위의 3가지가 아니라면 단항 함수는 가급적 피하는 것이 좋다.
-
-#### 플래그 인수  
-플래그 인수는 추하다. 쓰지마라. bool 값을 넘기는 것 자체가 그 함수는 한꺼번에 여러가지 일을 처리한다고 공표하는 것과 마찬가지다.
-
-#### 이항 함수  
-단항 함수보다 이해하기가 어렵다.
-Point 클래스의 경우에는 이항 함수가 적절하다.
-2개의 인수간의 자연적인 순서가 있어야함 
-`Point p = new Point(x,y);`
-무조건 나쁜 것은 아니지만, 인수가 2개이니 만큼 이해가 어렵고 위험이 따르므로 가능하면 단항으로 바꾸도록
-
-#### 삼항 함수  
-이항 함수보다 이해하기가 훨씬 어려우므로, 위험도 2배 이상 늘어난다.
-삼항 함수를 만들 때는 신중히 고려하라.
-
-#### 인수 객체  
-인수가 많이 필요할 경우, 일부 인수를 독자적인 클래스 변수로 선언할 가능성을 살펴보자
-x,y를 인자로 넘기는 것보다 Point를 넘기는 것이 더 낫다.
-
-#### 인수 목록  
-때로는 String.format같은 함수들처럼 인수 개수가 가변적인 함수도 필요하다. 
-String.format의 인수는 List형 인수이기 때문에 이항함수라고 할 수 있다.
-
-#### 동사와 키워드
-단항 함수는 함수와 인수가 동사/명사 쌍을 이뤄야한다.  
-`writeField(name);`  
-함수이름에 키워드(인수 이름)을 추가하면 인수 순서를 기억할 필요가 없어진다.  
-`assertExpectedEqualsActual(expected, actual);`  
-
-## 부수 효과를 일으키지 마라!  
-부수효과는 거짓말이다. 함수에서 한가지를 하겠다고 약속하고는 남몰래 다른 짓을 하는 것이므로, 한 함수에서는 딱 한가지만 수행할 것!
-
-아래 코드에서 `Session.initialize();`는 함수명과는 맞지 않는 부수효과이다.
 ```java
-public class UserValidator {
-	private Cryptographer cryptographer;
-	public boolean checkPassword(String userName, String password) { 
-		User user = UserGateway.findByName(userName);
-		if (user != User.NULL) {
-			String codedPhrase = user.getPhraseEncodedByPassword(); 
-			String phrase = cryptographer.decrypt(codedPhrase, password); 
-			if ("Valid Password".equals(phrase)) {
-				Session.initialize();
-				return true; 
-			}
-		}
-		return false; 
+//같은 assert 관련된 동작들을 수행하며, 명명법이 똑같고 기본 기능이 유사한 함수들로써 개념적 친화도가 높다.
+//이런 경우에는 종속성은 오히려 부차적 요인이므로, 종속적인 관계가 없더라도 가까이 배치하면 좋다.
+
+public class Assert {
+	static public void assertTrue(String message, boolean condition) {
+		if (!condition) 
+			fail(message);
 	}
-}
-```
 
-#### 출력인수  
-   일반적으로 출력 인수는 피해야 한다.   
-   함수에서 상태를 변경해야 한다면 함수가 속한 객체 상태를 변경하는 방식을 택하라.
+	static public void assertTrue(boolean condition) { 
+		assertTrue(null, condition);
+	}
 
-## 명령과 조회를 분리하라
-함수는 뭔가 객체 상태를 변경하거나, 객체 정보를 반환하거나 둘중 하나다. 둘다 수행해서는 안된다.  
-`public boolean set(String attribute, String value);`같은 경우에는 속성 값 설정 성공 시 true를 반환하므로 괴상한 코드가 작성된다.  
-`if(set(“username”, “unclebob”))...` 그러므로 명령과 조회를 분리해 혼란을 주지 않도록 한다.  
-
-## 오류코드보다 예외를 사용하라!
-
-try/catch를 사용하면 오류 처리 코드가 원래 코드에서 분리되므로 코드가 깔끔해 진다.
-
-#### Try/Catch 블록 뽑아내기  
-```java
-if (deletePage(page) == E_OK) {
-	if (registry.deleteReference(page.name) == E_OK) {
-		if (configKeys.deleteKey(page.name.makeKey()) == E_OK) {
-			logger.log("page deleted");
-		} else {
-			logger.log("configKey not deleted");
-		}
-	} else {
-		logger.log("deleteReference from registry failed"); 
+	static public void assertFalse(String message, boolean condition) { 
+		assertTrue(message, !condition);
+	}
+	
+	static public void assertFalse(boolean condition) { 
+		assertFalse(null, condition);
 	} 
-} else {
-	logger.log("delete failed"); return E_ERROR;
-}
+...
 ```
-정상 작동과 오류 처리 동작을 뒤섞는 추한 구조이므로 if/else와 마찬가지로 블록을 별도 함수로 뽑아내는 편이 좋다.
-````java
-public void delete(Page page) {
-	try {
-    		deletePageAndAllReferences(page);
-  	} catch (Exception e) {
-    		logError(e);
-  	}
-}
 
-private void deletePageAndAllReferences(Page page) throws Exception { 
-	deletePage(page);
-	registry.deleteReference(page.name); 
-	configKeys.deleteKey(page.name.makeKey());
-}
+#### 세로 순서
+일반적으로 함수 호출 종속성은 아래방향으로 유지하므로, 호출되는 함수를 호출하는 함수보다 뒤에 배치한다.  
+그러면 소스코드가 자연스럽게 고차원-->저차원으로 내려간다.  
+가장 중요한 개념을 가장 먼저 표현하고, 세세한 사항은 마지막에 표현한다.  
+그렇게 하면 첫 함수 몇개만 읽어도 개념을 파악하기 쉬워질 것이다.
 
-private void logError(Exception e) { 
-	logger.log(e.getMessage());
-}
-```
-오류 처리도 한가지 작업이다.
 
-Error.java 의존성 자석
+## 가로 형식 맞추기
+대다수의 프로그래머들은 명백히 짧은 행을 선호하므로 짧은 행이 바람직하다.  
+Hollerith가 제안한 80자 제한은 다소 인위적이므로 조금 더 늘여도 좋다. 하지만 120자 이상을 넘어간다면 주의 부족이다.  
+필자 개인적으로는 120자 정도로 길이를 제한한다.
+
+#### 가로 공백과 밀집도
+가로로는 공백을 사용해 밀접/느슨한 개념을 표현한다
+
 ```java
-public enum Error { 
-	OK,
-	INVALID,
-	NO_SUCH,
-	LOCKED,
-	OUT_OF_RESOURCES, 	
-	WAITING_FOR_EVENT;
+private void measureLine(String line) { 
+	lineCount++;
+	
+	//흔히 볼 수 있는 코드인데, 할당 연산자 좌우로 공백을 주어 왼쪽,오른쪽 요소가 확실하게 구분된다.
+	int lineSize = line.length();
+	totalChars += lineSize; 
+	
+	//반면 함수이름과 괄호 사이에는 공백을 없앰으로써 함수와 인수의 밀접함을 보여준다
+	//괄호 안의 인수끼리는 쉼표 뒤의 공백을 통해 인수가 별개라는 사실을 보여준다.
+	lineWidthHistogram.addLine(lineSize, lineCount);
+	recordWidestLine(lineSize);
 }
 ```
 
-오류를 처리하는 곳곳에서 오류코드를 사용한다면 enum class를 쓰게 되는데 이런 클래스는 의존성 자석이므로, 새 오류코드를 추가하거나 변경할 때 코스트가 많이 필요하다.
-그러므로 예외를 사용하는 것이 더 안전하다.
+추가로 연산자의 우선순위를 강조하기 위해서도 공백을 사용한다
+`return b*b - 4*a*c;`  
+하지만 Code Formatter등의 도구가 연산자 우선순위까지 고려하지 못하므로 공백을 임의로 넣어주더라도 사라지는 경우가 대부분.
+<br/>
+Q.그렇다면 괄호로 묶어주는 것이 더 바람직하지 않을까?
 
-## 반복하지 마라!  
-중복은 모든 소프트웨어에서 모든 악의 근원이므로 늘 중복을 없애도록 노력해야한다.
+#### 가로 정렬
+```java
+public class FitNesseExpediter implements ResponseSender {
+	private		Socket		socket;
+	private 	InputStream 	input;
+	private 	OutputStream 	output;
+	private 	Reques		request; 		
+	private 	Response 	response;	
+	private 	FitNesseContex	context; 
+	protected 	long		requestParsingTimeLimit;
+	private 	long		requestProgress;
+	private 	long		requestParsingDeadline;
+	private 	boolean		hasError;
+	
+	... 
+```
+보기엔 깔끔해 보일지 모르나, 코드가 엉뚱한 부분을 강조해 변수 유형을 자연스레 무시하고 이름부터 읽게 된다.  
+게다가 Code Formatter 대부분들은 이렇게 해놔봤자 무시하고 원래대로 돌려놓는다(내가 이 문제 때문에 씨름한 경험이 있음)  
+그러므로 선언문과 할당문을 별도로 정렬할 필요가 없다.  
+정렬이 필요할 정도로 목록이 길다면(Q. 여기서 말하는 목록은 인스턴스 변수 개수를 말하는 것인가?),  
+목록의 길이가 문제이지 정렬이 부족해서가 아니다. 선언부가 길다는 것은 클래스를 쪼개야 한다는 것을 의미한다.
 
-## 구조적 프로그래밍  
-구조적 프로그래밍의 원칙을 따르자면 모든 함수와 함수 내 모든 블록에 입구와 출구가 하나여야 된다. 즉, 함수는 return문이 하나여야 되며, 루프 안에서 break나 continue를 사용해선 안된다고 한다. 함수가 클 경우에만 상당 이익을 제공하므로, 함수를 작게 만든다면 오히려 여러차례 사용하는 것이 함수의 의도를 표현하기 쉬워진다.
+#### 들여쓰기  
+들여쓰기를 잘 해놓으면 _- 물론 그러고 있겠지만! -_ 구조가 한 눈에 들어온다.
 
-## 함수를 어떻게 짜죠?  
-처음에는 길고 복잡하고, 들여쓰기 단계나 중복된 루프도 많다. 인수목록도 길지만, 이 코드들을 빠짐없이 테스트하는 단위 테스트 케이스도 만들고, 
-코드를 다듬고, 함수를 만들고, 이름을 바꾸고, 중복을 제거한다. 처음부터 탁 짜지지는 않는다.
+###### 들여쓰기 무시하기
+간단한 if문, while문, 짧은 함수에서 들여쓰기를 무시하고픈 유혹이 생긴다.(정말?)   
+하지만 들여쓰기로 제대로 범위를 표현한 코드가 가독성이 더 높다. 유혹을 뿌리치자
+
+```java
+//이렇게 한행에 다 넣을 수 있다고 다 때려 박는 것이 멋있는 코드가 아니란 것! 알아두삼
+
+public class CommentWidget extends TextWidget {
+	public static final String REGEXP = "^#[^\r\n]*(?:(?:\r\n)|\n|\r)?";
+	
+	public CommentWidget(ParentWidget parent, String text){super(parent, text);}
+	public String render() throws Exception {return ""; } 
+}
+```
+
+```java
+//한줄이라도 정성스럽게 들여쓰기로 감싸주자. 가독성을 위해
+
+public class CommentWidget extends TextWidget {
+	public static final String REGEXP = "^#[^\r\n]*(?:(?:\r\n)|\n|\r)?";
+	
+	public CommentWidget(ParentWidget parent, String text){
+		super(parent, text);
+	}
+	
+	public String render() throws Exception {
+		return ""; 
+	} 
+}
+```
+
+#### 가짜 범위
+빈 while문이나 for문을 접할 때가 있다. 가능한한 피해야 되지만, 피하지 못 할 경우엔  
+빈 블록을 올바로 들여쓰고 괄호로 감싸라. **그렇지 않으면 찾을 수 없는 버그가 발생할지도...**
+
+
+## 팀 규칙
+당연한 이야기들이 적혀있는 것 같지만.. 팀에 속해있다면,  
+가장 우선시 되어야 하고 선호해야 할 규칙은 팀 규칙이다.  
+처음 팀이 이루어졌다면 우성이형과 동현이처럼 코딩을 시작하기 전,  
+코딩 스타일을 의논하여(괄호를 어디에 넣을지, 네이밍은 어떻게 할지 등) IDE Formatter로 지정하여
+구현하는 것이 옳은 방식이다.  
+**좋은 소프트웨어 시스템은 읽기 쉬운 문서로 이뤄지고, 읽기 쉬운 문서는 스타일이 일관적이고 매끄러워야 한다.**  
+
+## 밥 아저씨의 형식 규칙
+끝으로 이 책의 저자가 사용하는 규칙이 여실히 드러나는 코드를 첨부하며 턴을 종료한다.
+```java
+public class CodeAnalyzer implements JavaFileAnalysis { 
+	private int lineCount;
+	private int maxLineWidth;
+	private int widestLineNumber;
+	private LineWidthHistogram lineWidthHistogram; 
+	private int totalChars;
+	
+	public CodeAnalyzer() {
+		lineWidthHistogram = new LineWidthHistogram();
+	}
+	
+	public static List<File> findJavaFiles(File parentDirectory) { 
+		List<File> files = new ArrayList<File>(); 
+		findJavaFiles(parentDirectory, files);
+		return files;
+	}
+	
+	private static void findJavaFiles(File parentDirectory, List<File> files) {
+		for (File file : parentDirectory.listFiles()) {
+			if (file.getName().endsWith(".java")) 
+				files.add(file);
+			else if (file.isDirectory()) 
+				findJavaFiles(file, files);
+		} 
+	}
+	
+	public void analyzeFile(File javaFile) throws Exception { 
+		BufferedReader br = new BufferedReader(new FileReader(javaFile)); 
+		String line;
+		while ((line = br.readLine()) != null)
+			measureLine(line); 
+	}
+	
+	private void measureLine(String line) { 
+		lineCount++;
+		int lineSize = line.length();
+		totalChars += lineSize; 
+		lineWidthHistogram.addLine(lineSize, lineCount);
+		recordWidestLine(lineSize);
+	}
+	
+	private void recordWidestLine(int lineSize) { 
+		if (lineSize > maxLineWidth) {
+			maxLineWidth = lineSize;
+			widestLineNumber = lineCount; 
+		}
+	}
+
+	public int getLineCount() { 
+		return lineCount;
+	}
+
+	public int getMaxLineWidth() { 
+		return maxLineWidth;
+	}
+
+	public int getWidestLineNumber() { 
+		return widestLineNumber;
+	}
+
+	public LineWidthHistogram getLineWidthHistogram() {
+		return lineWidthHistogram;
+	}
+	
+	public double getMeanLineWidth() { 
+		return (double)totalChars/lineCount;
+	}
+
+	public int getMedianLineWidth() {
+		Integer[] sortedWidths = getSortedWidths(); 
+		int cumulativeLineCount = 0;
+		for (int width : sortedWidths) {
+			cumulativeLineCount += lineCountForWidth(width); 
+			if (cumulativeLineCount > lineCount/2)
+				return width;
+		}
+		throw new Error("Cannot get here"); 
+	}
+	
+	private int lineCountForWidth(int width) {
+		return lineWidthHistogram.getLinesforWidth(width).size();
+	}
+	
+	private Integer[] getSortedWidths() {
+		Set<Integer> widths = lineWidthHistogram.getWidths(); 
+		Integer[] sortedWidths = (widths.toArray(new Integer[0])); 
+		Arrays.sort(sortedWidths);
+		return sortedWidths;
+	} 
+}
+```
