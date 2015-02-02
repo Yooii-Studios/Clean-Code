@@ -191,7 +191,7 @@ public class DeviceController {
 
 ## 정상적인 상황을 정의하라(Default값을 설정하라) ##
 - 일반적으로는 위에서 봤던 방식들이 유용하지만, catch문에서 예외적인 상황(special case)을 처리해야 하는 경우 코드가 더러워지는 일이 발생할 수 있다.
-- 이런 경우, Martin Fowler의 Special Case Pattern을 사용하자.
+- 이런 경우, Martin Fowler의 Special Case Pattern을 사용하자.(참조 3)
  - 1. 코드를 부르는 입장에서 예외적인 상황을 신경쓰지 않아도 된다.
  - 2. 예외상황은 special case object 내에 캡슐화된다.
 ```java
@@ -243,11 +243,14 @@ public class DeviceController {
 
 #### 참조 ####
 ##### 1. Checked exception VS Unchecked Exception #####
-Checked Exception과 Unchecked Exception의 가장 명확한 구분 기준은 ‘꼭 처리를 해야 하느냐’이다. Checked Exception이 발생할 가능성이 있는 메소드라면 반드시 로직을 try/catch로 감싸거나 throw로 던져서 처리해야 한다. 반면에 Unchecked Exception은 명시적인 예외처리를 하지 않아도 된다. 이 예외는 피할 수 있지만 개발자가 부주의해서 발생하는 경우가 대부분이고, 미리 예측하지 못했던 상황에서 발생하는 예외가 아니기 때문에 굳이 로직으로 처리를 할 필요가 없도록 만들어져 있다.
+Checked Exception과 Unchecked Exception의 가장 명확한 구분 기준은 ‘꼭 처리를 해야 하느냐’이다. Checked Exception이 발생할 가능성이 있는 메소드라면 반드시 로직을 try/catch로 감싸거나 throw로 던져서 처리해야 한다. 반면에 Unchecked Exception은 명시적인 예외처리를 하지 않아도 된다. 이 예외는 피할 수 있지만 개발자가 부주의해서 발생하는 경우가 대부분이고, 미리 예측하지 못했던 상황에서 발생하는 예외가 아니기 때문에 굳이 로직으로 처리를 할 필요가 없도록 만들어져 있다.  
 출처: http://www.nextree.co.kr/p3239/
 ##### 2. Open/Closed Principle #####
-The Open Close Principle states that the design and writing of the code should be done in a way that new functionality should be added with minimum changes in the existing code. The design should be done in a way to allow the adding of new functionality as new classes, keeping as much as possible existing code unchanged.
+The Open Close Principle states that the design and writing of the code should be done in a way that new functionality should be added with minimum changes in the existing code. The design should be done in a way to allow the adding of new functionality as new classes, keeping as much as possible existing code unchanged.  
 출처: http://www.oodesign.com/open-close-principle.html
+##### 3. Special Case Pattern(by Martin Fowler) #####
+참조 1: http://www.captaindebug.com/2011/04/null-return-values-and-special-case.html#.VM9VUsbLgXR  
+참조 2: http://martinfowler.com/eaaCatalog/specialCase.html
 
 ## 제목 ##
 #### 부제목 ####
