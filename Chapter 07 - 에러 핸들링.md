@@ -3,7 +3,7 @@
 - Try-Catch-Finally문을 먼저 써라
 - Unchecked Exceptions를 사용하라
 - Exceptions로 문맥을 재공하라
-- 사용에 맞게 Exceptions 클래스를 선언하라
+- 사용에 맞게 Exception 클래스를 선언하라
 - 정상적인 상황을 정의하라(Default값을 설정하라)
 - Null을 리턴하지 마라
 - Null을 넘기지 마라
@@ -74,7 +74,7 @@ public class DeviceController {
 ## Try-Catch-Finally문을 먼저 써라 ##
 - try문은 transaction처럼 동작하는 실행코드로, catch문은 try문에 관계없이 프로그램을 일관적인 상태로 유지하도록 한다.
 - 이렇게 함으로써 코드의 "Scope 정의"가 가능해진다.
-- 예시 : 잘못된 input을 넣을 경우 StorageException을 제대로 던지는지 확인하는 테스트 코드를 작성해보자
+- 예시: 잘못된 input을 넣을 경우 StorageException을 제대로 던지는지 확인하는 테스트 코드를 작성해보자
 ```java
   // Step 1: StorageExceptio을 던지지 않으므로 이 테스트는 실패한다.
   
@@ -124,8 +124,73 @@ public class DeviceController {
 - 필요한 경우 checked exceptions를 사용해야 되지만 일반적인 경우 득보다 실이 많다.
 
 ## Exceptions로 문맥을 재공하라 ##
-## 사용에 맞게 Exceptions 클래스를 선언하라 ##
+- 예외가 발생한 이유와 타입을 제공하라.
+## 사용에 맞게 Exception 클래스를 선언하라 ##
+- Exception class를 만드는 데에서 가장 중요한 것은 "어떤 방식으로 예외를 잡을까"이다.
+- 써드파티 라이브러리를 사용하는 경우 그것들을 wrapping함으로써
+ - 1. 라이브러리 교체 등의 변경이 있는 경우 대응하기 쉬워진다.
+ - 2. 라이브러리를 쓰는 곳을 테스트할 경우 해당 라이브러리를 가짜로 만들거나 함으로써 테스트하기 쉬워진다.
+ - 3. 라이브러리의 api 디자인에 종속적이지 않고 내 입맛에 맞는 디자인을 적용할 수 있다.
+- 보통 특정 부분의 코드에는 exception 하나로 충분히 예외처리 할 수 있다.
+- 한 exception만 잡고 나머지 하나는 다시 throw하는 경우 등 정말 필요한 경우에만 다른 exception 클래스를 만들어 사용하자.
+- 예시: 외부 api의 클래스인 ACMEPort 클래스를 사용하는 상황을 살펴보자.
+```java
+  // Bad
+  // catch문의 내용이 거의 같다.
+  
+  ACMEPort port = new ACMEPort(12);
+  try {
+    port.open();
+  } catch (DeviceResponseException e) {
+    reportPortError(e);
+    logger.log("Device response exception", e);
+  } catch (ATM1212UnlockedException e) {
+    reportPortError(e);
+    logger.log("Unlock exception", e);
+  } catch (GMXError e) {
+    reportPortError(e);
+    logger.log("Device response exception");
+  } finally {
+    ...
+  }
+```
+```java
+  // Good
+  // ACME 클래스를 LocalPort 클래스로 래핑해 new ACMEPort().open() 메소드에서 던질 수 있는 exception들을 간략화
+  
+  LocalPort port = new LocalPort(12);
+  try {
+    port.open();
+  } catch (PortDeviceFailure e) {
+    reportError(e);
+    logger.log(e.getMessage(), e);
+  } finally {
+    ...
+  }
+  
+  public class LocalPort {
+    private ACMEPort innerPort;
+    public LocalPort(int portNumber) {
+      innerPort = new ACMEPort(portNumber);
+    }
+    
+    public void open() {
+      try {
+        innerPort.open();
+      } catch (DeviceResponseException e) {
+        throw new PortDeviceFailure(e);
+      } catch (ATM1212UnlockedException e) {
+        throw new PortDeviceFailure(e);
+      } catch (GMXError e) {
+        throw new PortDeviceFailure(e);
+      }
+    }
+    ...
+  }
+```
+
 ## 정상적인 상황을 정의하라(Default값을 설정하라) ##
+- 
 ## Null을 리턴하지 마라 ##
 ## Null을 넘기지 마라 ##
 ## 결론 ##
