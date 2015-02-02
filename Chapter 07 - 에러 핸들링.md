@@ -190,7 +190,52 @@ public class DeviceController {
 ```
 
 ## 정상적인 상황을 정의하라(Default값을 설정하라) ##
-- 
+- 일반적으로는 위에서 봤던 방식들이 유용하지만, catch문에서 예외적인 상황(special case)을 처리해야 하는 경우 코드가 더러워지는 일이 발생할 수 있다.
+- 이런 경우, Martin Fowler의 Special Case Pattern을 사용하자.
+ - 1. 코드를 부르는 입장에서 예외적인 상황을 신경쓰지 않아도 된다.
+ - 2. 예외상황은 special case object 내에 캡슐화된다.
+```java
+  // Bad
+
+  try {
+    MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
+    m_total += expenses.getTotal();
+  } catch(MealExpensesNotFound e) {
+    m_total += getMealPerDiem();
+  }
+```
+```java
+  // Good
+
+  // caller logic.
+  ...
+  MealExpenses expenses = expenseReportDAO.getMeals(employee.getID());
+  m_total += expenses.getTotal();
+  ...
+  
+  public class PerDiemMealExpenses implements MealExpenses {
+    public int getTotal() {
+      // return the per diem default
+    }
+  }
+  
+  // 이해를 돕기 위해 직접 추가한 클래스
+  public class ExpenseReportDAO {
+    ...
+    public MealExpenses getMeals(int employeeId) {
+      MealExpenses expenses;
+      try {
+        expenses = expenseReportDAO.getMeals(employee.getID());
+      } catch(MealExpensesNotFound e) {
+        expenses = new PerDiemMealExpenses();
+      }
+      
+      return expenses;
+    }
+    ...
+  }
+```
+
 ## Null을 리턴하지 마라 ##
 ## Null을 넘기지 마라 ##
 ## 결론 ##
