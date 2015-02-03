@@ -76,7 +76,7 @@ public class DeviceController {
 - 이렇게 함으로써 코드의 "Scope 정의"가 가능해진다.
 - 예시: 잘못된 input을 넣을 경우 StorageException을 제대로 던지는지 확인하는 테스트 코드를 작성해보자
 ```java
-  // Step 1: StorageExceptio을 던지지 않으므로 이 테스트는 실패한다.
+  // Step 1: StorageException을 던지지 않으므로 이 테스트는 실패한다.
   
   @Test(expected = StorageException.class)
   public void retrieveSectionShouldThrowOnInvalidFileName() {
@@ -106,7 +106,7 @@ public class DeviceController {
       FileInputStream stream = new FileInputStream(sectionName);
       stream.close();
     } catch (FileNotFoundException e) {
-      throw new StorageException("retrieval error”, e);
+      throw new StorageException("retrieval error", e);
     }
     return new ArrayList<RecordedGrip>();
   }
