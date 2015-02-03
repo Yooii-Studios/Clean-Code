@@ -123,7 +123,7 @@ public class DeviceController {
 - 상위 레벨 메소드에서 하위 레벨 메소드의 디테일에 대해 알아야 하기 때문에 캡슐화 또한 깨진다.
 - 필요한 경우 checked exceptions를 사용해야 되지만 일반적인 경우 득보다 실이 많다.
 
-## Exceptions로 문맥을 재공하라 ##
+## Exceptions로 문맥을 제공하라 ##
 - 예외가 발생한 이유와 타입을 제공하라.
 
 ## 사용에 맞게 Exception 클래스를 선언하라 ##
