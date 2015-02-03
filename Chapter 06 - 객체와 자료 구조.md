@@ -186,11 +186,11 @@ BufferedOutputStream bos = ctxt.createScratchFileStream(classFileName);
 
 ```java
 public class Address { 
-  private String street; 
-  private String streetExtra; 
-  private String city; 
-  private String state; 
-  private String zip;
+  public String street; 
+  public String streetExtra; 
+  public String city; 
+  public String state; 
+  public String zip;
 }
 ```
 #### 활성 레코드
