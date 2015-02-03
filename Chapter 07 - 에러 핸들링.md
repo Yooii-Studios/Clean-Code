@@ -262,7 +262,6 @@ public class DeviceController {
 ```
 ```java
   // Bad
-  
   List<Employee> employees = getEmployees();
   if (employees != null) {
     for(Employee e : employees) {
@@ -273,7 +272,6 @@ public class DeviceController {
 
 ```java
   // Good
-  
   List<Employee> employees = getEmployees();
   for(Employee e : employees) {
     totalPay += e.getPay();
@@ -283,7 +281,6 @@ public class DeviceController {
     if( .. there are no employees .. )
       return Collections.emptyList();
     }
-  
 ```
 
 ## Null을 넘기지 마라 ##
