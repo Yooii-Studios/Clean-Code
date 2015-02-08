@@ -4,7 +4,7 @@
 - log4j 공부하기(위 주제에 이어)
 - "공부를 위한 테스트"는 값어치를 한다
 - 아직 존재하지 않는 코드 사용하기
-- Clean한 경계(주: 이 책에서 나오는 clean의 뉘앙스를 살리기 위해 일부러 번역하지 않음)
+- Clean한 경계(주: 이 책에서 나오는 clean은 번역하면 안될것 같다.)
 - 결론
 
 ======================================================
@@ -165,6 +165,35 @@ public class LogTest {
 - Learning test를 하던 말던, 경계 테스트는 새 버전으로의 이전에 도움을 준다.
 
 ## 아직 존재하지 않는 코드 사용하기 ##
+- 아직 개발되지 않은 모듈이 필요한 경우, 인터페이스마저 확립되지 않은 경우
+- 
+
+```java
+public interface Transimitter {
+    public void transmit(SomeType frequency, OtherType stream);
+}
+
+public class FakeTransmitter implements Transimitter {
+    public void transmit(SomeType frequency, OtherType stream) {
+        // 실제 구현이 되기 전까지 더미 로직으로 대체
+    }
+}
+
+// 경계 밖의 API
+public class RealTransimitter {
+    // 캡슐화된 구현
+    ...
+}
+
+public class TransmitterAdapter extends RealTransimitter implements Transimitter {
+    public void transmit(SomeType frequency, OtherType stream) {
+        // RealTransimitter(외부 API)를 사용해 실제 로직을 여기에 구현.
+    }
+}
+
+```
+
+
 ## Clean한 경계(주: 이 책에서 나오는 clean의 뉘앙스를 살리기 위해 일부러 번역하지 않음) ##
 ## 결론 ##
 
