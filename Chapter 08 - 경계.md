@@ -213,6 +213,8 @@ public class CommunicationController {
 
 ```
 
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+
 ## Clean한 경계(주: 이 책에서 나오는 clean은 번역하면 안될것 같다.) ##
 - 좋은 소프트웨어 디자인은 변경이 생길 경우 많은 재작업 없이 변경을 반영할 수 있는 디자인이다.
 - 우리 내부 코드가 서드파티 코드를 많이 알지 못하게 막아야 한다.
