@@ -165,9 +165,13 @@ public class LogTest {
 - Learning test를 하던 말던, 경계 테스트는 새 버전으로의 이전에 도움을 준다.
 
 ## 아직 존재하지 않는 코드 사용하기 ##
-- 아직 개발되지 않은 모듈이 필요한 경우, 인터페이스마저 확립되지 않은 경우
-- 
-
+- 아직 개발되지 않은 모듈이 필요한데, 기능은 커녕 인터페이스조차 구현되지 않은 경우가 있을 수 있다.
+- 하지만 우리는 이러한 제약때문에 우리의 구현이 늦어지는걸 탐탁치 않게 여긴다.
+- 예시
+  - 저자는 무선통신 시스템을 구축하는 프로젝트를 하고 있었다.
+  - 그 팀 안의 하부 팀으로 "송신기"를 담당하는 팀이 있었는데 나머지 팀원들은 그쪽 지식이 거의 없었다.
+  - "송신기"팀은 인터페이스를 제공하지 않았다. 하지만 저자는 "송신기"팀을 기다리는 대신 "원하는" 기능을 인터페이스로 만들었다. _[지정한 주파수를 이용해 이 스트림에서 들어오는 자료를 아날로그 신호로 전송하라]_
+  - 이렇게 인터페이스를 정의함으로써 메인 로직을 더 깔끔하게 짤 수 있었고 목표를 명확하게 나타낼 수 있었다.
 ```java
 public interface Transimitter {
     public void transmit(SomeType frequency, OtherType stream);
@@ -188,6 +192,21 @@ public class RealTransimitter {
 public class TransmitterAdapter extends RealTransimitter implements Transimitter {
     public void transmit(SomeType frequency, OtherType stream) {
         // RealTransimitter(외부 API)를 사용해 실제 로직을 여기에 구현.
+        // Transmitter의 변경이 미치는 영향은 이 부분에 한정된다.
+    }
+}
+
+public class CommunicationController {
+    // Transmitter팀의 API가 제공되기 전에는 아래와 같이 사용한다.
+    public void someMethod() {
+        Transmitter transmitter = new FakeTransmitter();
+        transmitter.transmit(someFrequency, someStream);
+    }
+    
+    // Transmitter팀의 API가 제공되면 아래와 같이 사용한다.
+    public void someMethod() {
+        Transmitter transmitter = new TransmitterAdapter();
+        transmitter.transmit(someFrequency, someStream);
     }
 }
 
