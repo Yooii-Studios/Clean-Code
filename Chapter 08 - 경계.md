@@ -43,7 +43,7 @@
 | wait() void – Object                        |
 | wait(long timeout) void – Object            |
 | wait(long timeout, int nanos) void – Object |
-- 만약 우리가 Sensor클래스를 가지는 Map객체를 사용한다면 다음과 같은 형태일 것이다.
+- 만약 우리가 Sensor클래스를 저장하는 Map객체를 사용한다면 다음과 같은 형태일 것이다.
  - Map sensors = new HashMap();
  - Sensor s = (Sensor)sensors.get(sensorId );
  - 이와 같은 방식은 Sensor클래스를 사용하는 코드 전반에 걸쳐 빈번히 사용된다.
