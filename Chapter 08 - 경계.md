@@ -13,10 +13,37 @@
 어느 상황이던, 우리는 이 코드들을 우리 내부 코드와 "깨끗하게" 통합시켜야 한다.
 
 ## 서드파티 코드 사용하기 ##
-- 내용
-```java
-// 코드
-```
+- 인터페이스를 "제공하는" 입장과 "사용하는" 입장 사이에는 필연적인 긴장감이 존재한다.
+ - "제공하는" 입장에서는 좀 더 다양한 환경에서 좀 더 많은 사용자가 사용할 수 있도록 다양한 사용성을 지향한다.
+ - "사용하는" 입장에서는 그들의 사용성에 맞는 specific한 인터페이스를 원한다.
+ - 이것을 "경계에서의 긴장"이라 부른다.  
+ 
+| Figure 8-1. The methods of Map              |
+| ------------------------------------------- |
+| clear() void – Map                          |
+| containsKey(Object key) boolean – Map       |
+| containsValue(Object value) boolean – Map   |
+| clear() void – Map                          |
+| containsKey(Object key) boolean – Map       |
+| containsValue(Object value) boolean – Map   |
+| entrySet() Set – Map                        |
+| equals(Object o) boolean – Map              |
+| get(Object key) Object – Map                |
+| getClass() Class<? extends Object> – Object |
+| hashCode() int – Map                        |
+| isEmpty() boolean – Map                     |
+| keySet() Set – Map                          |
+| notify() void – Object                      |
+| notifyAll() void – Object                   |
+| put(Object key, Object value) Object – Map  |
+| putAll(Map t) void – Map                    |
+| remove(Object key) Object – Map             |
+| size() int – Map                            |
+| toString() String – Object                  |
+| values() Collection – Map                   |
+| wait() void – Object                        |
+| wait(long timeout) void – Object            |
+| wait(long timeout, int nanos) void – Object |
 
 ## 경계 탐험하고 공부하기 ##
 ## log4j 공부하기 ##
@@ -25,6 +52,11 @@
 ## Clean한 경계(주: 이 책에서 나오는 clean의 뉘앙스를 살리기 위해 일부러 번역하지 않음) ##
 ## 결론 ##
 
+
+- 내용
+```java
+// 코드
+```
 ======================================================
 
 #### 참조 ####
