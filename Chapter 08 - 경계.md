@@ -44,7 +44,31 @@
 | wait() void – Object                        |
 | wait(long timeout) void – Object            |
 | wait(long timeout, int nanos) void – Object |
-
+- 만약 우리가 Sensor클래스를 가지는 Map객체를 사용한다면 다음과 같은 형태일 것이다.
+ - Map sensors = new HashMap();
+ - Sensor s = (Sensor)sensors.get(sensorId );
+ - 이와 같은 방식은 Sensor클래스를 사용하는 코드 전반에 걸쳐 빈번히 사용된다.
+ - 하지만 이는 사용되는 곳에서 캐스팅의 부담을 안게 된다.
+ - 그리고 적절한 문맥조차 줄 수 없다.
+- 이는 아래와 같이 generic을 사용함으로써 해결할 수 있다.
+ - Map<Sensor> sensors = new HashMap<Sensor>();
+ - Sensor s = sensors.get(sensorId );
+ - 하지만 이 방법 또한 Map객체가 필요 이상의 기능을 제공하는 것은 막지 못한다.
+- Map의 인터페이스가 바뀌거나 할 경우 또한 우리 코드의 많은 부분들이 바뀌어야 한다.
+ - 인터페이스가 바뀔 일이 별로 없을 것이라 생각할 지도 모르지만, 실제로 Java 5버전에서 generic이 추가되었을 때 Map의 인터페이스가 바뀐 사례가 있다.
+- 결국 제일 좋은 방법은 래핑이다.
+ - 경계의 인터페이스(이 경우에는 Map의 메서드)는 숨겨진다.
+ - Map의 인터페이스가 변경되더라도 여파를 최소화할 수 있다. 예를 들어 Generic을 사용하던 직접 캐스팅하던 그건 구현 디테일이며 Sensor클래스를 사용하는 측에서는 신경쓸 필요가 없다.
+```java
+public class Sensors {
+    private Map sensors = new HashMap();
+    
+    public Sensor getById(String id) {
+        return (Sensor)sensors.get(id);
+    }
+    //snip
+}
+```
 ## 경계 탐험하고 공부하기 ##
 ## log4j 공부하기 ##
 ## "공부를 위한 테스트"는 값어치를 한다 ##
