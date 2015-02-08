@@ -1,7 +1,7 @@
 ## 목차 ##
 - 서드파티 코드 사용하기
 - 경계 탐험하고 공부하기
-- log4j 공부하기
+- log4j 공부하기(위 주제에 이어)
 - "공부를 위한 테스트"는 값어치를 한다
 - 아직 존재하지 않는 코드 사용하기
 - Clean한 경계(주: 이 책에서 나오는 clean의 뉘앙스를 살리기 위해 일부러 번역하지 않음)
@@ -79,7 +79,85 @@ public class Sensors {
 - 서드파티 코드를 사용할 때, 우리는 적어도 우리가 사용할 코드에 대해서는 테스트를 할 필요가 있다.
 - 곧바로 서드파티 코드를 사용하지 말고, 그 코드를 이해하기 위해 테스트를 작성할 수 있다.(짐 뉴커크는 이를 "테스트 공부하기"라고 부른다.)
 
-## log4j 공부하기 ##
+## log4j 공부하기(위 주제에 이어) ##
+```java
+    // 1.
+    // 우선 log4j 라이브러리를 다운받자.
+    // 고민 많이 하지 말고 본능에 따라 "hello"가 출력되길 바라면서 아래의 테스트 코드를 작성해보자.
+    @Test
+    public void testLogCreate() {
+        Logger logger = Logger.getLogger("MyLogger");
+        logger.info("hello");
+    }
+
+    // 2.
+    // 위 테스트는 "Appender라는게 필요하다"는 에러를 밷는다.
+    // 조금 더 읽어보니 ConsoleAppender라는게 있는걸 알아냈다.
+    // 그래서 ConsoleAppender라는 객체를 만들어 넣어줘봤다.
+    @Test
+    public void testLogAddAppender() {
+        Logger logger = Logger.getLogger("MyLogger");
+        ConsoleAppender appender = new ConsoleAppender();
+        logger.addAppender(appender);
+        logger.info("hello");
+    }
+
+    // 3.
+    // 위와 같이 하면 "Appender에 출력 스트림이 없다"고 한다.
+    // 이상하다. 가지고 있는게 이성적일것 같은데...
+    // 구글의 도움을 빌려, 다음과 같이 해보았다.
+    @Test
+    public void testLogAddAppender() {
+        Logger logger = Logger.getLogger("MyLogger");
+        logger.removeAllAppenders();
+        logger.addAppender(new ConsoleAppender(
+            new PatternLayout("%p %t %m%n"),
+            ConsoleAppender.SYSTEM_OUT));
+        logger.info("hello");
+    }
+    
+    // 성공했다. 하지만 ConsoleAppender를 만들어놓고 ConsoleAppender.SYSTEM_OUT을 받는건 이상하다.
+    // 그래서 빼봤더니 잘 돌아간다.
+    // 하지만 PatternLayout을 제거하니 돌아가지 않는다.
+    // 그래서 문서를 살펴봤더니 "ConsoleAppender의 기본 생성자는 unconfigured상태"란다.
+    // 명백하지도 않고 실용적이지도 않다... 버그이거나, 적어도 "일관적이지 않다"고 느껴진다.
+```
+```java
+// 조금 더 구글링, 문서 읽기, 테스트를 거쳐 log4j의 동작법을 알아냈고 그것을 간단한 유닛테스트로 기록했다.
+// 이제 이 지식을 기반으로 log4j를 래핑하는 클래스를 만들수 있다. 나머지 코드에서는 log4j의 동작원리에 대해 알 필요가 없게 됐다.
+
+public class LogTest {
+    private Logger logger;
+    
+    @Before
+    public void initialize() {
+        logger = Logger.getLogger("logger");
+        logger.removeAllAppenders();
+        Logger.getRootLogger().removeAllAppenders();
+    }
+    
+    @Test
+    public void basicLogger() {
+        BasicConfigurator.configure();
+        logger.info("basicLogger");
+    }
+    
+    @Test
+    public void addAppenderWithStream() {
+        logger.addAppender(new ConsoleAppender(
+            new PatternLayout("%p %t %m%n"),
+            ConsoleAppender.SYSTEM_OUT));
+        logger.info("addAppenderWithStream");
+    }
+    
+    @Test
+    public void addAppenderWithoutStream() {
+        logger.addAppender(new ConsoleAppender(
+            new PatternLayout("%p %t %m%n")));
+        logger.info("addAppenderWithoutStream");
+    }
+}
+```
 ## "공부를 위한 테스트"는 값어치를 한다 ##
 ## 아직 존재하지 않는 코드 사용하기 ##
 ## Clean한 경계(주: 이 책에서 나오는 clean의 뉘앙스를 살리기 위해 일부러 번역하지 않음) ##
