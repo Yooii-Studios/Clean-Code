@@ -173,6 +173,9 @@ public class LogTest {
   - 그 팀 안의 하부 팀으로 "송신기"를 담당하는 팀이 있었는데 나머지 팀원들은 송신기에 대한 지식이 거의 없었다.
   - "송신기"팀은 인터페이스를 제공하지 않았다. 하지만 저자는 "송신기"팀을 기다리는 대신 "원하는" 기능을 정의하고 인터페이스로 만들었다. _[지정한 주파수를 이용해 이 스트림에서 들어오는 자료를 아날로그 신호로 전송하라]_
   - 이렇게 인터페이스를 정의함으로써 메인 로직을 더 깔끔하게 짤 수 있었고 목표를 명확하게 나타낼 수 있었다.(참조 1)
+
+![Figure 8-2](/images/figure 8-2.png)
+
 ```java
 public interface Transimitter {
     public void transmit(SomeType frequency, OtherType stream);
@@ -212,8 +215,6 @@ public class CommunicationController {
 }
 
 ```
-
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
 ## Clean한 경계(주: 이 책에서 나오는 clean은 번역하면 안될것 같다.) ##
 - 좋은 소프트웨어 디자인은 변경이 생길 경우 많은 재작업 없이 변경을 반영할 수 있는 디자인이다.
