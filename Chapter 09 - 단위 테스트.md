@@ -54,7 +54,7 @@
 
 목록 9-1은 FitNess에서 가져온 코드다. 아래 테스트 케이스 세 개는 이해하기 어렵기에 개선할 여지가 충분하다. 첫째, addPage와 assertSubString을 부르느라 중복되는 코드가 매우 많다. 좀 더 중요하게는 자질구레한 사항이 너무 많아 테스트 코드의 표현력이 떨어진다. 
 
-######목록 9-1
+######목록 9-1 SerializedPageResponderTest.java
 ```java
 public void testGetPageHieratchyAsXml() throws Exception {
   crawler.addPage(root, PathParser.parse("PageOne"));
