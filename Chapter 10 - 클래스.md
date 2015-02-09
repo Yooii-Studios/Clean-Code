@@ -15,7 +15,7 @@
 
 ## 클래스 체계
 JAVA Convention에 따르면 가장 먼저 변수 목록이 나온다.
-**static public > static private > private 인스턴스 > public...은 필요한 경우가 거의 없다.**  
+**static public --> static private --> private 인스턴스 --> (public은 필요한 경우가 거의 없다)**  
 변수목록 다음에는 공개 함수가 나온다. 비공개 함수는 자신을 호출 하는 공개 함수 직후에 나온다.  
 즉, 추상화 단계가 순차적으로 내려간다.
 
@@ -69,468 +69,87 @@ SRP는 객체지향설계에서 더욱 중요한 개념이고, 지키기 수월�
    작은 서랍을 많이 두고 기능과 이름이 명확한 컴포넌트를 나눠 넣고 싶은가?  
    아니면 큰 서랍 몇개를 두고 모두 떤져 넣고 싶은가?"  
 
+**큰 클래스 몇개가 아니라 작은 클래스 여럿으로 이뤄진 시스템이 더 바람직하다.  
+작은 클래스는 각자 맡은 책임이 하나며, 변경할 이유가 하나며, 다른 작은 클래스와 협력해  
+시스템에 필요한 동작을 수행한다.  
 
+#### 응집도
+클래스는 인스턴스 변수 수가 작아야 한다.  
+각 클래스 메서드는 클래스 인스턴스 변수를 하나 이상 사용해야 한다.  
+일반적으로 메서드가 변수를 더 많이 사용할 수록 메서드와 클래스는 응집도가 더 높다.  
+모든 인스턴스 변수를 메서드마다 사용하는 클래스는 응집도가 가장 높지만, 이런 클래스는 가능하지도,  
+바람직하지도 않다. 하지만 가능한한 응집도가 높은 클래스를 지향해야 한다.  
+**응집도가 높다는 말은 클래스에 속한 메서드와 변수가 서로 의존하며 논리적인 단위로 묶인다는 의미기 때문이다**
 
 ```java
-//빈 행을 넣을 경우
-package fitnesse.wikitext.widgets;
-
-import java.util.regex.*;
-
-public class BoldWidget extends ParentWidget {
-	public static final String REGEXP = "'''.+?'''";
-	private static final Pattern pattern = Pattern.compile("'''(.+?)'''", 
-		Pattern.MULTILINE + Pattern.DOTALL
-	);
-	
-	public BoldWidget(ParentWidget parent, String text) throws Exception { 
-		super(parent);
-		Matcher match = pattern.matcher(text);
-		match.find();
-		addChildWidgets(match.group(1)); 
-	}
-	
-	public String render() throws Exception { 
-		StringBuffer html = new StringBuffer("<b>"); 
-		html.append(childHtml()).append("</b>"); 
-		return html.toString();
-	} 
-}
+//Stack을 구현한 코드, 응집도가 높은 편이다.
 ```
 
-#### 세로 밀집도
-줄바꿈이 개념을 분리한다면, 반대로 세로 밀집도는 연관성을 의미한다.  
-즉, 서로 밀집한 코드 행은 세로로 가까이 놓여야 한다.
+**'함수를 작게, 매개변수 목록을 짧게'**라는 전략을 따르다 보면  
+때때로 몇몇 메서드만이 사용하는 인스턴스 변수가 아주 많아진다.  
+이는 십중 팔구 새로운 클래스를 쪼개야 한다는 신호다.  
+응집도가 높아지도록 변수와 메서드를 적절히 분리해 새로운 클래스 두세 개로 쪼개준다.
+
+#### 응집도를 유지하면 작은 클래스 여럿이 나온다.
+큰 함수를 작은 함수 여럿으로 나누기만 해도 클래스 수가 많아진다.
+예를 들어,   
+변수가 아주 많은 큰 함수가 하나 있다  
+--> 큰 함수 일부를 작은 함수로 빼내고 싶다   
+--> 빼내려는 코드가 큰 함수에 정의 된 변수를 많이 사용한다  
+--> 변수들을 새 함수에 인수로 넘겨야 하나? NO!
+--> 변수들을 클래스 인스턴스 변수로 승격 시키면 인수가 필요없다. But! 응집력이 낮아짐
+--> **몇몇 함수가 몇몇 인스턴스 변수만 사용한다면 독자적인 클래스로 분리해도 된다!**
+
+큰 함수를 작은 함수 여럿으로 쪼개다 보면 종종 작은 클래스 여럿으로 쪼갤 기회가 생긴다.
 
 ```java
-//의미없는 주석으로 변수를 떨어뜨려 놓아서 한눈에 파악이 잘 안된다.
-
-public class ReporterConfig {
-	/**
-	* The class name of the reporter listener 
-	*/
-	private String m_className;
-	
-	/**
-	* The properties of the reporter listener 
-	*/
-	private List<Property> m_properties = new ArrayList<Property>();
-	public void addProperty(Property property) { 
-		m_properties.add(property);
-	}
+//이 하나의 크고 더러운 함수를 여러 함수와 클래스로 잘게 나누면서 적절한 이름을 부여해보자!
 ```
 
 ```java
-//의미 없는 주석을 제거함으로써 코드가 한눈에 들어온다.
-//변수 2개에 메소드가 1개인 클래스라는 사실이 드러난다.
-
-public class ReporterConfig {
-	private String m_className;
-	private List<Property> m_properties = new ArrayList<Property>();
-	
-	public void addProperty(Property property) { 
-		m_properties.add(property);
-	}
-```
-
-#### 수직 거리 
-서로 밀접한 개념은 세로로 가까이 둬야 한다.  
-두 개념이 서로 다른 파일에 속한다면 규칙이 통하지 않지만,  
-타당한 근거가 없다면 서로 밀접한 개념은 한 파일에 속해야 마땅하다(protected 변수를 피해야 하는 이유)  
-같은 파일에 속할 정도로 밀접한 두 개념은 세로 거리로 연관성_- 한 개념을 이해하는 데 다른 개념이 중요한 정도 -_을 표현한다.  
-
-###### 변수선언
-변수는 사용하는 위치에서 최대한 가까이 선언한다.  
-우리가 만든 함수는 매우 짧으므로 (Chapter3 - 함수를 공부했다면 말이지) 
-
-```java
-//InputStream이 함수 맨 처음에 선언 되어있다.
-
-private static void readPreferences() {
-	InputStream is= null;
-	try {
-		is= new FileInputStream(getPreferencesFile()); 
-		setPreferences(new Properties(getPreferences())); 
-		getPreferences().load(is);
-	} catch (IOException e) { 
-		try {
-			if (is != null) 
-				is.close();
-		} catch (IOException e1) {
-		} 
-	}
-}
 ```
 
 ```java
-//모두들 알다시피 루프 제어 변수는 Test each처럼 루프 문 내부에 선언
-
-public int countTestCases() { 
-	int count= 0;
-	for (Test each : tests)
-		count += each.countTestCases(); 
-	return count;
-}
 ```
 
 ```java
-//드물지만, 긴 함수에서는 블록 상단 또는 루프 직전에 변수를 선언 할 수도 있다.
-...
-for (XmlTest test : m_suite.getTests()) {
-	TestRunner tr = m_runnerFactory.newTestRunner(this, test);
-	tr.addListener(m_textReporter); 
-	m_testRunners.add(tr);
-
-	invoker = tr.getInvoker();
-	
-	for (ITestNGMethod m : tr.getBeforeSuiteMethods()) { 
-		beforeSuiteMethods.put(m.getMethod(), m);
-	}
-
-	for (ITestNGMethod m : tr.getAfterSuiteMethods()) { 
-		afterSuiteMethods.put(m.getMethod(), m);
-	} 
-}
-...
 ```
 
-###### 인스턴스 변수
-인스턴스 변수는 클래스 맨 처음에 선언한다(자바의 경우).  
-변수 간 세로로 거리를 두지 않는다 - 잘 설계한 클래스는 대다수 클래스 메서드가 인스턴스 변수를 사용하기 때문.  
-C++의 경우에는 마지막에 선언하는 것이 일반적이다. 어느 곳이든 잘 알려진 위치에 인스턴스 변수를 모으는 것이 중요하다.
+가장 먼저 원래 프로그램의 정확한 동작을 검증하는 테스트 슈프를 작성하라.  
+그 다음 한번에 하나씩 여러번에 걸쳐 코드를 변경하고,  
+코드를 변경 할 때 마다 테스트를 수행해 원래 프로그램과 동일하게 동작하는지 확인하라.
+
+## 변경하기 쉬운 클래스 
+시스템은 변경이 불가피하다. 그리고 변경이 있을 때 마다 의도대로 동작하지 않을 위험이 따른다.  
+깨끗한 시스템은 클래스를 체계적으로 관리해 변경에 따르는 위험을 최대한 낮춘다.  
 
 ```java
-//도중에 선언된 변수는 꽁꽁 숨겨놓은 보물 찾기와 같다. 십중 팔구 코드를 읽다가 우연히 발견한다. 발견해보시길.
-//요즘은 IDE가 잘 되어있어서 찾기야 어렵지 않겠지만, 더러운건 마찬가지
-
-public class TestSuite implements Test {
-	static public Test createTest(Class<? extends TestCase> theClass,
-									String name) {
-		... 
-	}
-
-	public static Constructor<? extends TestCase> 
-	getTestConstructor(Class<? extends TestCase> theClass) 
-	throws NoSuchMethodException {
-		... 
-	}
-
-	public static Test warning(final String message) { 
-		...
-	}
-	
-	private static String exceptionToString(Throwable t) { 
-		...
-	}
-	
-	private String fName;
-
-	private Vector<Test> fTests= new Vector<Test>(10);
-
-	public TestSuite() { }
-	
-	public TestSuite(final Class<? extends TestCase> theClass) { 
-		...
-	}
-
-	public TestSuite(Class<? extends TestCase> theClass, String name) { 
-		...
-	}
-	
-	... ... ... ... ...
-}
+//해당 코드는 새로운 SQL문을 지원할 때 손대야 하고, 기존 SQL문을 수정할 때도 손대야 하므로 SRP위반
 ```
 
-###### 종속 함수
-한 함수가 다른 함수를 호출한다면(종속 함수) 두 함수는 세로로 가까이 배치한다.
-가능하면 호출되는 함수를 호출하는 함수보다 뒤에 배치한다. (프로그램이 자연스럽게 읽힐 수 있도록)
-이러한 규칙을 일관되게 적용한다면 독자는 방금 함수에서 호출한 함수가 잠시 후에 정의될 것이라고 자연스레 예측한다.
+클래스 일부에서만 사용되는 비공개 메서드는 코드 개선의 잠재적인 여지를 시사한다.
 
 ```java
-/*첫째 함수에서 가장 먼저 호출하는 함수가 바로 아래 정의된다.
-다음으로 호출하는 함수는 그 아래에 정의된다. 그러므로 호출되는 함수를 찾기가 쉬워지며
-전체 가독성도 높아진다.*/
-	
-/*makeResponse 함수에서 호출하는 getPageNameOrDefault함수 안에서 "FrontPage" 상수를 사용하지 않고,
-상수를 알아야 의미 전달이 쉬워지는 함수 위치에서 실제 사용하는 함수로 상수를 넘겨주는 방법이
-가독성 관점에서 훨씬 더 좋다*/
-
-public class WikiPageResponder implements SecureResponder { 
-	protected WikiPage page;
-	protected PageData pageData;
-	protected String pageTitle;
-	protected Request request; 
-	protected PageCrawler crawler;
-	
-	public Response makeResponse(FitNesseContext context, Request request) throws Exception {
-		String pageName = getPageNameOrDefault(request, "FrontPage");
-		loadPage(pageName, context); 
-		if (page == null)
-			return notFoundResponse(context, request); 
-		else
-			return makePageResponse(context); 
-		}
-
-	private String getPageNameOrDefault(Request request, String defaultPageName) {
-		String pageName = request.getResource(); 
-		if (StringUtil.isBlank(pageName))
-			pageName = defaultPageName;
-
-		return pageName; 
-	}
-	
-	protected void loadPage(String resource, FitNesseContext context)
-		throws Exception {
-		WikiPagePath path = PathParser.parse(resource);
-		crawler = context.root.getPageCrawler();
-		crawler.setDeadEndStrategy(new VirtualEnabledPageCrawler()); 
-		page = crawler.getPage(context.root, path);
-		if (page != null)
-			pageData = page.getData();
-	}
-	
-	private Response notFoundResponse(FitNesseContext context, Request request)
-		throws Exception {
-		return new NotFoundResponder().makeResponse(context, request);
-	}
-	
-	private SimpleResponse makePageResponse(FitNesseContext context)
-		throws Exception {
-		pageTitle = PathParser.render(crawler.getFullPath(page)); 
-		String html = makeHtml(context);
-		SimpleResponse response = new SimpleResponse(); 
-		response.setMaxAge(0); 
-		response.setContent(html);
-		return response;
-	} 
-...
+//공개 인터페이스를 전부 SQL 클래스에서 파생하는 클래스로 만들고, 비공개 메서드는 해당 클래스로 옮기고,
+//공통된 인터페이스는 따로 클래스로 뺐다.
+//이렇게 하면 update문 추가 시에 기존의 클래스를 건드릴 이유가 없어진다.
 ```
 
-###### 개념의 유사성
-개념적인 친화도가 높을 수록 코드를 서로 가까이 배치한다.  
-앞서 살펴보았듯이 한 함수가 다른 함수를 호출하는 종속성, 변수와 그 변수를 사용하는 함수가 그 예다.  
-그 외에도 비슷한 동작을 수행하는 함수 무리 또한 개념의 친화도가 높다.
+**잘 짜여진 시스템은 추가와 수정에 있어서 건드릴 코드가 최소이다.**
+
+##### 변경으로부터 격리
+OOP입문에서 concrete 클래스와 abstract 클래스가 있는데, 
+concrete 클래스에 의존(상세한 구현에 의존)하는 클라이언트 클래스는 구현이 바뀌면 위험에 빠진다.  
+그래서 인터페이스와 abstract 클래스를 사용해 구현이 미치는 영향을 격리시켜야 한다.  
+
+상세한 구현에 의존하는 코드는 테스트가 어려움.  
+그래서 추상화를 통해 테스트가 가능할 정도로 시스템의 결합도를 낮춤으로써  
+유연성과 재사용성도 더욱 높아진다.
+
+결함도가 낮다는 말은 각 시스템 요소가 다른 요소로부터 그리고 변경으로부터 잘 격리되어있다는 뜻이다.
 
 ```java
-//같은 assert 관련된 동작들을 수행하며, 명명법이 똑같고 기본 기능이 유사한 함수들로써 개념적 친화도가 높다.
-//이런 경우에는 종속성은 오히려 부차적 요인이므로, 종속적인 관계가 없더라도 가까이 배치하면 좋다.
-
-public class Assert {
-	static public void assertTrue(String message, boolean condition) {
-		if (!condition) 
-			fail(message);
-	}
-
-	static public void assertTrue(boolean condition) { 
-		assertTrue(null, condition);
-	}
-
-	static public void assertFalse(String message, boolean condition) { 
-		assertTrue(message, !condition);
-	}
-	
-	static public void assertFalse(boolean condition) { 
-		assertFalse(null, condition);
-	} 
-...
-```
-
-#### 세로 순서
-일반적으로 함수 호출 종속성은 아래방향으로 유지하므로, 호출되는 함수를 호출하는 함수보다 뒤에 배치한다.  
-그러면 소스코드가 자연스럽게 고차원-->저차원으로 내려간다.  
-가장 중요한 개념을 가장 먼저 표현하고, 세세한 사항은 마지막에 표현한다.  
-그렇게 하면 첫 함수 몇개만 읽어도 개념을 파악하기 쉬워질 것이다.
-
-
-## 가로 형식 맞추기
-대다수의 프로그래머들은 명백히 짧은 행을 선호하므로 짧은 행이 바람직하다.  
-Hollerith가 제안한 80자 제한은 다소 인위적이므로 조금 더 늘여도 좋다. 하지만 120자 이상을 넘어간다면 주의 부족이다.  
-필자 개인적으로는 120자 정도로 길이를 제한한다.
-
-#### 가로 공백과 밀집도
-가로로는 공백을 사용해 밀접/느슨한 개념을 표현한다
-
-```java
-private void measureLine(String line) { 
-	lineCount++;
-	
-	//흔히 볼 수 있는 코드인데, 할당 연산자 좌우로 공백을 주어 왼쪽,오른쪽 요소가 확실하게 구분된다.
-	int lineSize = line.length();
-	totalChars += lineSize; 
-	
-	//반면 함수이름과 괄호 사이에는 공백을 없앰으로써 함수와 인수의 밀접함을 보여준다
-	//괄호 안의 인수끼리는 쉼표 뒤의 공백을 통해 인수가 별개라는 사실을 보여준다.
-	lineWidthHistogram.addLine(lineSize, lineCount);
-	recordWidestLine(lineSize);
-}
-```
-
-추가로 연산자의 우선순위를 강조하기 위해서도 공백을 사용한다
-`return b*b - 4*a*c;`  
-하지만 Code Formatter등의 도구가 연산자 우선순위까지 고려하지 못하므로 공백을 임의로 넣어주더라도 사라지는 경우가 대부분.
-<br/>
-Q.그렇다면 괄호로 묶어주는 것이 더 바람직하지 않을까?
-
-#### 가로 정렬
-```java
-public class FitNesseExpediter implements ResponseSender {
-	private		Socket		socket;
-	private 	InputStream 	input;
-	private 	OutputStream 	output;
-	private 	Reques		request; 		
-	private 	Response 	response;	
-	private 	FitNesseContex	context; 
-	protected 	long		requestParsingTimeLimit;
-	private 	long		requestProgress;
-	private 	long		requestParsingDeadline;
-	private 	boolean		hasError;
-	
-	... 
-```
-보기엔 깔끔해 보일지 모르나, 코드가 엉뚱한 부분을 강조해 변수 유형을 자연스레 무시하고 이름부터 읽게 된다.  
-게다가 Code Formatter 대부분들은 이렇게 해놔봤자 무시하고 원래대로 돌려놓는다(내가 이 문제 때문에 씨름한 경험이 있음)  
-그러므로 선언문과 할당문을 별도로 정렬할 필요가 없다.  
-정렬이 필요할 정도로 목록이 길다면(Q. 여기서 말하는 목록은 인스턴스 변수 개수를 말하는 것인가?),  
-목록의 길이가 문제이지 정렬이 부족해서가 아니다. 선언부가 길다는 것은 클래스를 쪼개야 한다는 것을 의미한다.
-
-#### 들여쓰기  
-들여쓰기를 잘 해놓으면 _- 물론 그러고 있겠지만! -_ 구조가 한 눈에 들어온다.
-
-###### 들여쓰기 무시하기
-간단한 if문, while문, 짧은 함수에서 들여쓰기를 무시하고픈 유혹이 생긴다.(정말?)   
-하지만 들여쓰기로 제대로 범위를 표현한 코드가 가독성이 더 높다. 유혹을 뿌리치자
-
-```java
-//이렇게 한행에 다 넣을 수 있다고 다 때려 박는 것이 멋있는 코드가 아니란 것! 알아두삼
-
-public class CommentWidget extends TextWidget {
-	public static final String REGEXP = "^#[^\r\n]*(?:(?:\r\n)|\n|\r)?";
-	
-	public CommentWidget(ParentWidget parent, String text){super(parent, text);}
-	public String render() throws Exception {return ""; } 
-}
 ```
 
 ```java
-//한줄이라도 정성스럽게 들여쓰기로 감싸주자. 가독성을 위해
-
-public class CommentWidget extends TextWidget {
-	public static final String REGEXP = "^#[^\r\n]*(?:(?:\r\n)|\n|\r)?";
-	
-	public CommentWidget(ParentWidget parent, String text){
-		super(parent, text);
-	}
-	
-	public String render() throws Exception {
-		return ""; 
-	} 
-}
-```
-
-#### 가짜 범위
-빈 while문이나 for문을 접할 때가 있다. 가능한한 피해야 되지만, 피하지 못 할 경우엔  
-빈 블록을 올바로 들여쓰고 괄호로 감싸라. **그렇지 않으면 찾을 수 없는 버그가 발생할지도...**
-
-
-## 팀 규칙
-당연한 이야기들이 적혀있는 것 같지만.. 팀에 속해있다면,  
-가장 우선시 되어야 하고 선호해야 할 규칙은 팀 규칙이다.  
-처음 팀이 이루어졌다면 우성이형과 동현이처럼 코딩을 시작하기 전,  
-코딩 스타일을 의논하여(괄호를 어디에 넣을지, 네이밍은 어떻게 할지 등) IDE Formatter로 지정하여
-구현하는 것이 옳은 방식이다.  
-**좋은 소프트웨어 시스템은 읽기 쉬운 문서로 이뤄지고, 읽기 쉬운 문서는 스타일이 일관적이고 매끄러워야 한다.**  
-
-## 밥 아저씨의 형식 규칙
-끝으로 이 책의 저자가 사용하는 규칙이 여실히 드러나는 코드를 첨부하며 턴을 종료한다.
-```java
-public class CodeAnalyzer implements JavaFileAnalysis { 
-	private int lineCount;
-	private int maxLineWidth;
-	private int widestLineNumber;
-	private LineWidthHistogram lineWidthHistogram; 
-	private int totalChars;
-	
-	public CodeAnalyzer() {
-		lineWidthHistogram = new LineWidthHistogram();
-	}
-	
-	public static List<File> findJavaFiles(File parentDirectory) { 
-		List<File> files = new ArrayList<File>(); 
-		findJavaFiles(parentDirectory, files);
-		return files;
-	}
-	
-	private static void findJavaFiles(File parentDirectory, List<File> files) {
-		for (File file : parentDirectory.listFiles()) {
-			if (file.getName().endsWith(".java")) 
-				files.add(file);
-			else if (file.isDirectory()) 
-				findJavaFiles(file, files);
-		} 
-	}
-	
-	public void analyzeFile(File javaFile) throws Exception { 
-		BufferedReader br = new BufferedReader(new FileReader(javaFile)); 
-		String line;
-		while ((line = br.readLine()) != null)
-			measureLine(line); 
-	}
-	
-	private void measureLine(String line) { 
-		lineCount++;
-		int lineSize = line.length();
-		totalChars += lineSize; 
-		lineWidthHistogram.addLine(lineSize, lineCount);
-		recordWidestLine(lineSize);
-	}
-	
-	private void recordWidestLine(int lineSize) { 
-		if (lineSize > maxLineWidth) {
-			maxLineWidth = lineSize;
-			widestLineNumber = lineCount; 
-		}
-	}
-
-	public int getLineCount() { 
-		return lineCount;
-	}
-
-	public int getMaxLineWidth() { 
-		return maxLineWidth;
-	}
-
-	public int getWidestLineNumber() { 
-		return widestLineNumber;
-	}
-
-	public LineWidthHistogram getLineWidthHistogram() {
-		return lineWidthHistogram;
-	}
-	
-	public double getMeanLineWidth() { 
-		return (double)totalChars/lineCount;
-	}
-
-	public int getMedianLineWidth() {
-		Integer[] sortedWidths = getSortedWidths(); 
-		int cumulativeLineCount = 0;
-		for (int width : sortedWidths) {
-			cumulativeLineCount += lineCountForWidth(width); 
-			if (cumulativeLineCount > lineCount/2)
-				return width;
-		}
-		throw new Error("Cannot get here"); 
-	}
-	
-	private int lineCountForWidth(int width) {
-		return lineWidthHistogram.getLinesforWidth(width).size();
-	}
-	
-	private Integer[] getSortedWidths() {
-		Set<Integer> widths = lineWidthHistogram.getWidths(); 
-		Integer[] sortedWidths = (widths.toArray(new Integer[0])); 
-		Arrays.sort(sortedWidths);
-		return sortedWidths;
-	} 
-}
 ```
