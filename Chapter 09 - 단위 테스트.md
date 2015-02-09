@@ -56,6 +56,62 @@
 
 ######목록 9-1
 ```java
+public void testGetPageHieratchyAsXml() throws Exception {
+  crawler.addPage(root, PathParser.parse("PageOne"));
+  crawler.addPage(root, PathParser.parse("PageOne.ChildOne"));
+  crawler.addPage(root, PathParser.parse("PageTwo"));
+
+  request.setResource("root");
+  request.addInput("type", "pages");
+  Responder responder = new SerializedPageResponder();
+  SimpleResponse response =
+    (SimpleResponse) responder.makeResponse(new FitNesseContext(root), request);
+  String xml = response.getContent();
+
+  assertEquals("text/xml", response.getContentType());
+  assertSubString("<name>PageOne</name>", xml);
+  assertSubString("<name>PageTwo</name>", xml);
+  assertSubString("<name>ChildOne</name>", xml);
+}
+
+public void testGetPageHieratchyAsXmlDoesntContainSymbolicLinks() throws Exception {
+  WikiPage pageOne = crawler.addPage(root, PathParser.parse("PageOne"));
+  crawler.addPage(root, PathParser.parse("PageOne.ChildOne"));
+  crawler.addPage(root, PathParser.parse("PageTwo"));
+
+  PageData data = pageOne.getData();
+  WikiPageProperties properties = data.getProperties();
+  WikiPageProperty symLinks = properties.set(SymbolicPage.PROPERTY_NAME);
+  symLinks.set("SymPage", "PageTwo");
+  pageOne.commit(data);
+
+  request.setResource("root");
+  request.addInput("type", "pages");
+  Responder responder = new SerializedPageResponder();
+  SimpleResponse response =
+    (SimpleResponse) responder.makeResponse(new FitNesseContext(root), request);
+  String xml = response.getContent();
+
+  assertEquals("text/xml", response.getContentType());
+  assertSubString("<name>PageOne</name>", xml);
+  assertSubString("<name>PageTwo</name>", xml);
+  assertSubString("<name>ChildOne</name>", xml);
+  assertNotSubString("SymPage", xml);
+}
+
+public void testGetDataAsHtml() throws Exception {
+  crawler.addPage(root, PathParser.parse("TestPageOne"), "test page");
+
+  request.setResource("TestPageOne"); request.addInput("type", "data");
+  Responder responder = new SerializedPageResponder();
+  SimpleResponse response =
+    (SimpleResponse) responder.makeResponse(new FitNesseContext(root), request);
+  String xml = response.getContent();
+
+  assertEquals("text/xml", response.getContentType());
+  assertSubString("test page", xml);
+  assertSubString("<Test", xml);
+}
 ```
 
 예를 들어, PathParser 호출을 살펴보자. PathParser는 문자열을 pagePath 인스턴스로 변환한다. 이 코드는 테스트와 무관하며 테스트 코드의 의도만 흐린다. responder 객체를 생성하는 코드와 response를 수집해 변환하는 코드 역시 잡음에 불과하다. 게다가 resource와 인수에서 요청 URL을 만드는 어설픈 코드도 보인다.  
@@ -64,8 +120,40 @@
 
 이제 목록 9-2를 살펴보자. 목록 9-1을 개선한 코드로, 목록 9-1과 정확히 동일한 테스트를 수행한다. 하지만 목록 9-2는 좀 더 깨끗하고 좀 더 이해하기 쉽다. 
 
-######목록 9-2
+######목록 9-2 SerializedPageResponderTest.java (refactored)
 ```java
+public void testGetPageHierarchyAsXml() throws Exception {
+  makePages("PageOne", "PageOne.ChildOne", "PageTwo");
+
+  submitRequest("root", "type:pages");
+
+  assertResponseIsXML();
+  assertResponseContains(
+    "<name>PageOne</name>", "<name>PageTwo</name>", "<name>ChildOne</name>");
+}
+
+public void testSymbolicLinksAreNotInXmlPageHierarchy() throws Exception {
+  WikiPage page = makePage("PageOne");
+  makePages("PageOne.ChildOne", "PageTwo");
+
+  addLinkTo(page, "PageTwo", "SymPage");
+
+  submitRequest("root", "type:pages");
+
+  assertResponseIsXML();
+  assertResponseContains(
+    "<name>PageOne</name>", "<name>PageTwo</name>", "<name>ChildOne</name>");
+  assertResponseDoesNotContain("SymPage");
+}
+
+public void testGetDataAsXml() throws Exception {
+  makePageWithContent("TestPageOne", "test page");
+
+  submitRequest("TestPageOne", "type:data");
+
+  assertResponseIsXML();
+  assertResponseContains("test page", "<Test");
+}
 ```
 
 **BUILD-OPERATE_CHECK 패턴**이 위와 같은 테스트 구조에 적합하다. 각 테스트는 명확히 세 부분으로 나눠진다. 첫 부분은 테스트 자료를 만든다. 두 번째 부분은 테스트 자료를 조작하며, 세 번째 부분은 조작한 결과가 올바른지 확인한다.  
@@ -82,23 +170,74 @@
 
 목록 9-3을 살펴보자. 온도가 '급격하게 떨어지면' 경보, 온풍기, 송풍기가 모두 가동되는지 확인하는 코드이다. 
 
-######목록 9-3
+######목록 9-3 EnvironmentControllerTest.java
 ```java
+@Test
+public void turnOnLoTempAlarmAtThreashold() throws Exception {
+  hw.setTemp(WAY_TOO_COLD); 
+  controller.tic(); 
+  assertTrue(hw.heaterState());   
+  assertTrue(hw.blowerState()); 
+  assertFalse(hw.coolerState()); 
+  assertFalse(hw.hiTempAlarm());       
+  assertTrue(hw.loTempAlarm());
+}
 ```
 
-######목록 9-4
+######목록 9-4 EnvironmentControllerTest.java(리팩터링)
+```java
+@Test
+public void turnOnLoTempAlarmAtThreshold() throws Exception {
+  wayTooCold();
+  assertEquals("HBchL", hw.getState()); 
+}
+```
 
 당연히 tic 함수는 wayTooCold라는 함수를 만들어 숨겼다. 그런데 assertEquals에 들어있는 이상한 문자열에 주목한다. 대문자는 '켜짐'이고 소문자는 '꺼짐'을 뜻한다. 문자는 항상 '{heater, blower, cooler, hi-temp-alarm, lo-temp-alarm}' 순서다.  
 
 비롯 위 방식이 그릇된 정보를 피하라는 규칙의 위반에 가깝지만 여기서는 적절해 보인다. 일단 의미만 안다면 눈길이 문자열을 따라 움직이며 결과를 재빨리 판단한다. 테스트 코드를 읽기가 사뭇 즐거워진다. 목록 9-5를 살펴보면 테스트 코드를 이해하기 너무도 쉽다는 사실이 분명히 드러난다. 
 
-######목록 9-5
+######목록 9-5 EnvironmentControllerTest.java (bigger selection)
 ```java
+@Test
+public void turnOnCoolerAndBlowerIfTooHot() throws Exception {
+  tooHot();
+  assertEquals("hBChl", hw.getState()); 
+}
+  
+@Test
+public void turnOnHeaterAndBlowerIfTooCold() throws Exception {
+  tooCold();
+  assertEquals("HBchl", hw.getState()); 
+}
+
+@Test
+public void turnOnHiTempAlarmAtThreshold() throws Exception {
+  wayTooHot();
+  assertEquals("hBCHl", hw.getState()); 
+}
+
+@Test
+public void turnOnLoTempAlarmAtThreshold() throws Exception {
+  wayTooCold();
+  assertEquals("HBchL", hw.getState()); 
+}
 ```
 
 목록 9-6은 'getState' 함수를 보여준다. 코드가 그리 효율적이지 못하다는 사실에 주목한다. 효율을 높이려면 StringBuffer가 더 적합하다. 
 
-######목록 9-6
+######목록 9-6 MockControlHardware.java
+```java
+public String getState() {
+  String state = "";
+  state += heater ? "H" : "h"; 
+  state += blower ? "B" : "b"; 
+  state += cooler ? "C" : "c"; 
+  state += hiTempAlarm ? "H" : "h"; 
+  state += loTempAlarm ? "L" : "l"; 
+  return state;
+}
+```
 
 하지만 StringBuffer는 보기에 흉하다. 나는 실제 코드에서도 크게 무리가 아니라면 이를 피한다. 목록 9-6은 StringBuffer를 안 써서 치르는 대가가 미미하다. **실제 환경에서는 문제가 될 수 있지만 테스트 환경은 자원이 제한적일 가능성이 낮기 때문이다.**  
 
@@ -109,8 +248,25 @@ JUnit으로 테스트 코드를 짤 때 함수마다 assert를 단 하나만 사
 
 하지만 목록 9-2는 어떨까? "출력이 XML이다"라는 assert문과 "특정 문자열을 포함한다"는 assert문을 하나로 병합하는 방식이 불합리해 보인다. 하지만 목록 9-7에서 보듯이 테스트를 쪼개 각자가 assert를 수행하면 된다. 
 
-######목록 9-7
-```java
+######목록 9-7 SerializedPageResponderTest.java (단일 Assert)
+```java 
+public void testGetPageHierarchyAsXml() throws Exception { 
+  givenPages("PageOne", "PageOne.ChildOne", "PageTwo");
+  
+  whenRequestIsIssued("root", "type:pages");
+  
+  thenResponseShouldBeXML(); 
+}
+
+public void testGetPageHierarchyHasRightTags() throws Exception { 
+  givenPages("PageOne", "PageOne.ChildOne", "PageTwo");
+  
+  whenRequestIsIssued("root", "type:pages");
+  
+  thenResponseShouldContain(
+    "<name>PageOne</name>", "<name>PageTwo</name>", "<name>ChildOne</name>"
+  ); 
+}
 ```
 
 위에서 함수 이름을 바꿔 given-when-them 이라는 관례를 사용했다는 사실에 주목한다. 그러면 테스트 코드를 읽기가 쉬워진다. 불행하게도 위에서 보듯이 테스트를 분리하면 중복되는 코드가 많아진다.   
