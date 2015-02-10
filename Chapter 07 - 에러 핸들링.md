@@ -338,5 +338,5 @@ Checked Exception과 Unchecked Exception의 가장 명확한 구분 기준은 �
 The Open Close Principle states that the design and writing of the code should be done in a way that new functionality should be added with minimum changes in the existing code. The design should be done in a way to allow the adding of new functionality as new classes, keeping as much as possible existing code unchanged.  
 출처: http://www.oodesign.com/open-close-principle.html
 ##### 3. Special Case Pattern(by Martin Fowler) #####
-참조 1: http://www.captaindebug.com/2011/04/null-return-values-and-special-case.html#.VM9VUsbLgXR  
-참조 2: http://martinfowler.com/eaaCatalog/specialCase.html
+  - 1: http://www.captaindebug.com/2011/04/null-return-values-and-special-case.html#.VM9VUsbLgXR  
+  - 2: http://martinfowler.com/eaaCatalog/specialCase.html
