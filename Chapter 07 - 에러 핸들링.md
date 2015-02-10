@@ -59,7 +59,9 @@ public class DeviceController {
   private void tryToShutDown() throws DeviceShutDownError {
     DeviceHandle handle = getHandle(DEV1);
     DeviceRecord record = retrieveDeviceRecord(handle);
-    pauseDevice(handle); clearDeviceWorkQueue(handle); closeDevice(handle);
+    pauseDevice(handle); 
+    clearDeviceWorkQueue(handle); 
+    closeDevice(handle);
   }
   
   private DeviceHandle getHandle(DeviceID id) {
@@ -124,7 +126,7 @@ public class DeviceController {
 - 필요한 경우 checked exceptions를 사용해야 되지만 일반적인 경우 득보다 실이 많다.
 
 ## Exceptions로 문맥을 제공하라 ##
-- 예외가 발생한 이유와 타입을 제공하라.
+- 예외가 발생한 이유와 좀 더 구체적인 Exception 타입을 제공하라.
 
 ## 사용에 맞게 Exception 클래스를 선언하라 ##
 - Exception class를 만드는 데에서 가장 중요한 것은 "어떤 방식으로 예외를 잡을까"이다.
