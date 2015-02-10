@@ -129,7 +129,7 @@ public class SuperDashboard extends JFrame implements MetaDataUser {
 또한 클래스 설명은 "if", "and", "or", "but"을 사용하지 않고 25 단어 내외로 가능해야된다.
 한글의 경우 만약, 그리고, ~하며, 하지만 이 들어가면 안된다.
 
-#### 단일 책임의 원칙
+#### 단일 책임의 원칙 - Single Responsibility Principle
 단일 책임의 원칙 (이하 SRP)은 클래스나 모듈을 변경할 이유가 단 하나뿐이어야 한다는 원칙이다.
 책임, 즉 변경할 이유를 파악하려고 애쓰다 보면 코드를 추상화 하기도 쉬워진다.  
 
