@@ -295,7 +295,6 @@ public void testAddMonths() {
   assertEquals(6, d2.getMonth()); 
   assertEquals(2004, d2.getYYYY());
   
-  
   SerialDate d3 = SerialDate.addMonths(2, d1); 
   assertEquals(31, d3.getDayOfMonth()); 
   assertEquals(7, d3.getMonth()); 
