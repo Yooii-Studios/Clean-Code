@@ -45,7 +45,7 @@
 | wait(long timeout, int nanos) void – Object |
 - 만약 우리가 Sensor클래스를 저장하는 Map객체를 사용한다면 다음과 같은 형태일 것이다.
  - Map sensors = new HashMap();
- - Sensor s = (Sensor)sensors.get(sensorId );
+ - Sensor s = (Sensor) sensors.get(sensorId);
  - 이와 같은 방식은 Sensor클래스를 사용하는 코드 전반에 걸쳐 빈번히 사용된다.
  - 하지만 이는 사용되는 곳에서 캐스팅의 부담을 안게 된다. 그리고 적절한 문맥조차 줄 수 없다.
 - 이는 아래와 같이 generic을 사용함으로써 해결할 수 있다.
