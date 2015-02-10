@@ -33,7 +33,7 @@ JAVA Convention에 따르면 가장 먼저 변수 목록이 나온다.
 생각 사이에는 빈 행을 넣어 분리해야한다. 그렇지 않다면 단지 줄바꿈만 다를 뿐인데도 코드 가독성이 현저히 떨어진다.
 
 ```java
-//어마어마하게 큰 슈퍼 만능 클래스
+// 어마어마하게 큰 슈퍼 만능 클래스
 
 public class SuperDashboard extends JFrame implements MetaDataUser {
 	public String getCustomizerLanguagePath()
@@ -111,7 +111,7 @@ public class SuperDashboard extends JFrame implements MetaDataUser {
 ```
 
 ```java
-//메소드를 5개로 줄인다고 하더라도 여전히 책임이 많다..
+// 메소드를 5개로 줄인다고 하더라도 여전히 책임이 많다..
 
 public class SuperDashboard extends JFrame implements MetaDataUser {
 	public Component getLastFocusedComponent()
@@ -134,7 +134,7 @@ public class SuperDashboard extends JFrame implements MetaDataUser {
 책임, 즉 변경할 이유를 파악하려고 애쓰다 보면 코드를 추상화 하기도 쉬워진다.  
 
 ```java
-//이 코드는 작아보이지만, 변경할 이유가 2가지이다.
+// 이 코드는 작아보이지만, 변경할 이유가 2가지이다.
 
 public class SuperDashboard extends JFrame implements MetaDataUser {
 	public Component getLastFocusedComponent()
@@ -146,8 +146,8 @@ public class SuperDashboard extends JFrame implements MetaDataUser {
 ```
 
 ```java
-//위 코드에서 버전 정보를 다루는 메서드 3개를 따로 빼서
-//Version이라는 독자적인 클래스를 만들어 다른 곳에서 재사용하기 쉬워졌다.
+// 위 코드에서 버전 정보를 다루는 메서드 3개를 따로 빼서
+// Version이라는 독자적인 클래스를 만들어 다른 곳에서 재사용하기 쉬워졌다.
 
 public class Version {
 	public int getMajorVersionNumber() 
@@ -178,7 +178,7 @@ SRP는 객체지향설계에서 더욱 중요한 개념이고, 지키기 수월�
 **응집도가 높다는 말은 클래스에 속한 메서드와 변수가 서로 의존하며 논리적인 단위로 묶인다는 의미기 때문이다**
 
 ```java
-//Stack을 구현한 코드, 응집도가 높은 편이다.
+// Stack을 구현한 코드, 응집도가 높은 편이다.
 
 public class Stack {
 	private int topOfStack = 0;
@@ -221,7 +221,7 @@ public class Stack {
 큰 함수를 작은 함수 여럿으로 쪼개다 보면 종종 작은 클래스 여럿으로 쪼갤 기회가 생긴다.
 
 ```java
-//이 하나의 크고 더러운 함수를 여러 함수와 클래스로 잘게 나누면서 적절한 이름을 부여해보자!
+// 이 하나의 크고 더러운 함수를 여러 함수와 클래스로 잘게 나누면서 적절한 이름을 부여해보자!
 
 package literatePrimes;
 
@@ -450,7 +450,7 @@ public class PrimeGenerator {
 깨끗한 시스템은 클래스를 체계적으로 관리해 변경에 따르는 위험을 최대한 낮춘다.  
 
 ```java
-//해당 코드는 새로운 SQL문을 지원할 때 손대야 하고, 기존 SQL문을 수정할 때도 손대야 하므로 SRP위반
+// 해당 코드는 새로운 SQL문을 지원할 때 손대야 하고, 기존 SQL문을 수정할 때도 손대야 하므로 SRP위반
 
 public class Sql {
 	public Sql(String table, Column[] columns)
@@ -470,9 +470,9 @@ public class Sql {
 클래스 일부에서만 사용되는 비공개 메서드는 코드 개선의 잠재적인 여지를 시사한다.
 
 ```java
-//공개 인터페이스를 전부 SQL 클래스에서 파생하는 클래스로 만들고, 비공개 메서드는 해당 클래스로 옮기고,
-//공통된 인터페이스는 따로 클래스로 뺐다.
-//이렇게 하면 update문 추가 시에 기존의 클래스를 건드릴 이유가 없어진다.
+// 공개 인터페이스를 전부 SQL 클래스에서 파생하는 클래스로 만들고, 비공개 메서드는 해당 클래스로 옮기고,
+// 공통된 인터페이스는 따로 클래스로 뺐다.
+// 이렇게 하면 update문 추가 시에 기존의 클래스를 건드릴 이유가 없어진다.
 
 	abstract public class Sql {
 		public Sql(String table, Column[] columns) 
@@ -539,9 +539,9 @@ concrete 클래스에 의존(상세한 구현에 의존)하는 클라이언트 �
 결함도가 낮다는 말은 각 시스템 요소가 다른 요소로부터 그리고 변경으로부터 잘 격리되어있다는 뜻이다.
 
 ```java
-//Portfolio 클래스를 구현하자, 그런데 이 클래스는 외부 TokyoStockExchange API를 사용해 포트폴리오 값을 계산한다.
-//따라서 API 특성 상 시세 변화에 영향을 많이 받아 5분마다 값이 달라지는데, 이때문에 테스트 코드를 짜기 쉽지 않다.
-//그러므로 Portfolio에서 외부 API를 직접 호출하는 대신 StockExchange라는 인터페이스를 생성한 후 메서드를 선언하다.
+// Portfolio 클래스를 구현하자, 그런데 이 클래스는 외부 TokyoStockExchange API를 사용해 포트폴리오 값을 계산한다.
+// 따라서 API 특성 상 시세 변화에 영향을 많이 받아 5분마다 값이 달라지는데, 이때문에 테스트 코드를 짜기 쉽지 않다.
+// 그러므로 Portfolio에서 외부 API를 직접 호출하는 대신 StockExchange라는 인터페이스를 생성한 후 메서드를 선언하다.
 
 public interface StockExchange { 
 	Money currentPrice(String symbol);
@@ -549,8 +549,8 @@ public interface StockExchange {
 ```
 
 ```java
-//이후 StockExchange 인터페이스를 구현하는 TokyoStockExchange 클래스를 구현한다.
-//그리고 Portfolio 생성자를 수정해 StockExchange 참조자를 인수로 받는다.
+// 이후 StockExchange 인터페이스를 구현하는 TokyoStockExchange 클래스를 구현한다.
+// 그리고 Portfolio 생성자를 수정해 StockExchange 참조자를 인수로 받는다.
 
 public Portfolio {
 	private StockExchange exchange;
@@ -562,9 +562,9 @@ public Portfolio {
 ```
 
 ```java
-//이제 TokyoStockExchange 클래스를 흉내내는 테스트용 클래스를 만들 수 있다.(FixedStockExchangeStub)
-//테스트용 클래스는 StockExchange 인터페이스를 구현하며 고정된 주가를 반환한다.
-//그럼으로써 무난히 테스트 코드를 작성 할 수 있다.
+// 이제 TokyoStockExchange 클래스를 흉내내는 테스트용 클래스를 만들 수 있다.(FixedStockExchangeStub)
+// 테스트용 클래스는 StockExchange 인터페이스를 구현하며 고정된 주가를 반환한다.
+// 그럼으로써 무난히 테스트 코드를 작성 할 수 있다.
 
 public class PortfolioTest {
 	private FixedStockExchangeStub exchange;
