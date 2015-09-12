@@ -170,7 +170,7 @@ private static void readPreferences() {
 // 모두들 알다시피 루프 제어 변수는 Test each처럼 루프 문 내부에 선언
 
 public int countTestCases() { 
-	int count= 0;
+	int count = 0;
 	for (Test each : tests)
 		count += each.countTestCases(); 
 	return count;
@@ -341,7 +341,7 @@ public class Assert {
 
 #### 세로 순서
 일반적으로 함수 호출 종속성은 아래방향으로 유지하므로, 호출되는 함수를 호출하는 함수보다 뒤에 배치한다.  
-그러면 소스코드가 자연스럽게 고차원-->저차원으로 내려간다.  
+그러면 소스코드가 자연스럽게 고차원 --> 저차원으로 내려간다.  
 가장 중요한 개념을 가장 먼저 표현하고, 세세한 사항은 마지막에 표현한다.  
 그렇게 하면 첫 함수 몇개만 읽어도 개념을 파악하기 쉬워질 것이다.
 
