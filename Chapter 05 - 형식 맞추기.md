@@ -56,7 +56,7 @@
 생각 사이에는 빈 행을 넣어 분리해야한다. 그렇지 않다면 단지 줄바꿈만 다를 뿐인데도 코드 가독성이 현저히 떨어진다.
 
 ```java
-//빈 행을 넣지 않을 경우
+// 빈 행을 넣지 않을 경우
 package fitnesse.wikitext.widgets;
 import java.util.regex.*;
 public class BoldWidget extends ParentWidget {
@@ -76,7 +76,7 @@ public class BoldWidget extends ParentWidget {
 ```
 
 ```java
-//빈 행을 넣을 경우
+// 빈 행을 넣을 경우
 package fitnesse.wikitext.widgets;
 
 import java.util.regex.*;
@@ -148,7 +148,7 @@ public class ReporterConfig {
 우리가 만든 함수는 매우 짧으므로 (Chapter3 - 함수를 공부했다면 말이지) 
 
 ```java
-//InputStream이 함수 맨 처음에 선언 되어있다.
+// InputStream이 함수 맨 처음에 선언 되어있다.
 
 private static void readPreferences() {
 	InputStream is = null;
@@ -167,7 +167,7 @@ private static void readPreferences() {
 ```
 
 ```java
-//모두들 알다시피 루프 제어 변수는 Test each처럼 루프 문 내부에 선언
+// 모두들 알다시피 루프 제어 변수는 Test each처럼 루프 문 내부에 선언
 
 public int countTestCases() { 
 	int count= 0;
@@ -204,8 +204,8 @@ for (XmlTest test : m_suite.getTests()) {
 C++의 경우에는 마지막에 선언하는 것이 일반적이다. 어느 곳이든 잘 알려진 위치에 인스턴스 변수를 모으는 것이 중요하다.
 
 ```java
-//도중에 선언된 변수는 꽁꽁 숨겨놓은 보물 찾기와 같다. 십중 팔구 코드를 읽다가 우연히 발견한다. 발견해보시길.
-//요즘은 IDE가 잘 되어있어서 찾기야 어렵지 않겠지만, 더러운건 마찬가지
+// 도중에 선언된 변수는 꽁꽁 숨겨놓은 보물 찾기와 같다. 십중 팔구 코드를 읽다가 우연히 발견한다. 발견해보시길.
+// 요즘은 IDE가 잘 되어있어서 찾기야 어렵지 않겠지만, 더러운건 마찬가지
 
 public class TestSuite implements Test {
 	static public Test createTest(Class<? extends TestCase> theClass,
@@ -316,8 +316,8 @@ public class WikiPageResponder implements SecureResponder {
 그 외에도 비슷한 동작을 수행하는 함수 무리 또한 개념의 친화도가 높다.
 
 ```java
-//같은 assert 관련된 동작들을 수행하며, 명명법이 똑같고 기본 기능이 유사한 함수들로써 개념적 친화도가 높다.
-//이런 경우에는 종속성은 오히려 부차적 요인이므로, 종속적인 관계가 없더라도 가까이 배치하면 좋다.
+// 같은 assert 관련된 동작들을 수행하며, 명명법이 똑같고 기본 기능이 유사한 함수들로써 개념적 친화도가 높다.
+// 이런 경우에는 종속성은 오히려 부차적 요인이므로, 종속적인 관계가 없더라도 가까이 배치하면 좋다.
 
 public class Assert {
 	static public void assertTrue(String message, boolean condition) {
