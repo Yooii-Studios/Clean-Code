@@ -107,7 +107,7 @@ public class BoldWidget extends ParentWidget {
 즉, 서로 밀집한 코드 행은 세로로 가까이 놓여야 한다.
 
 ```java
-//의미없는 주석으로 변수를 떨어뜨려 놓아서 한눈에 파악이 잘 안된다.
+// 의미없는 주석으로 변수를 떨어뜨려 놓아서 한눈에 파악이 잘 안된다.
 
 public class ReporterConfig {
 	/**
@@ -125,8 +125,8 @@ public class ReporterConfig {
 ```
 
 ```java
-//의미 없는 주석을 제거함으로써 코드가 한눈에 들어온다.
-//변수 2개에 메소드가 1개인 클래스라는 사실이 드러난다.
+// 의미 없는 주석을 제거함으로써 코드가 한눈에 들어온다.
+// 변수 2개에 메소드가 1개인 클래스라는 사실이 드러난다.
 
 public class ReporterConfig {
 	private String m_className;
@@ -178,7 +178,7 @@ public int countTestCases() {
 ```
 
 ```java
-//드물지만, 긴 함수에서는 블록 상단 또는 루프 직전에 변수를 선언 할 수도 있다.
+// 드물지만, 긴 함수에서는 블록 상단 또는 루프 직전에 변수를 선언 할 수도 있다.
 ...
 for (XmlTest test : m_suite.getTests()) {
 	TestRunner tr = m_runnerFactory.newTestRunner(this, test);
@@ -358,12 +358,12 @@ Hollerith가 제안한 80자 제한은 다소 인위적이므로 조금 더 늘�
 private void measureLine(String line) { 
 	lineCount++;
 	
-	//흔히 볼 수 있는 코드인데, 할당 연산자 좌우로 공백을 주어 왼쪽,오른쪽 요소가 확실하게 구분된다.
+	// 흔히 볼 수 있는 코드인데, 할당 연산자 좌우로 공백을 주어 왼쪽,오른쪽 요소가 확실하게 구분된다.
 	int lineSize = line.length();
 	totalChars += lineSize; 
 	
-	//반면 함수이름과 괄호 사이에는 공백을 없앰으로써 함수와 인수의 밀접함을 보여준다
-	//괄호 안의 인수끼리는 쉼표 뒤의 공백을 통해 인수가 별개라는 사실을 보여준다.
+	// 반면 함수이름과 괄호 사이에는 공백을 없앰으로써 함수와 인수의 밀접함을 보여준다
+	// 괄호 안의 인수끼리는 쉼표 뒤의 공백을 통해 인수가 별개라는 사실을 보여준다.
 	lineWidthHistogram.addLine(lineSize, lineCount);
 	recordWidestLine(lineSize);
 }
@@ -405,7 +405,7 @@ public class FitNesseExpediter implements ResponseSender {
 하지만 들여쓰기로 제대로 범위를 표현한 코드가 가독성이 더 높다. 유혹을 뿌리치자
 
 ```java
-//이렇게 한행에 다 넣을 수 있다고 다 때려 박는 것이 멋있는 코드가 아니란 것! 알아두삼
+// 이렇게 한행에 다 넣을 수 있다고 다 때려 박는 것이 멋있는 코드가 아니란 것! 알아두삼
 
 public class CommentWidget extends TextWidget {
 	public static final String REGEXP = "^#[^\r\n]*(?:(?:\r\n)|\n|\r)?";
@@ -416,7 +416,7 @@ public class CommentWidget extends TextWidget {
 ```
 
 ```java
-//한줄이라도 정성스럽게 들여쓰기로 감싸주자. 가독성을 위해
+// 한줄이라도 정성스럽게 들여쓰기로 감싸주자. 가독성을 위해
 
 public class CommentWidget extends TextWidget {
 	public static final String REGEXP = "^#[^\r\n]*(?:(?:\r\n)|\n|\r)?";
