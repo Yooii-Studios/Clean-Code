@@ -151,9 +151,9 @@ public class ReporterConfig {
 //InputStream이 함수 맨 처음에 선언 되어있다.
 
 private static void readPreferences() {
-	InputStream is= null;
+	InputStream is = null;
 	try {
-		is= new FileInputStream(getPreferencesFile()); 
+		is = new FileInputStream(getPreferencesFile()); 
 		setPreferences(new Properties(getPreferences())); 
 		getPreferences().load(is);
 	} catch (IOException e) { 
