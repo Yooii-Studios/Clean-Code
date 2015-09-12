@@ -378,16 +378,16 @@ Q.그렇다면 괄호로 묶어주는 것이 더 바람직하지 않을까?
 #### 가로 정렬
 ```java
 public class FitNesseExpediter implements ResponseSender {
-	private		Socket		socket;
-	private 	InputStream 	input;
-	private 	OutputStream 	output;
-	private 	Reques		request; 		
-	private 	Response 	response;	
-	private 	FitNesseContex	context; 
-	protected 	long		requestParsingTimeLimit;
-	private 	long		requestProgress;
-	private 	long		requestParsingDeadline;
-	private 	boolean		hasError;
+	private		Socket		  socket;
+	private 	InputStream 	  input;
+	private 	OutputStream 	  output;
+	private 	Reques		  request; 		
+	private 	Response 	  response;	
+	private 	FitNesseContex	  context; 
+	protected 	long		  requestParsingTimeLimit;
+	private 	long		  requestProgress;
+	private 	long		  requestParsingDeadline;
+	private 	boolean		  hasError;
 	
 	... 
 ```
