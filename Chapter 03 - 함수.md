@@ -103,10 +103,9 @@ switch문은 작게 만들기 어렵지만(if/else의 연속 도 마찬가지!),
 
 ```java
 public abstract class Employee {
-	public abstract public abstract public abstract
-	boolean isPayday();
-	Money calculatePay();
-	void deliverPay(Money pay);
+	public abstract boolean isPayday();
+	public abstract Money calculatePay();
+	public abstract void deliverPay(Money pay);
 }
 -----------------
 public interface EmployeeFactory {
