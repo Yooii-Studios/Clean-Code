@@ -232,9 +232,9 @@ if (deletePage(page) == E_OK) {
 ````java
 public void delete(Page page) {
 	try {
-    		deletePageAndAllReferences(page);
+    	    deletePageAndAllReferences(page);
   	} catch (Exception e) {
-    		logError(e);
+    	    logError(e);
   	}
 }
 
