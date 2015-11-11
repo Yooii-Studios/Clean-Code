@@ -130,7 +130,7 @@ class Customer {
 
 ```java 
 Complex fulcrumPoint = new Complex(23.0);  
-Complex fulcrumPoint = Conmlex.FromRealNumber(23.0);  
+Complex fulcrumPoint = Complex.FromRealNumber(23.0);  
 ```
 
 ##기발한 이름은 피하라  
