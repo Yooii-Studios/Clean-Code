@@ -69,8 +69,24 @@ service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여�
       (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 ```
 
+#### 생성 로직을 어플리케이션의 시작이 아닌 메인으로 ####
+<p align="center"><img src="/images/figure 11-1.png" width="500" /></p>
+생성과 사용을 분리하는 가장 간단한 방법은 모든 생성과 관련된 로직을 main으로 옮기는 것이다.  
+어플리케이션에서는 사용할 모등 객체들이 main에서 잘 생성되었을 것이라 여기고 나머지 디자인에 집중할 수 있다.
+
+#### 팩토리 기법 ####
+<p align="center"><img src="/images/figure 11-2.png" width="500" /></p>
+객체의 생성 시기를 직접 결정하려면 main에서 완성된 객체를 던져주기 보다 factory 객체를 만들어서 던져주자.
+만약 자세한 구현을 숨기고 싶다면 Abstract Factory 패턴을 사용하자.<sup>[1](#myfootnote1)</sup>
+
+#### 의존성 주입 ####
+
 ======================================================
 
 #### 참조 ####
-##### 1. Adapter Pattern #####
-참조: http://ko.m.wikipedia.org/wiki/어댑터_패턴
+<a name="myfootnote1">
+##### 1. Abstract Factory Pattern #####
+</a>:
+A factory is the location of a concrete class in the code at which objects are constructed. The intent in employing the pattern is to insulate the creation of objects from their usage and to create families of related objects without having to depend on their concrete classes.[2]This allows for new derived types to be introduced with no change to the code that uses the base class.
+Use of this pattern makes it possible to interchange concrete implementations without changing the code that uses them, even at runtime. However, employment of this pattern, as with similar design patterns, may result in unnecessary complexity and extra work in the initial writing of code. Additionally, higher levels of separation and abstraction can result in systems which are more difficult to debug and maintain.  
+참조: https://en.m.wikipedia.org/wiki/Abstract_factory_pattern
