@@ -77,14 +77,14 @@ service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여�
 #### 팩토리 기법 ####
 <p align="center"><img src="/images/figure 11-2.png" width="500" /></p>
 객체의 생성 시기를 직접 결정하려면 main에서 완성된 객체를 던져주기 보다 factory 객체를 만들어서 던져주자.
-만약 자세한 구현을 숨기고 싶다면 Abstract Factory 패턴을 사용하자.<sup>[1](#myfootnote1)</sup>
+만약 자세한 구현을 숨기고 싶다면 Abstract Factory 패턴을 사용하자.<sup>[1](#fn1)</sup>
 
 #### 의존성 주입 ####
 
 ======================================================
 
 #### 참조 ####
-<a name="myfootnote1">
+<a name="fn1">
 ##### 1. Abstract Factory Pattern #####
 </a>
 A factory is the location of a concrete class in the code at which objects are constructed. The intent in employing the pattern is to insulate the creation of objects from their usage and to create families of related objects without having to depend on their concrete classes.[2]This allows for new derived types to be introduced with no change to the code that uses the base class.
