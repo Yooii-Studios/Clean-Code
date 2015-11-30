@@ -3,7 +3,7 @@
 - 시스템의 생성과 사용을 분리하라
  - 생성 로직을 어플리케이션의 시작이 아닌 메인으로
  - 팩토리 기법
- - 의존성 주입
+ - 의존성 주입(Dependency Injection)
 - 스케일링
  - Cross-Cutting Concerns(관여)
 - Cross-Cutting Concerns 해결을 위한 세 가지 방법
@@ -42,13 +42,13 @@
 null 반환 방지 등의 이점을 가지는 코드이다.
 하지만 이 코드로 인해 우리의 시스템은 MyServiceImpl 객체에 대한 의존성을 가지게 되었고 MyServiceImpl의 사용 여부와 관계 없이
 무조건 이 의존성을 만족해야 하게 되었다.
-테스트 수행에도 문제가 발생한다. 만약 MyServiceImpl 객체가 무거운 객체라면 테스트를 위한 Test Double / Mock Object를
+테스트 수행에도 문제가 발생한다. 만약 MyServiceImpl 객체가 무거운 객체라면 테스트를 위한 Test Double<sup> [1](#fn1)</sup> / Mock Object를
 service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여하기 때문에 모든 가능한 경우의 수를 고려해야 하는 문제도
 발생한다.  
 이러한 생성/사용의 분산은 모듈성을 저해하고 코드의 중복을 가져오므로
 **잘 정돈된 견고한 시스템을 만들기 위해서는 전역적이고 일관된 의존성 해결 방법을 통해 위와 같은 작은 편의 코드들이 모듈성의 저해를 가져오는 것을 막아야 한다.**
 
-```
+```java
   /* Code 1-2: Android Example */
 
   @Override
@@ -77,16 +77,34 @@ service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여�
 #### 팩토리 기법 ####
 <p align="center"><img src="/images/figure 11-2.png" width="500" /></p>
 객체의 생성 시기를 직접 결정하려면 main에서 완성된 객체를 던져주기 보다 factory 객체를 만들어서 던져주자.
-만약 자세한 구현을 숨기고 싶다면 Abstract Factory 패턴을 사용하자.<sup>[1](#fn1)</sup>
+만약 자세한 구현을 숨기고 싶다면 Abstract Factory 패턴을 사용하자.<sup> [2](#fn2)</sup>
 
-#### 의존성 주입 ####
+#### 의존성 주입(Dependency Injection) ####
+의존성 관리의 관점에서는 "객체는 그 자신의 의존성들을 직접 생성하지 말고 다른 'authoritative mechanism'에게 맡겨야 한다."라고 한다. 아래의 예를 보자.(JNDI가 실제로 어떤 일을 하는지는 본 챕터와 관계가 없으므로 생략한다)
+```java
+    /* Code 1-3 */
+    MyService myService = (MyService)(jndiContext.lookup(“NameOfMyService”));
+```
+위 코드를 호출하는 쪽에서는 실제로 lookup 메서드가 무엇을(어떤 구현체를) 리턴하는지에 대해 관여하지 않으면서 의존성을 해결할 수 있다.
+
+진정한 의존성 주입은 여기에서 한 단계 더 나아가 완전히 수동적인 형태를 지닌다. 의존성을 필요로 하는 객체가 직접 의존성을 해결(생성, 연결)하는 대신 생성자/setter 등을 통해 DI 컨테이너가 해당 의존성을 해결하도록 도와준다.(DI and IoC)<sup> [3](#fn3)</sup>
 
 ======================================================
 
 #### 참조 ####
 <a name="fn1">
-##### 1. Abstract Factory Pattern #####
+##### 1. Test Double #####
+</a>
+https://en.wikipedia.org/wiki/Test_double
+
+<a name="fn2">
+##### 2. Abstract Factory Pattern #####
 </a>
 A factory is the location of a concrete class in the code at which objects are constructed. The intent in employing the pattern is to insulate the creation of objects from their usage and to create families of related objects without having to depend on their concrete classes.[2]This allows for new derived types to be introduced with no change to the code that uses the base class.
 Use of this pattern makes it possible to interchange concrete implementations without changing the code that uses them, even at runtime. However, employment of this pattern, as with similar design patterns, may result in unnecessary complexity and extra work in the initial writing of code. Additionally, higher levels of separation and abstraction can result in systems which are more difficult to debug and maintain.  
 참조: https://en.m.wikipedia.org/wiki/Abstract_factory_pattern
+
+<a name="fn3">
+##### 3. Dependency Injection and Inversion of Control #####
+</a>
+http://greatkim91.tistory.com/41 
