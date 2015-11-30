@@ -29,19 +29,44 @@
 
 ## 시스템의 생성과 사용을 분리하라 ##
 ```
+  /* Code 1-1 */
   public Service getService() {
       if (service == null)
           service = new MyServiceImpl(...); // Good enough default for most cases?
       return service;
   }
 ```
-위 코드는 "Lazy Initialization/Evaluation(게으른 초기화)"의 일반적인 형태이다. 이는 불필요한 초기화 코스트의 최적화,
+
+위 Code 1-1은 "Lazy Initialization/Evaluation(게으른 초기화)"의 일반적인 형태이다. 이는 불필요한 초기화 코스트의 최적화,
 null 반환 방지 등의 이점을 가지는 코드이다.
 하지만 이 코드로 인해 우리의 시스템은 MyServiceImpl 객체에 대한 의존성을 가지게 되었고 MyServiceImpl의 사용 여부와 관계 없이
 무조건 이 의존성을 만족해야 하게 되었다.
 테스트 수행에도 문제가 발생한다. 만약 MyServiceImpl 객체가 무거운 객체라면 테스트를 위한 Test Double / Mock Object를
 service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여하기 때문에 모든 가능한 경우의 수를 고려해야 하는 문제도
 발생한다.
+이러한 생성/사용의 분산은 
+잘 정돈된 견고한 시스템을 만들기 위해서는 전역적이고 일관된 의존성 해결 방법을 통해 위와 같은 작은 편의 코드들이 모듈성의 저해를 가져오는 것을 막아야 한다.
+
+```
+  /* Code 1-2: Android Example */
+
+  @Override
+  public Object getSystemService(@ServiceName @NonNull String name) {
+      /* Pre-contidion checks here... */
+
+      if (WINDOW_SERVICE.equals(name)) {
+          return mWindowManager;
+      } else if (SEARCH_SERVICE.equals(name)) {
+          ensureSearchManager();
+          return mSearchManager;
+      }
+      return super.getSystemService(name);
+  }
+  
+  // Usage
+  ConnectivityManager cm =
+      (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+```
 
 ======================================================
 
