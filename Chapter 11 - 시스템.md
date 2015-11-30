@@ -86,7 +86,7 @@ service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여�
 #### 참조 ####
 <a name="myfootnote1">
 ##### 1. Abstract Factory Pattern #####
-</a>:
+</a>
 A factory is the location of a concrete class in the code at which objects are constructed. The intent in employing the pattern is to insulate the creation of objects from their usage and to create families of related objects without having to depend on their concrete classes.[2]This allows for new derived types to be introduced with no change to the code that uses the base class.
 Use of this pattern makes it possible to interchange concrete implementations without changing the code that uses them, even at runtime. However, employment of this pattern, as with similar design patterns, may result in unnecessary complexity and extra work in the initial writing of code. Additionally, higher levels of separation and abstraction can result in systems which are more difficult to debug and maintain.  
 참조: https://en.m.wikipedia.org/wiki/Abstract_factory_pattern
