@@ -95,6 +95,83 @@ service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여�
 
 소프트웨어 시스템 또한 마찬가지이다. 만약 우리가 **관여들(Concerns)을 적절히 분리**할 수 있다면, 소프트웨어 시스템은 물리적인 시스템(ex, 건축)과는 다르게 점진적으로 커질 수 있다. 
 
+먼저, 스케일링을 고려하지 않은 구조에 대해 EJB1/EJB2를 예시로 알아보자.
+* EJB에 대한 자세한 내용은 본 챕터와 관계가 없으므로 생략한다. (EJB에 대한 자세한 개요는 각주로 추가 바람)  
+우선 entity bean이란 관계 데이터(DB 테이블의 행)의 메모리상의 표현이라는 것만 알고 가자. (An entity bean is an in-memory representation of relational data, in other words, a table row.)
+
+```java
+/* Code 2-1(Listing 11-1): An EJB2 local interface for a Bank EJB */
+
+package com.example.banking;
+import java.util.Collections;
+import javax.ejb.*;
+
+public interface BankLocal extends java.ejb.EJBLocalObject {
+    String getStreetAddr1() throws EJBException;
+    String getStreetAddr2() throws EJBException;
+    String getCity() throws EJBException;
+    String getState() throws EJBException;
+    String getZipCode() throws EJBException;
+    void setStreetAddr1(String street1) throws EJBException;
+    void setStreetAddr2(String street2) throws EJBException;
+    void setCity(String city) throws EJBException;
+    void setState(String state) throws EJBException;
+    void setZipCode(String zip) throws EJBException;
+    Collection getAccounts() throws EJBException;
+    void setAccounts(Collection accounts) throws EJBException;
+    void addAccount(AccountDTO accountDTO) throws EJBException;
+}
+```
+
+```java
+/* Code 2-2(Listing 11-2): The corresponding EJB2 Entity Bean Implementation */
+
+package com.example.banking;
+import java.util.Collections;
+import javax.ejb.*;
+
+public abstract class Bank implements javax.ejb.EntityBean {
+    // Business logic...
+    public abstract String getStreetAddr1();
+    public abstract String getStreetAddr2();
+    public abstract String getCity();
+    public abstract String getState();
+    public abstract String getZipCode();
+    public abstract void setStreetAddr1(String street1);
+    public abstract void setStreetAddr2(String street2);
+    public abstract void setCity(String city);
+    public abstract void setState(String state);
+    public abstract void setZipCode(String zip);
+    public abstract Collection getAccounts();
+    public abstract void setAccounts(Collection accounts);
+    
+    public void addAccount(AccountDTO accountDTO) {
+        InitialContext context = new InitialContext();
+        AccountHomeLocal accountHome = context.lookup("AccountHomeLocal");
+        AccountLocal account = accountHome.create(accountDTO);
+        Collection accounts = getAccounts();
+        accounts.add(account);
+    }
+    
+    // EJB container logic
+    public abstract void setId(Integer id);
+    public abstract Integer getId();
+    public Integer ejbCreate(Integer id) { ... }
+    public void ejbPostCreate(Integer id) { ... }
+    
+    // The rest had to be implemented but were usually empty:
+    public void setEntityContext(EntityContext ctx) {}
+    public void unsetEntityContext() {}
+    public void ejbActivate() {}
+    public void ejbPassivate() {}
+    public void ejbLoad() {}
+    public void ejbStore() {}
+    public void ejbRemove() {}
+}
+```
+1. 비지니스 로직이 EJB2 컨테이너에 타이트하게 연결되어 있다. Entity를 만들기 위해 컨테이너 타입을 subclass하고 필요한 lifecycle 메서드를 구현해야 한다.
+2. 실제로 사용되지도 않을 테스트 객체의 작성을 위해 mock 객체를 만드는 데에도 무의미한 노력이 많이 든다. EJB2 구조가 아닌 다른 구조에서 재사용할 수 없는 컴포넌트를 작성해야 한다.
+3. OOP 또한 등한시되고 있다. 상속도 불가능하며 쓸데없는 DTO(Data Transfer Object)를 작성하게 만든다.
 ======================================================
 
 #### 참조 ####
