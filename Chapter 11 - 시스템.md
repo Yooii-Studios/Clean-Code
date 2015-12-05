@@ -185,7 +185,7 @@ AOP에서는 "코드의 어느 부분에 어떤 추가적인 기능을 삽입할
 이제 자바를 사용한 aspect-like mechanism에 대해 알아보자.
 
 ## Cross-Cutting Concerns 해결을 위한 세 가지 방법(이해를 돕기 위해 추가된 섹션) ##
-#### 자바 프록시 ####
+#### 자바 프록시<sup> [5](#fn5)</sup> ####
 간단한 경우라면 자바 프록시가 적절한 솔루션일 것이다. 아래는 자바 프록시를 사용해 객체의 변경이 자동으로 persistant framework에 저장되는 구조에 대한 예시이다.
 
 ```java
@@ -267,6 +267,102 @@ Bank bank = (Bank) Proxy.newProxyInstance(
 
 하지만 위와 같은 상대적으로 간단한 경우임에도 불구하고 결과적으로 추가적인 복잡한 코드가 생겼다. 이는 클린코드를 작성하는 데에 걸림돌이 되며 또한 시스템 전반적인 advice를 삽입하는 데에도 부적절하다.
 
+#### 순수 자바 AOP 프레임워크<sup> [6](#fn6)</sup> ####
+위 Java Proxy API의 단점들은 Spring, JBoss와 같은 순수 자바 AOP 프레임워크를 통해 해결할 수 있다. 예를 들어 Spring에서는 비지니스 로직을 POJO로 작성해 자신이 속한 도메인에 집중하게 한다. 결과적으로 의존성은 줄어들고 테스트 작성에 필요한 고민도 줄어든다. 이러한 심플함은 user story의 구현과 유지보수, 확장 또한 간편하게 만들어 준다.  
+
+예시를 통해 Spring 프레임워크의 동작 방식에 대해 확인해 보자.  
+
+```java
+/* Code 3-2(Listing 11-4): Spring 2.X configuration file */
+
+<beans>
+    ...
+    <bean id="appDataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close"
+        p:driverClassName="com.mysql.jdbc.Driver"
+        p:url="jdbc:mysql://localhost:3306/mydb"
+        p:username="me"/>
+    
+    <bean id="bankDataAccessObject"
+        class="com.example.banking.persistence.BankDataAccessObject"
+        p:dataSource-ref="appDataSource"/>
+    
+    <bean id="bank"
+        class="com.example.banking.model.Bank"
+        p:dataAccessObject-ref="bankDataAccessObject"/>
+    ...
+</beans>
+```
+
+Bank객체는 BankDataAccessObject가, BankDataAccessObject는 BankDataSource가 감싸 프록시하는 구조로 되어 각각의 bean들이 "러시안 인형"의 한 부분처럼 구성되었다. 클라이언트는 Bank에 접근하고 있다고 생각하지만 사실은 가장 바깥의 BankDataSource에 접근하고 있는 것이다.  
+이 프록시된 Bank객체를 생성하는 방법은 아래와 같다.  
+
+```java
+/* Code 3-3: Code 3-2의 활용법 */
+
+XmlBeanFactory bf = new XmlBeanFactory(new ClassPathResource("app.xml", getClass()));
+Bank bank = (Bank) bf.getBean("bank");
+```
+위와 같이 최소한의 Spring-specific한 코드만 작성하면 되므로 ***프레임워크와 "거의" decouple된*** 어플리케이션을 작성할 수 있다.  
+
+구조 정의를 위한 xml은 다소 장황하고 읽기 힘들 수는 있지만 Java Proxy보다는 훨씬 간결하다. 이 개념은 아래에 설명할 EJB3의 구조 개편에 큰 영향을 미쳤다. EJB3은 xml와 Java annotation을 사용해 cross-cutting concerns를 정의하고 서포트하게 되었다.  
+```java
+/* Code 3-4(Listing 11-5): An EBJ3 Bank EJB */
+
+package com.example.banking.model;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+@Entity
+@Table(name = "BANKS")
+public class Bank implements java.io.Serializable {
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
+    private int id;
+    
+    @Embeddable // An object “inlined” in Bank’s DB row
+    public class Address {
+        protected String streetAddr1;
+        protected String streetAddr2;
+        protected String city;
+        protected String state;
+        protected String zipCode;
+    }
+    
+    @Embedded
+    private Address address;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy="bank")
+    private Collection<Account> accounts = new ArrayList<Account>();
+    public int getId() {
+        return id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public void addAccount(Account account) {
+        account.setBank(this);
+        accounts.add(account);
+    }
+    
+    public Collection<Account> getAccounts() {
+        return accounts;
+    }
+    
+    public void setAccounts(Collection<Account> accounts) {
+        this.accounts = accounts;
+    }
+}
+```
+위와 같이 EJB3은 EJB2 보다 훨씬 간결한 코드로 작성할 수 있게 되었다. 몇몇 세부 속성들은 annotation으로 클래스 내에 정의되어 있지만 annotation을 벗어나진 않기 때문에 이전보다 더 깨끗하고 명료한 코드를 산출하며 그로 인해 유지보수, 테스트하기 편한 장점을 갖게 되었다.  
+
+#### AspectJ ####
+AspectJ는 AOP를 실현하기 위한 full-featured tool이라 일컬어진다. 8~90%의 경우에는 Spring AOP와 JBoss AOP로도 충분하지만 AspectJ는 훨씬 강력한 수준의 AOP를 지원한다. 다만 이를 사용하기 위해 새로운 툴, 언어 구조, 관습적인 코드를 익혀야 한다는 단점도 존재한다.(최근 소개된 "annotation-form AspectJ"로 인해 적용에 필요한 노력은 많이 줄어들었다고 한다.)  
+AOP에 대한 더 자세한 내용은 [AspectJ], [Colyer], [Spring]를 참조하기 바란다.  
+
 ======================================================
 
 #### 참조 ####
@@ -293,5 +389,13 @@ http://greatkim91.tistory.com/41
 읽기 좋은 정리: http://isstory83.tistory.com/90  
 그림: http://addio3305.tistory.com/86  
 사전적 설명(개요): http://seulkom.tistory.com/18  
-Java Proxy API sample: https://github.com/crowjdh/DatabaseProxySample
-Spring Framework example: https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
+
+<a name="fn5">
+##### 5. Java Proxy API sample #####
+</a>
+https://github.com/crowjdh/DatabaseProxySample
+
+<a name="fn6">
+##### 6. Spring Framework example #####
+</a>
+https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
