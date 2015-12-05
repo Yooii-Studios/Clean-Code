@@ -262,8 +262,8 @@ Bank bank = (Bank) Proxy.newProxyInstance(
 위 코드에 대한 간략한 설명은 아래와 같다.  
 1. Java Proxy API를 위한 Bank 인터페이스를 작성한다.  
 2. 위에서 작성한 Bank 인터페이스를 사용한 BankImpl(POJO aka Plane Old Java Object)를 구현한다. 여기에는 순수한 데이터만 들어가며 비지니스 로직은 포함되지 않는다.(모델과 로직의 분리)  
-3. InvocationHandler를 구현하는 BankProxyHandler를 작성한다. 이 핸들러는 Java Reflection API를 이용해 Bank 인터페이스를 구현하는 객체들의 메서드콜을 가로챌 수 있으며 추가적인 로직을 삽입할 수 있다. 본 예제에서 비지니스 로직(persistant stack logic)은 이 곳에 둘어간다.  
-4. 마지막으로 코드의 마지막 블럭과 같이 BankImpl 객체를 BankProxyHandle에 할당, Bank 인터페이스를 사용해 프록시된 인터페이스를 사용해 모델과 로직이 분리된 코드를 작성할 수 있다. 이로써 모델과 로직의 분리를 이뤄낸 코드를 작성할 수 있게 되었다.  
+3. InvocationHandler를 구현하는 BankProxyHandler를 작성한다. 이 핸들러는 Java Reflection API를 이용해 Bank 인터페이스를 구현하는 객체들의 메서드콜을 가로챌 수 있으며 추가적인 로직을 삽입할 수 있다. 본 예제에서 비지니스 로직(persistant stack logic)은 이 곳에 들어간다.  
+4. 마지막으로 코드의 마지막 블럭과 같이 BankImpl 객체를 BankProxyHandler에 할당, Bank 인터페이스를 사용해 프록시된 인터페이스를 사용해 모델과 로직이 분리된 코드를 작성할 수 있다. 이로써 모델과 로직의 분리를 이뤄낸 코드를 작성할 수 있게 되었다.  
 
 하지만 위와 같은 상대적으로 간단한 경우임에도 불구하고 결과적으로 추가적인 복잡한 코드가 생겼다. 이는 클린코드를 작성하는 데에 걸림돌이 되며 또한 시스템 전반적인 advice를 삽입하는 데에도 부적절하다.
 
@@ -293,4 +293,5 @@ http://greatkim91.tistory.com/41
 읽기 좋은 정리: http://isstory83.tistory.com/90  
 그림: http://addio3305.tistory.com/86  
 사전적 설명(개요): http://seulkom.tistory.com/18  
-프록시 코드 샘플: https://github.com/crowjdh/DatabaseProxySample, https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
+Java Proxy API sample: https://github.com/crowjdh/DatabaseProxySample
+Spring Framework example: https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
