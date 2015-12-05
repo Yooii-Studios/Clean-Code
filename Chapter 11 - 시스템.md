@@ -5,7 +5,7 @@
  - 팩토리 기법
  - 의존성 주입(Dependency Injection)
 - 스케일링
- - Cross-Cutting Concerns(관여)
+ - Cross-Cutting Concerns(간섭)
 - Cross-Cutting Concerns 해결을 위한 세 가지 방법
  - 자바 프록시
  - 순수 자바 AOP 프레임워크
@@ -169,9 +169,104 @@ public abstract class Bank implements javax.ejb.EntityBean {
     public void ejbRemove() {}
 }
 ```
-1. 비지니스 로직이 EJB2 컨테이너에 타이트하게 연결되어 있다. Entity를 만들기 위해 컨테이너 타입을 subclass하고 필요한 lifecycle 메서드를 구현해야 한다.
-2. 실제로 사용되지도 않을 테스트 객체의 작성을 위해 mock 객체를 만드는 데에도 무의미한 노력이 많이 든다. EJB2 구조가 아닌 다른 구조에서 재사용할 수 없는 컴포넌트를 작성해야 한다.
-3. OOP 또한 등한시되고 있다. 상속도 불가능하며 쓸데없는 DTO(Data Transfer Object)를 작성하게 만든다.
+
+위 코드와 같은 전형적인 EJB2 객체 구조는 아래와 같은 문제점을 가지고 있다.  
+1. 비지니스 로직이 EJB2 컨테이너에 타이트하게 연결되어 있다. Entity를 만들기 위해 컨테이너 타입을 subclass하고 필요한 lifecycle 메서드를 구현해야 한다.  
+2. 실제로 사용되지 않을 테스트 객체의 작성을 위해 mock 객체를 만드는 데에도 무의미한 노력이 많이 든다. EJB2 구조가 아닌 다른 구조에서 재사용할 수 없는 컴포넌트를 작성해야 한다.  
+3. OOP 또한 등한시되고 있다. 상속도 불가능하며 쓸데없는 DTO(Data Transfer Object)를 작성하게 만든다.  
+
+#### Cross-Cutting Concerns(간섭) ####
+* Cross-Cuttin Concerns란?  
+ - 이론적으로는 독립된 형태로 구분될 수 있지만 실제로는 코드에 산재하기 쉬운 부분들을 뜻한다.(transaction, authorization, logging등)  
+
+반면, 어떤 측면에서는 EJB2 아키텍쳐는 시스템의 스케일링을 위한 concern의 분리를 잘 이행하고 있다. 이들은 AOP(aspect-oriented programming)<sup> [4](#fn4)</sup>를 통해 transaction, logging과 같은 cross-cutting concerns의 모듈성을 되살리고 있다.
+AOP에서는 "코드의 어느 부분에 어떤 추가적인 기능을 삽입할까"에 대한 정의를 aspect라는 형태로 제공한다.  
+
+이제 자바를 사용한 aspect-like mechanism에 대해 알아보자.
+
+## Cross-Cutting Concerns 해결을 위한 세 가지 방법(이해를 돕기 위해 추가된 섹션) ##
+#### 자바 프록시 ####
+간단한 경우라면 자바 프록시가 적절한 솔루션일 것이다. 아래는 자바 프록시를 사용해 객체의 변경이 자동으로 persistant framework에 저장되는 구조에 대한 예시이다.
+
+```java
+/* Code 3-1(Listing 11-3): JDK Proxy Example */
+
+// Bank.java (suppressing package names...)
+import java.utils.*;
+
+// The abstraction of a bank.
+public interface Bank {
+    Collection<Account> getAccounts();
+    void setAccounts(Collection<Account> accounts);
+}
+
+// BankImpl.java
+import java.utils.*;
+
+// The “Plain Old Java Object” (POJO) implementing the abstraction.
+public class BankImpl implements Bank {
+    private List<Account> accounts;
+
+    public Collection<Account> getAccounts() {
+        return accounts;
+    }
+    
+    public void setAccounts(Collection<Account> accounts) {
+        this.accounts = new ArrayList<Account>();
+        for (Account account: accounts) {
+            this.accounts.add(account);
+        }
+    }
+}
+// BankProxyHandler.java
+import java.lang.reflect.*;
+import java.util.*;
+
+// “InvocationHandler” required by the proxy API.
+public class BankProxyHandler implements InvocationHandler {
+    private Bank bank;
+    
+    public BankHandler (Bank bank) {
+        this.bank = bank;
+    }
+    
+    // Method defined in InvocationHandler
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        String methodName = method.getName();
+        if (methodName.equals("getAccounts")) {
+            bank.setAccounts(getAccountsFromDatabase());
+            
+            return bank.getAccounts();
+        } else if (methodName.equals("setAccounts")) {
+            bank.setAccounts((Collection<Account>) args[0]);
+            setAccountsToDatabase(bank.getAccounts());
+            
+            return null;
+        } else {
+            ...
+        }
+    }
+    
+    // Lots of details here:
+    protected Collection<Account> getAccountsFromDatabase() { ... }
+    protected void setAccountsToDatabase(Collection<Account> accounts) { ... }
+}
+
+// Somewhere else...
+Bank bank = (Bank) Proxy.newProxyInstance(
+    Bank.class.getClassLoader(),
+    new Class[] { Bank.class },
+    new BankProxyHandler(new BankImpl())
+);
+```
+위 코드에 대한 간략한 설명은 아래와 같다.  
+1. Java Proxy API를 위한 Bank 인터페이스를 작성한다.  
+2. 위에서 작성한 Bank 인터페이스를 사용한 BankImpl(POJO aka Plane Old Java Object)를 구현한다. 여기에는 순수한 데이터만 들어가며 비지니스 로직은 포함되지 않는다.(모델과 로직의 분리)  
+3. InvocationHandler를 구현하는 BankProxyHandler를 작성한다. 이 핸들러는 Java Reflection API를 이용해 Bank 인터페이스를 구현하는 객체들의 메서드콜을 가로챌 수 있으며 추가적인 로직을 삽입할 수 있다. 본 예제에서 비지니스 로직(persistant stack logic)은 이 곳에 둘어간다.  
+4. 마지막으로 코드의 마지막 블럭과 같이 BankImpl 객체를 BankProxyHandle에 할당, Bank 인터페이스를 사용해 프록시된 인터페이스를 사용해 모델과 로직이 분리된 코드를 작성할 수 있다. 이로써 모델과 로직의 분리를 이뤄낸 코드를 작성할 수 있게 되었다.  
+
+하지만 위와 같은 상대적으로 간단한 경우임에도 불구하고 결과적으로 추가적인 복잡한 코드가 생겼다. 이는 클린코드를 작성하는 데에 걸림돌이 되며 또한 시스템 전반적인 advice를 삽입하는 데에도 부적절하다.
+
 ======================================================
 
 #### 참조 ####
@@ -191,3 +286,11 @@ Use of this pattern makes it possible to interchange concrete implementations wi
 ##### 3. Dependency Injection and Inversion of Control #####
 </a>
 http://greatkim91.tistory.com/41 
+
+<a name="fn4">
+##### 4. AOP #####
+</a>
+읽기 좋은 정리: http://isstory83.tistory.com/90  
+그림: http://addio3305.tistory.com/86  
+사전적 설명(개요): http://seulkom.tistory.com/18  
+프록시 코드 샘플: https://github.com/crowjdh/DatabaseProxySample, https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
