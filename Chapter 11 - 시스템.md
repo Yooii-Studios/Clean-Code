@@ -11,7 +11,7 @@
  - 순수 자바 AOP 프레임워크
  - AspectJ
 - 시스템 아키텍쳐를 테스트 주도하라(Test Drive the System Architecture)
-- 의사 결정의 최적화
+- 의사 결정의 최적화하라
 - 표준은 확실한 이득을 가져올 경우 추가하라
 - 시스템에는 DSL(도메인 영역 언어)이 필요하다
 - 결론
@@ -370,9 +370,17 @@ AOP에 대한 더 자세한 내용은 [AspectJ], [Colyer], [Spring]를 참조하
 
 > 이상적인 시스템 아키텍쳐는 각각 POJO로 만들어진 모듈화된 관심 분야 영역(modularized domains of concern)으로 이루어져야 한다. 다른 영역끼리는 Aspect의 개념을 사용해 최소한의 간섭으로 통합되어야 한다. 이러한 아키텍쳐는 코드와 마찬가지로 test-driven될 수 있다.
 
-#### 의사 결정의 최적화 ####
+#### 의사 결정의 최적화하라 ####
+충분히 큰 시스템에서는(그것이 도시이건 소프트웨어이건) 한 사람이 모든 결정을 내릴 수는 없다. 결정은 최대한 많은 정보가 모일 때까지 미루고 시기가 되었을 경우 해당 파트의 책임자(여기서는 사람이 아닌 모듈화된 컴포넌트를 뜻한다)에게 맡기는 것이 불필요한 고객 피드백과 고통을 덜어줄 것이다.  
+> 모듈화된 관심 분야로 이루어진 POJO 시스템의 (변화에 대한)민첩함은 가장 최신의 정보를 가지고 적시에 최적의 선택을 할 수 있게 도와준다. 결정에 필요한 복잡도 또한 경감된다.  
+
 #### 표준은 확실한 이득을 가져올 경우 추가하라 ####
+많은 소프트웨어 팀들은 훨씬 가볍고 직관적인 디자인이 가능했음에도 불구하고 그저 표준이라는 이유만으로 EJB2 구조를 사용했다. **표준에 심취해 "고객을 위한 가치 창출"이라는 목표를 잃어 버렸기 때문이다.**  
+Standards make it easier to reuse ideas and components, recruit people with relevant expe- rience, encapsulate good ideas, and wire components together. However, the process of creating standards can sometimes take too long for industry to wait, and some standards lose touch with the real needs of the adopters they are intended to serve.
+> 표준은 아이디어와 컴포넌트의 재사용, 관련 전문가 채용, 좋은 아이디어의 캡슐화, 컴포넌트들의 연결을 쉽게 도와 준다. 하지만 종종 표준을 만드는 데에 드는 시간은 납품 기한을 맞추기 어렵게 만들고, 혹은 최초에 제공하려던 기능과 동떨어지게 되기도 한다.
+
 #### 시스템에는 DSL(도메인 영역 언어)이 필요하다 ####
+
 #### 결론 ####
 
 ======================================================
