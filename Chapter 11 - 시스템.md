@@ -376,12 +376,16 @@ AOP에 대한 더 자세한 내용은 [AspectJ], [Colyer], [Spring]를 참조하
 
 #### 표준은 확실한 이득을 가져올 경우 추가하라 ####
 많은 소프트웨어 팀들은 훨씬 가볍고 직관적인 디자인이 가능했음에도 불구하고 그저 표준이라는 이유만으로 EJB2 구조를 사용했다. **표준에 심취해 "고객을 위한 가치 창출"이라는 목표를 잃어 버렸기 때문이다.**  
-Standards make it easier to reuse ideas and components, recruit people with relevant expe- rience, encapsulate good ideas, and wire components together. However, the process of creating standards can sometimes take too long for industry to wait, and some standards lose touch with the real needs of the adopters they are intended to serve.
 > 표준은 아이디어와 컴포넌트의 재사용, 관련 전문가 채용, 좋은 아이디어의 캡슐화, 컴포넌트들의 연결을 쉽게 도와 준다. 하지만 종종 표준을 만드는 데에 드는 시간은 납품 기한을 맞추기 어렵게 만들고, 혹은 최초에 제공하려던 기능과 동떨어지게 되기도 한다.
 
 #### 시스템에는 DSL(도메인 영역 언어)이 필요하다 ####
+좋은 DSL은 도메인 영역의 개념과 실제 구현될 코드 사이의 "소통의 간극"을 줄여 도메인 영역을 코드 구현으로 번역하는 데에 오역을 줄여준다. DSL을 효율적으로 사용하면 코드 덩어리와 디자인 패턴의 추상도를 높여 주며 그에 따라 코드의 의도를 적절한 추상화 레벨에서 표현할 수 있게 해준다.  
+> DSL은 "모든 단계에서의 추상화"와 "모든 도메인의 POJO화"를 고차원적 규칙과 저차원적 디테일 전반에 걸쳐 도와 준다.
 
 #### 결론 ####
+코드뿐만이 아니라 시스템 또한 깨끗해야 한다. 침략적인(invasive) 아키텍쳐는 도메인 로직에 피해를 주고 신속성에도 영향을 준다. 도메인 로직이 모호해지면 버그는 숨기 쉬워지고 기능 구현은 어려워 진다. 신속성이 침해되면 생산성이 저해되고 TDD로 인한 이득 또한 얻을 수 없다.  
+의도는 모든 레벨의 추상화에서 명확해야 한다. 이는 각각의 concern들을 POJO로 작성된 코드와 aspect-like 메커니즘을 통해 구성할 때 비로소 실현될 수 있다.  
+당신이 시스템을 디자인하든 독자적인 모듈을 디자인하든, *동작하는 범위에서 가장 간단한 것*을 사용하는 것을 잊어서는 안된다.
 
 ======================================================
 
