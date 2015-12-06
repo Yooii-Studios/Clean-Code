@@ -184,8 +184,8 @@ AOP에서는 "코드의 어느 부분에 어떤 추가적인 기능을 삽입할
 
 이제 자바를 사용한 aspect-like mechanism에 대해 알아보자.
 
-## Cross-Cutting Concerns 해결을 위한 세 가지 방법(이해를 돕기 위해 추가된 섹션) ##
-#### 자바 프록시<sup> [5](#fn5)</sup> ####
+## Cross-Cutting Concerns 해결을 위한 세 가지 방법<sup> [5](#fn5)</sup> ##
+#### 자바 프록시<sup> [6](#fn6)</sup> ####
 간단한 경우라면 자바 프록시가 적절한 솔루션일 것이다. 아래는 자바 프록시를 사용해 객체의 변경이 자동으로 persistant framework에 저장되는 구조에 대한 예시이다.
 
 ```java
@@ -267,7 +267,7 @@ Bank bank = (Bank) Proxy.newProxyInstance(
 
 하지만 위와 같은 상대적으로 간단한 경우임에도 불구하고 결과적으로 추가적인 복잡한 코드가 생겼다. 이는 클린코드를 작성하는 데에 걸림돌이 되며 또한 시스템 전반적인 advice를 삽입하는 데에도 부적절하다.
 
-#### 순수 자바 AOP 프레임워크<sup> [6](#fn6)</sup> ####
+#### 순수 자바 AOP 프레임워크<sup> [7](#fn7)</sup> ####
 위 Java Proxy API의 단점들은 Spring, JBoss와 같은 순수 자바 AOP 프레임워크를 통해 해결할 수 있다. 예를 들어 Spring에서는 비지니스 로직을 POJO로 작성해 자신이 속한 도메인에 집중하게 한다. 결과적으로 의존성은 줄어들고 테스트 작성에 필요한 고민도 줄어든다. 이러한 심플함은 user story의 구현과 유지보수, 확장 또한 간편하게 만들어 준다.  
 
 예시를 통해 Spring 프레임워크의 동작 방식에 대해 확인해 보자.  
@@ -415,11 +415,15 @@ http://greatkim91.tistory.com/41
 사전적 설명(개요): http://seulkom.tistory.com/18  
 
 <a name="fn5">
-##### 5. Java Proxy API sample #####
+##### 5. 해당 섹션은 독자의 이해를 돕기 위해 역자 임의로 추가된 섹션 #####
+</a>
+
+<a name="fn6">
+##### 6. Java Proxy API sample #####
 </a>
 https://github.com/crowjdh/DatabaseProxySample
 
-<a name="fn6">
-##### 6. Spring Framework example #####
+<a name="fn7">
+##### 7. Spring Framework example #####
 </a>
 https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
