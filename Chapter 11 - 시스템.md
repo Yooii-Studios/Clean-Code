@@ -297,7 +297,8 @@ Bank bank = (Bank) Proxy.newProxyInstance(
 </beans>
 ```
 
-Bank객체는 BankDataAccessObject가, BankDataAccessObject는 BankDataSource가 감싸 프록시하는 구조로 되어 각각의 bean들이 "러시안 인형"의 한 부분처럼 구성되었다. 클라이언트는 Bank에 접근하고 있다고 생각하지만 사실은 가장 바깥의 BankDataSource에 접근하고 있는 것이다.
+Bank객체는 BankDataAccessObject가, BankDataAccessObject는 BankDataSource가 감싸 프록시하는 구조로 되어 각각의 bean들이 <a href="/images/additional references/Chapter 11 - Russian nesting dolls.jpg?raw=true">"러시안 인형"</a>의 한 부분처럼 구성되었다. 클라이언트는 Bank에 접근하고 있다고 생각하지만 사실은 가장 바깥의 BankDataSource에 접근하고 있는 것이다.
+<p align="center"><img src="/images/figure 11-3.png" width="500" /></p>
 
 이 프록시된 Bank객체를 생성하는 방법은 아래와 같다.  
 
