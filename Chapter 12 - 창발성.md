@@ -98,7 +98,74 @@ public void scaleToOneDimension(float desiredDimension, float imageDimension) {
   float scalingFactor = desiredDimension / imageDimension;
   scalingFactor = (float) Math.floor(scalingFactor * 10) * 0.01f);
   replaceImage(ImageUtilities.getScaledImage(image, scalingFactor, scalingFactor));
+}
+
+public synchronized void rotate(int degrees) {
+  replaceImage(ImageUtilities.getRotatedImage(image, degrees));
+}
+
+private void replaceImage(RenderedOpnewImage) {
+  image.dispose();
+  System.gc();
+  image = newImage;
+}
 ```
+
+위 replaceImage()를 리팩토링했다. 아주 적은 양이지만 공통적인 코드를 새 메서드로 뽑고 보니 클래스가 SRP를 위반한다. 그러므로 새로 만든 replaceImage 메서드를 다른 클래스로 옮겨도 좋겠다. 그러면 새 메서드의 가시성이 높아지고, 따라서 다른 팀원이 새 메서드를 좀 더 추상화해 다른 맥락에서 재사용할 기회를 포착할지도 모른다. 이런 '소규모 재사용'은 시스템 복잡도를 극적으로 줄여준다. 소규모 재사용을 제대로 익혀야 대규모 재사용이 가능하다. 
+
+TEMPLATE METHOD<sup><a name="FN3">[4](#fn3)</a></sup> 패턴은 고차원 중복을 제거할 목적으로 자주 사용하는 기법이다. 예를 살펴보자. 
+
+```java
+public class VacationPolicy {
+  public void accrueUSDDivisionVacation() {
+    // 지금까지 근무한 시간을 바탕으로 휴가 일수를 계산하는 코드
+    // ...
+    // 휴가 일수가 미국 최소 법정 일수를 만족하는지 확인하는 코드
+    // ...
+    // 휴가 일수를 급여 대장에 적용하는 코드
+    // ...
+  }
+  
+  public void accrueEUDivisionVacation() {
+    // 지금까지 근무한 시간을 바탕으로 휴가 일수를 계산하는 코드
+    // ...
+    // 휴가 일수가 유럽연합 최소 법정 일수를 만족하는지 확인하는 코드
+    // ...
+    // 휴가 일수를 급여 대장에 적용하는 코드
+    // ...
+  }
+}
+```
+
+최소 법정 일수를 계산하는 코드만 제외하면 두 메서드는 거의 동일하다. 최소 법정 일수를 계산하는 알고리즘은 직원 유형에 따라 살짝 변한다. 여기에 TEMPLATE METHOD 패턴을 적용해 눈에 들어오는 중복을 제거한다. 
+
+```java
+abstract public class VacationPolicy {
+  public void accrueVacation() {
+    caculateBseVacationHours();
+    alterForLegalMinimums();
+    applyToPayroll();
+  }
+  
+  private void calculateBaseVacationHours() { /* ... */ };
+  abstract protected void alterForLegalMinimums();
+  private void applyToPayroll() { /* ... */ };
+}
+
+public class USVacationPolicy extends VacationPolicy {
+  @Override protected void alterForLegalMinimums() {
+    // 미국 최소 법정 일수를 사용한다.
+  }
+}
+
+public class EUVacationPolicy extends VacationPolicy {
+  @Override protected void alterForLegalMinimums() {
+    // 유럽연합 최소 법정 일수를 사용한다.
+  }
+}
+```
+
+하위 클래스는 중복되지 않는 정보만 제공해 accrueVacation 알고리즘에서 빠진 '구멍'을 메운다.
 
 <a name="5">
 ## 표현하라
@@ -145,3 +212,7 @@ Single Responsibility Principle, 단일 책임 원칙
 ##### [2. DIP](#FN2) #####
 </a>
 Dependency Inversion Principle, 의존 관계 역전 원칙
+
+<a name="fn3">
+##### [3. GOF](#FN3) #####
+Gang of Four의 디자인 패턴 중 하나
