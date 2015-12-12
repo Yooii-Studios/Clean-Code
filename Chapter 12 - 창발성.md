@@ -169,6 +169,9 @@ public class EUVacationPolicy extends VacationPolicy {
 
 하위 클래스는 중복되지 않는 정보만 제공해 accrueVacation 알고리즘에서 빠진 '구멍'을 메운다.
 
+역주: swift에서는 protocol과 protocol extension을 활용해서 위와 유사한 방식으로 구현할 수 있다. 
+추후 플레이그라운드 테스트 후 본인 gist 링크로 달 예정
+
 <a name="5">
 ## 표현하라
 </a>
