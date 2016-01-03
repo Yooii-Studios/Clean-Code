@@ -41,6 +41,206 @@ public static void main(String[] args) {
 
 이름을 붙인 방법, 함수 크기, 코드 형식에 각별히 주목한다. 노련한 프로그래머라면 여기저기 자잘한 구조나 스타일이 거슬릴지 모르지만 전반적으로 깔끔한 구조에 잘 짜인 프로그램으로 여겨주면 좋겠다. 
 
+##### 목록 14-2 Args.java
+```java
+package com.objectmentor.utilities.args;
+
+import static com.objectmentor.utilities.args.ArgsException.ErrorCode.*; 
+import java.util.*;
+
+public class Args {
+  private Map<Character, ArgumentMarshaler> marshalers;
+  private Set<Character> argsFound;
+  private ListIterator<String> currentArgument;
+  
+  public Args(String schema, String[] args) throws ArgsException { 
+    marshalers = new HashMap<Character, ArgumentMarshaler>(); 
+    argsFound = new HashSet<Character>();
+    
+    parseSchema(schema);
+    parseArgumentStrings(Arrays.asList(args)); 
+  }
+  
+  private void parseSchema(String schema) throws ArgsException { 
+    for (String element : schema.split(","))
+      if (element.length() > 0) 
+        parseSchemaElement(element.trim());
+  }
+  
+  private void parseSchemaElement(String element) throws ArgsException { char elementId = element.charAt(0);
+    String elementTail = element.substring(1); validateSchemaElementId(elementId);
+    if (elementTail.length() == 0)
+      marshalers.put(elementId, new BooleanArgumentMarshaler());
+    else if (elementTail.equals("*")) 
+      marshalers.put(elementId, new StringArgumentMarshaler());
+    else if (elementTail.equals("#"))
+      marshalers.put(elementId, new IntegerArgumentMarshaler());
+    else if (elementTail.equals("##")) 
+      marshalers.put(elementId, new DoubleArgumentMarshaler());
+    else if (elementTail.equals("[*]"))
+      marshalers.put(elementId, new StringArrayArgumentMarshaler());
+    else
+      throw new ArgsException(INVALID_ARGUMENT_FORMAT, elementId, elementTail);
+  }
+  
+  private void validateSchemaElementId(char elementId) throws ArgsException { 
+    if (!Character.isLetter(elementId))
+      throw new ArgsException(INVALID_ARGUMENT_NAME, elementId, null); 
+  }
+  
+  private void parseArgumentStrings(List<String> argsList) throws ArgsException {
+    for (currentArgument = argsList.listIterator(); currentArgument.hasNext();) {
+      String argString = currentArgument.next(); 
+      if (argString.startsWith("-")) {
+        parseArgumentCharacters(argString.substring(1)); 
+      } else {
+        currentArgument.previous();
+        break; 
+      }
+    } 
+  }
+  
+  private void parseArgumentCharacters(String argChars) throws ArgsException { 
+    for (int i = 0; i < argChars.length(); i++)
+      parseArgumentCharacter(argChars.charAt(i)); 
+  }
+  
+  private void parseArgumentCharacter(char argChar) throws ArgsException { 
+    ArgumentMarshaler m = marshalers.get(argChar);
+    if (m == null) {
+      throw new ArgsException(UNEXPECTED_ARGUMENT, argChar, null); 
+    } else {
+      argsFound.add(argChar); 
+      try {
+        m.set(currentArgument); 
+      } catch (ArgsException e) {
+        e.setErrorArgumentId(argChar);
+        throw e; 
+      }
+    } 
+  }
+  
+  public boolean has(char arg) { 
+    return argsFound.contains(arg);
+  }
+  
+  public int nextArgument() {
+    return currentArgument.nextIndex();
+  }
+  
+  public boolean getBoolean(char arg) {
+    return BooleanArgumentMarshaler.getValue(marshalers.get(arg));
+  }
+  
+  public String getString(char arg) {
+    return StringArgumentMarshaler.getValue(marshalers.get(arg));
+  }
+  
+  public int getInt(char arg) {
+    return IntegerArgumentMarshaler.getValue(marshalers.get(arg));
+  }
+  
+  public double getDouble(char arg) {
+    return DoubleArgumentMarshaler.getValue(marshalers.get(arg));
+  }
+  
+  public String[] getStringArray(char arg) {
+    return StringArrayArgumentMarshaler.getValue(marshalers.get(arg));
+  } 
+}
+```
+
+여기저기 뒤적일 필요 없이 위에서 아래로 코드가 읽힌다는 사실에 주목한다. 한 가지 먼저 읽어볼 코드가 있다면 ArgumentMrashaler 정의인데, 목록 14-3에서 14-6까지는 ArgumentMarshaler 인터페이스와 파생 클래스다. 
+
+##### 목록 14-3 ArgumentMarshaler.java
+```java
+public interface ArgumentMarshaler {
+  void set(Iterator<String> currentArgument) throws ArgsException;
+}
+```
+
+##### 목록 14-4 BooleanArgumentMarshaler.java
+```java
+public class BooleanArgumentMarshaler implements ArgumentMarshaler { 
+  private boolean booleanValue = false;
+  
+  public void set(Iterator<String> currentArgument) throws ArgsException { 
+    booleanValue = true;
+  }
+  
+  public static boolean getValue(ArgumentMarshaler am) {
+    if (am != null && am instanceof BooleanArgumentMarshaler)
+      return ((BooleanArgumentMarshaler) am).booleanValue; 
+    else
+      return false; 
+  }
+}
+```
+
+##### 목록 14-5 StringArgumentMarshaler.java
+```java
+import static com.objectmentor.utilities.args.ArgsException.ErrorCode.*;
+
+public class StringArgumentMarshaler implements ArgumentMarshaler { 
+  private String stringValue = "";
+  
+  public void set(Iterator<String> currentArgument) throws ArgsException { 
+    try {
+      stringValue = currentArgument.next(); 
+    } catch (NoSuchElementException e) {
+      throw new ArgsException(MISSING_STRING); 
+    }
+  }
+  
+  public static String getValue(ArgumentMarshaler am) {
+    if (am != null && am instanceof StringArgumentMarshaler)
+      return ((StringArgumentMarshaler) am).stringValue; 
+    else
+      return ""; 
+  }
+}
+```
+
+##### 목록 14-6 IntegerArgumentMarshaler.java
+```java
+import static com.objectmentor.utilities.args.ArgsException.ErrorCode.*;
+
+public class IntegerArgumentMarshaler implements ArgumentMarshaler { 
+  private int intValue = 0;
+  
+  public void set(Iterator<String> currentArgument) throws ArgsException { 
+    String parameter = null;
+    try {
+      parameter = currentArgument.next();
+      intValue = Integer.parseInt(parameter);
+    } catch (NoSuchElementException e) {
+      throw new ArgsException(MISSING_INTEGER);
+    } catch (NumberFormatException e) {
+      throw new ArgsException(INVALID_INTEGER, parameter); 
+    }
+  }
+  
+  public static int getValue(ArgumentMarshaler am) {
+    if (am != null && am instanceof IntegerArgumentMarshaler)
+      return ((IntegerArgumentMarshaler) am).intValue; 
+    else
+    return 0; 
+  }
+}
+```
+
+나머지 DoubleArgumentMarshaler와 StringArrayArgumentMarshaler는 다른 파생 클래스와 똑같은 패턴이므로 코드를 생략한다. 
+
+한 가지가 눈에 거슬릴지 모르겠다. 바로 오류 코드 상수를 정의하는 부분이다. 목록 14-7을 살펴보자. 
+
+##### 목록 14-7 ArgsException.java
+```java
+```
+
+이처럼 단순한 개념을 구현하는데 코드가 너무 많이 필요해 놀랄지도 모르겠다. 우선적인 이유는 장황한 언어인 자바를 사용해서인데, 정적 타입 언어라서 타입 시스템을 만족하려면 많은 단어가 필요하다. 
+
+하지만 이름을 붙인 방법, 함수 크기, 코드 형식에 주목을 해 본다면 전반적으로 깔끔한 구조에 잘 짜인 프로그램으로 여겨주면 좋겠다. 
+
 예를 들어, 날짜 인수나 복소수 인수 등 새로운 인수 유형을 추가하는 방법이 명백하다. 고칠 코드도 별로 없다. 간단히 설명하자면, ArgumentMarshaler에서 새 클래스를 파생해 getXXX 함수를 추가한 후 parseSchemaElement 함수에 새 case 문만 추가하면 끝이다. 필요하다면 새 ArgsException.ErrorCode를 만들고 새 오류 메시지를 추가한다. 
 
 <a name="1-1"></a>
