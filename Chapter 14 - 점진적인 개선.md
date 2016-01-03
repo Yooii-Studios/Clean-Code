@@ -364,7 +364,7 @@ public class ArgsException extends Exception {
 
 <a name="3"></a>
 ## String 인수
-String 인수를 추가하는 과정은 boolean 인수와 매우 유사했다. HashMap을 변경한 후 parse, set, get 함수를 고쳤다. 
+String 인수를 추가하는 과정은 boolean 인수와 매우 유사했다. HashMap을 변경한 후 parse, set, get 함수를 고쳤다. 일단 각 인수 유형을 처리하는 코드를 모두 ArgumentMarshaler 클래스에 넣고 나서 그 파생 클래스를 만들어 코드를 분리할 계획을 세우고 진행했다. 그러면 프로그램 구조를 조금씩 변경하는 동안에도 시스템의 정상 동작을 유지하기 쉬워지기 때문이다. 
 
 <a name="4"></a>
 ## 최종 코드
@@ -588,7 +588,7 @@ public class Args {
   } 
 }
 ```
-Args 클래스에서는 주로 코드만 삭제했을 뿐이다. 상당한 코드를 Args 클래스에서 ArgsException 클래스로 옮겼다. 멋지다. 또한 모든 ArgumentMarshaler 클래스도 각자 파일로 옮겼다. 더욱 멋지다!
+Args 클래스에서 코드 중복을 최소화하고, 상당한 코드를 Args 클래스에서 ArgsException 클래스로 옮겼다. 멋지다. 또한 ArgumentMarshaler 클래스를 통해 여러 인수에 대한 추후 확장성을 꾀했다. 더욱 멋지다!
 
 소프트웨어 설계는 분할만 잘해도 품질이 크게 높아진다. 적절한 장소를 만들어 코드만 분리해도 설계가 좋아진다. 관심사를 분리하면 코드를 이해하고 보수하기 훨씬 더 쉬워진다. 
 
