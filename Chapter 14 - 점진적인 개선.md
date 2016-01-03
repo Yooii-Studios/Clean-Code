@@ -11,7 +11,27 @@
 
 이 장은 점진적인 개선을 보여주는 사례 연구다. 우선, 출발은 좋았으나 확장성이 부족했던 모듈을 소개한다. 그런 다음, 모듈을 개선하고 정리하는 단계를 살펴본다. 
 
- 프로그램을 짜다 보면 종종 명령행 인수의 구문을 분석할 필요가 생긴다. 
+ 프로그램을 짜다 보면 종종 명령행 인수의 구문을 분석할 필요가 생긴다. 편리한 유틸리티가 없다면 main 함수로 넘어오는 문자열 배열을 직접 분석하게 된다. 여러 가지 훌륭한 유틸리티가 있지만 내 사정에 딱 맞는 유틸리티가 없다면? 물론 직접 짜겠다고 결심한다. 새로 짠 유틸리티를 Args라 부르겠다. 
+ 
+ Args는 사용법이 간단하다. Args 생성자에 (입력으로 들어온) 인수 문자열과 형식 문자열을 넘겨 Args 인스턴스를 생성한 후 Args 인스턴스에다 인수 값을 질의한다. 다음 간단한 예를 살펴보자. 
+ 
+##### 목록 14-1 간단한 Args 사용법
+```java
+public static void main(String[] args) {
+  try {
+    Args arg = new Args("l,p#,d*", args);
+    boolean logging = arg.getBoolean('l');
+    int port = arg.getInt('p');
+    String directory = arg.getString('d');
+    executeApplication(logging, port, directory);
+  } catch (ArgsException e) {
+    System.out.print("Argument error: %s\n", e.errorMessage());
+  }
+}
+```
+매개변수 두 개로 Args 클래스의 클래스의 인스턴스를 만든다. 첫째 매개변수는 형식 또는 스키마를 지정한다. "l,p#,d*"은 명령행 인수 세 개를 정의한다. 첫 번째 -l은 부울 인수다. 두 번째 -p는 정수 인수다. 세 번째 -d는 문자열 인수다. 두 번째 매개변수는 main으로 넘어온 명령행 인수 배열 자체다.
+
+ ArgsException이 발생하지 않는다면 명령행 인수의 구문을 성공적으로 분석했으며 Args 인스턴스에 질의를 던져도 좋다는 말이다. 인수 값을 가져오기 위해 get~() 등의 메서드를 사용한다. 
 
 <a name="1"></a>
 ## Args 구현
