@@ -360,7 +360,51 @@ public class ArgsException extends Exception {
 
 변경 전후 시스템이 똑같이 돌아간다는 사실을 확인하려면 언제든 실행이 가능한 자동화된 테스트 슈트가 필요하다. 앞서 Args 클래스를 구현하는 동안에 나는 이미 단위 테스트 슈트와 인수 테스트를 만들어 놓았다. 두 테스트 모두 언제든 실행이 가능했고, 시스템이 두 테스트를 모두 통과하면 올바로 동작한다고 봐도 좋았다. 
 
-그래서 나는 시스템에 자잘한 변경을 가하기 시작했다. 코드를 변경할 때마다 시스템 구조는 조금씩 ArgumentMashaler 개념에 가까워졌다. 또한 변경 후에도 시스템은 여전히 잘 돌아갔다. 
+그래서 나는 시스템에 자잘한 변경을 가하기 시작했다. 코드를 변경할 때마다 시스템 구조는 조금씩 ArgumentMarshaler 개념에 가까워졌다. 또한 변경 후에도 시스템은 여전히 잘 돌아갔다. 가장 먼저 나는 기존 코드 끝에 ArgumentMarshaler 클래스의 골격을 추가했다. 우선 boolean 부분 부터 해 보기로 했다. 
+
+##### 목록 14-11 Args.java 끝에 추가한 ArgumentMarshaler
+```java
+private class ArgumentMarshaler { 
+  private boolean booleanValue = false;
+
+  public void setBoolean(boolean value) { 
+    booleanValue = value;
+  }
+  
+  public boolean getBoolean() {return booleanValue;} 
+}
+
+private class BooleanArgumentMarshaler extends ArgumentMarshaler { }
+private class StringArgumentMarshaler extends ArgumentMarshaler { }
+private class IntegerArgumentMarshaler extends ArgumentMarshaler { }
+```
+
+그리고 코드를 최소로 건드리는, 가장 단순한 변경을 가했다. 구체적으로는 Boolean 인수를 저장하는 HashMap에서 Boolean 인수 유형을 ArgumentMarshaler 유형으로 바꿨다. 
+
+```java
+private Map<Character, ArgumentMarshaler> boolean Args = new HashMap<Character, ArgumentMarshaler>();
+```
+
+```java
+...
+
+private void parseBooleanSchemaElement(char elementId) {
+  booleanArgs.put(elementId, new BooleanArgumentMarshaler());
+}
+  
+...
+
+private void setBooleanArg(char argChar, boolean value) {
+  booleanArgs.get(argChar).setBoolean(value);
+}
+  
+...
+
+public boolean getBoolean(char arg) {
+  Args.ArgumentMarshaler am = booleanArgs.get(arg);
+  return am != null && am.getBoolean();
+}
+```
 
 <a name="3"></a>
 ## String 인수
@@ -588,6 +632,7 @@ public class Args {
   } 
 }
 ```
+
 Args 클래스에서 코드 중복을 최소화하고, 상당한 코드를 Args 클래스에서 ArgsException 클래스로 옮겼다. 멋지다. 또한 ArgumentMarshaler 클래스를 통해 여러 인수에 대한 추후 확장성을 꾀했다. 더욱 멋지다!
 
 소프트웨어 설계는 분할만 잘해도 품질이 크게 높아진다. 적절한 장소를 만들어 코드만 분리해도 설계가 좋아진다. 관심사를 분리하면 코드를 이해하고 보수하기 훨씬 더 쉬워진다. 
