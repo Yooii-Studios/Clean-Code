@@ -75,15 +75,21 @@ Concurrency는 단일 스레드에서 엮여 있던 "무엇을 할 것인가"와
 public class ClassWithThreadingProblem {
     private int lastIdUsed;
     
+    public ClassWithThreadingProblem(int lastIdUsed) {
+        self.lastIdUsed = lastIdUsed;
+    }
+    
     public int getNextId() {
         return ++lastIdUsed;
     }
 }
 
 public static void main(String args[]) {
+    final ClassWithThreadingProblem classWithThreadingProblem = new ClassWithThreadingProblem(42);
+    
     Runnable runnable = new Runnable() {
         public void run() {
-            classWithThreadingProblem.takeNextId();
+            classWithThreadingProblem.getNextId();
         }
     };
     
@@ -93,7 +99,12 @@ public static void main(String args[]) {
     t2.start();
 }
 ```
-위 X 객체를 생성, 
+위 코드가 만들 수 있는 결과는 총 3가지 이다.
+- t1이 43을, t2가 44를 가져간다. lastIdUsed는 44이다.
+- t1이 44을, t2가 43를 가져간다. lastIdUsed는 44이다.
+- t1이 43을, t2가 43를 가져간다. lastIdUsed는 43이다.
+
+위의 getNextId() 메서드는 8개의 자바 byte-code로 변환되며, 이를 두 스레드에서 실행하게 되면 총 12,870개의 코드 조합을 낼 수 있다. 그 중 *얼마 안 되는* 몇몇 조합이 위의 3가지 결과 중 마지막 결과를 낳게 된다.<sup> [3](#fn3)</sup>
 
 <a name="4"></a>
 ## Concurrency 문제 해결을 위한 원칙들 ##
@@ -178,4 +189,8 @@ https://en.wikipedia.org/wiki/Concurrency_(computer_science)
 <a name="fn2">
 ##### 2. One-off #####
 </a>
-"한 번만 일어나는"이라는 의미이며 여기에서는 "고칠 수 없는"이라는 의미도 포함하고 있다.
+사전적 의미는 "한 번만 일어나는"이며, 여기에서는 "고칠 수 없는"이라는 의미도 포함하고 있다.
+
+<a name="fn3">
+##### 3. 더 자세한 내용은 [부록 A: Concurrency II]를 참고하길 바란다. #####
+</a>
