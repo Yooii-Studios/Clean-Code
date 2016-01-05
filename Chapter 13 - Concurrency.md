@@ -71,6 +71,29 @@ Concurrency는 단일 스레드에서 엮여 있던 "무엇을 할 것인가"와
 
 <a name="3"></a>
 ## 무엇이 어려운가? ##
+```java
+public class ClassWithThreadingProblem {
+    private int lastIdUsed;
+    
+    public int getNextId() {
+        return ++lastIdUsed;
+    }
+}
+
+public static void main(String args[]) {
+    Runnable runnable = new Runnable() {
+        public void run() {
+            classWithThreadingProblem.takeNextId();
+        }
+    };
+    
+    Thread t1 = new Thread(runnable);
+    Thread t2 = new Thread(runnable);
+    t1.start();
+    t2.start();
+}
+```
+위 X 객체를 생성, 
 
 <a name="4"></a>
 ## Concurrency 문제 해결을 위한 원칙들 ##
