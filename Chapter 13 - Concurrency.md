@@ -76,7 +76,7 @@ public class ClassWithThreadingProblem {
     private int lastIdUsed;
     
     public ClassWithThreadingProblem(int lastIdUsed) {
-        self.lastIdUsed = lastIdUsed;
+        this.lastIdUsed = lastIdUsed;
     }
     
     public int getNextId() {
