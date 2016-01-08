@@ -165,9 +165,9 @@ java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 �
 
 | Name            | Description                                                         |
 | :-------------- | :------------------------------------------------------------------ |
-| ReentrantLock   | A lock that can be acquired in one method and released in another.  |
-| Semaphore       | An implementation of the classic semaphore, a lock with a count.    |
-| CountDownLatch  | A lock that waits for a number of events before releasing all threads waiting on it. This allows all threads to have a fair chance of starting at about the same time. |
+| ReentrantLock   | 한 메서드에서 잠그고 다른 메서드에서 해제될 수 있는 lock이다.       |
+| Semaphore       | 전통적인 세마포어(갯수를 셀 수 있는 lock)의 구현체이다.             |
+| CountDownLatch  | 기다리는 모든 스레드들을 해제하기 전 특정 횟수의 이벤트가 발생하는 것을 기다리게 할 수 있는 lock이다. 모든 스레드가 거의 동시에 시작될 수 있게 도와줄 수 있다. |
 
 **추천**: *당신에게 맞는 클래스를 살펴보라. 자바의 경우 java.util.concurrent, java.util.concurrent.atomic, java.util.concurrent.locks를 살펴보라.*
 
