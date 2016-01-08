@@ -150,9 +150,24 @@ HttpServlet을 생각해 보라. HttpServlet을 상속받는 클래스는 doGet,
 
 <a name="5"></a>
 ## 라이브러리를 이해하라 ##
+자바 5버전 이상에서 스레드 관련 코드 작성시 아래의 사항들을 숙지하자.
+
+- 자바에서 제공하는 thread-safe 컬랙션을 사용하라.
+- 연관이 없는 태스크들을 수행시 executor 프레임워크를 사용하라.
+- 가능하면 nonblocking 방법을 사용하라.
+- 몇몇 라이브러리 클래스들은 thread-safe하지 않다.
 
 <a name="5-1"></a>
 #### Thread-Safe한 컬랙션들 ####
+java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 있는 컬랙션들을 제공한다. ConcurrentHashMap의 경우에는 일반 HashMap보다 대부분의 상황에서 더 좋은 퍼포먼스를 제공한다. 만약 배포 환경이 자바 5버전 이상이라면 이 패키지를 활용하자.
+
+아래와 같은 고급 concurrency 디자인 구현을 위한 컴포넌트들도 숙지하자.
+
+| Name            | Description                                                         |
+| :-------------- | :------------------------------------------------------------------ |
+| ReentrantLock   | A lock that can be acquired in one method and released in another.  |
+| Semaphore       | An implementation of the classic semaphore, a lock with a count.    |
+| CountDownLatch  | A lock that waits for a number of events before releasing all threads waiting on it. This allows all threads to have a fair chance of starting at about the same time. |
 
 <a name="6"></a>
 ## 실행 모델에 대한 이해 ##
