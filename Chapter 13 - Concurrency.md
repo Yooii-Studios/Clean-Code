@@ -119,7 +119,7 @@ Concurrency 디자인은 그 자체로 충분히 복잡하기 때문에 변경�
 - *Concurrency 관련 코드*는 그 자체가 가지는 어려움(풀기 힘든 문제)이 있다.
 - 잘못 작성된 concurrency 코드는 여러 문제를 발생시킬 수 있으며, 이는 추가적인 코드 없이 해결되기 힘들다.
 
-**추천**: *Concurrency 관련 코드는 다른 코드들과 분리하라*
+**추천**: *Concurrency 관련 코드는 다른 코드들과 분리하라.*
 
 <a name="4-2"></a>
 #### Corollary: 데이터를 접근할 수 있는 범위를 제한하라 ####
@@ -130,7 +130,7 @@ Concurrency 디자인은 그 자체로 충분히 복잡하기 때문에 변경�
 - 모든 곳이 보호되었는지 파악하기 위해 중복적인 노력이 필요하게 된다.
 - 이미 찾기 어려운 문제의 근원을 더 찾기 어렵게 만들게 된다.
 
-**추천**: *데이터 캡슐화를 가슴 깊이 새기며, 공유될 만한 자원에 접근하는 부분(코드)을 극도로 줄여라*
+**추천**: *데이터 캡슐화를 가슴 깊이 새기며, 공유될 만한 자원에 접근하는 부분(코드)을 극도로 줄여라.*
 
 <a name="4-3"></a>
 #### Corollary: 데이터의 복사본을 사용하라 ####
@@ -146,7 +146,7 @@ HttpServlet을 생각해 보라. HttpServlet을 상속받는 클래스는 doGet,
 이는 각 Servlet이 각자의 세계에 있는 것처럼 작동하게 도와주며, 지역 변수를 사용하는 한 동기화 문제는 발생하지 않게 된다.
 물론 대부분의 Servlet들은 데이터베이스 연결과 같은 공유 자원이 필요하긴 하다.
 
-**추천**: *데이터를 독립적인 스레드-더 나아가 각각의 프로세서-에서 사용될 수 있게 구분하라*
+**추천**: *데이터를 독립적인 스레드-더 나아가 각각의 프로세서-에서 사용될 수 있게 구분하라.*
 
 <a name="5"></a>
 ## 라이브러리를 이해하라 ##
@@ -168,6 +168,8 @@ java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 �
 | ReentrantLock   | A lock that can be acquired in one method and released in another.  |
 | Semaphore       | An implementation of the classic semaphore, a lock with a count.    |
 | CountDownLatch  | A lock that waits for a number of events before releasing all threads waiting on it. This allows all threads to have a fair chance of starting at about the same time. |
+
+**추천**: *당신에게 맞는 클래스를 살펴보라. 자바의 경우 java.util.concurrent, java.util.concurrent.atomic, java.util.concurrent.locks를 살펴보라.*
 
 <a name="6"></a>
 ## 실행 모델에 대한 이해 ##
