@@ -72,6 +72,8 @@ Concurrency는 단일 스레드에서 엮여 있던 "무엇을 할 것인가"와
 <a name="3"></a>
 ## 무엇이 어려운가? ##
 ```java
+/* Code 1-1 */
+    
 public class ClassWithThreadingProblem {
     private int lastIdUsed;
     
@@ -203,6 +205,72 @@ java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 �
 
 <a name="7"></a>
 ## 동기화된 메서드 간의 의존성을 주의하라 ##
+```java
+/* Code 2-1 */
+public class IntegerIterator implements Iterator<Integer>{
+    private Integer nextValue = 0;
+    
+    public synchronized boolean hasNext() {
+        return nextValue < 100000;
+    }
+    
+    public synchronized Integer next() {
+        if (nextValue == 100000)
+            throw new IteratorPastEndException();
+        return nextValue++;
+    }
+    
+    public synchronized Integer getNextValue() {
+        return nextValue;
+    }
+}
+
+// Threaded-Code
+IntegerIterator iterator = new IntegerIterator();
+while(iterator.hasNext()) {
+    int nextValue = iterator.next();
+    // do something with nextValue
+}
+```
+
+```java
+/* Code 2-2: Client-Based Locking */
+
+// Threaded-Code
+IntegerIterator iterator = new IntegerIterator();
+while (true) {
+    int nextValue;
+    synchronized (iterator) {
+        if (!iterator.hasNext())
+            break;
+        nextValue = iterator.next();
+    }
+    doSometingWith(nextValue);
+}
+```
+
+```java
+/* Code 2-3: Server-Based Locking */
+
+public class IntegerIteratorServerLocked {
+    private Integer nextValue = 0;
+    
+    public synchronized Integer getNextOrNull() {
+        if (nextValue < 100000)
+            return nextValue++;
+        else
+            return null;
+        }
+}
+
+// Threaded-Code
+while (true) {
+    Integer nextValue = iterator.getNextOrNull();
+    if (next == null)
+        break;
+    // do something with nextValue
+}
+```
 
 <a name="8"></a>
 ## 제대로 "Shut-Down"하는 코드는 작성하기 어렵다 ##
