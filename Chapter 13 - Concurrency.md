@@ -205,6 +205,20 @@ java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 �
 
 <a name="7"></a>
 ## 동기화된 메서드 간의 의존성을 주의하라 ##
+동기화된 메서드 간의 의존성은 concurrent 코드에서 사소한 버그를 일으킬 수 있다. 자바는 synchronized라는 "메서드 하나를 보호하는 노테이션"을 제공한다. 하지만 한 클래스에 두 개 이상의 synchronized 메서드가 존재하면 문제를 일으킬 수도 있다.
+
+**추천**: *공유된 객체의 두 메서드 이상을 사용하는 것을 피하라.*
+
+만약 위 추천을 따를 수 없는 상황이라면 아래의 세 방법을 고려해 보라.
+
+**클라이언트 기반 잠금(Client-Based Locking)**: 클라이언트가 첫 메서드를 부르기 이전부터 마지막 메서드를 부른 다음까지 서버를 잠근다. (역주: 공유 객체를 사용하는 코드에서 공유 객체를 잠그는 것이다.)
+
+**서버 기반 잠금(Server-Based Locking)**: 서버 내에서 서버(자신)을 잠그고 모든 동작을 수행한 후 잠금을 푸는 메서드를 제공한다. 클라이언트에게는 새로운 메서드를 제공한다. (역주: 공유 객체에 새로운 메서드를 작성하고 잠금이 필요한 동작 전체를 수행하게 하는 것이다.)
+
+**중계된 서버(Adapted Server)**: 잠금을 수행하는 중계자를 작성한다. 이는 기본적으로 서버 기반 잠금이지만 기존의 서버를 변경할 수 없는 상황에 사용할 수 있는 방법이다.(역주: 서드 파티 라이브러리를 사용한다고 생각하면 쉬울 것이다.)
+
+아래는 위의 내용에 대한 예제이다.
+
 ```java
 /* Code 2-1 */
 public class IntegerIterator implements Iterator<Integer>{
@@ -269,6 +283,20 @@ while (true) {
     if (next == null)
         break;
     // do something with nextValue
+}
+```
+
+```java
+/* Code 2-4: Adapted Server */
+
+public class ThreadSafeIntegerIterator {
+    private IntegerIterator iterator = new IntegerIterator();
+    
+    public synchronized Integer getNextOrNull() {
+        if(iterator.hasNext())
+            return iterator.next();
+        return null;
+    }
 }
 ```
 
