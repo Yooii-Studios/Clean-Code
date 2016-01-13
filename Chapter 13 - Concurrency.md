@@ -126,7 +126,7 @@ Concurrency 디자인은 그 자체로 충분히 복잡하기 때문에 변경�
 <a name="4-2"></a>
 #### Corollary: 데이터를 접근할 수 있는 범위를 제한하라 ####
 위 "무엇이 어려운가?"에서 본 것 처럼 공유 객체를 두 스레드에서 수정하는 중 간섭이 발생할 수 있으며 이는 예기치 못한 결과를 야기할 수 있다.
-이러한 *critical section*을 보호하는 한 가지 방법은 synchronized 키워드를 사용하는 것이다.
+이러한 *critical section*<sup> [5](#fn5)</sup>을 보호하는 한 가지 방법은 synchronized 키워드를 사용하는 것이다.
 *Critical section*의 수는 가능한한 적게 만들어야 하며 이를 어길 경우 아래와 같은 문제가 발생하기 쉽게 된다.
 - 한두 군데를 보호하는 것을 까먹기 쉬우며 이로 인해 해당 자원을 수정하는 모든 코드를 망가트리게 된다.
 - 모든 곳이 보호되었는지 파악하기 위해 중복적인 노력이 필요하게 된다.
@@ -183,7 +183,7 @@ java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 �
 | Mutual Exclusion             | 한 시점에 공유 자원에 접근할 수 있는 스레드는 단 하나이다. |
 | Starvation                   | 한 스레드 혹은 스레드의 그룹이 긴 시간 혹은 영원히 작업을 수행할 수 없게 된다. 작업의 우선권을 가지는 수행 시간이 짧은 스레드가 끝없이 실행된다면 수행 시간이 긴 스레드는 굶게 된다. |
 | Deadlock                     | 두 개 이상의 스레드들이 서로의 작업이 끝나기를 기다린다. 각 스레드는 서로가 필요로 하는 자원을 점유하고 있으며 필요한 자원을 얻지 못하는 이상 그 누구도 작업을 끝내지 못하게 된다. |
-| Livelock<sup> [5](#fn5)</sup>| 스레드들이 서로 작업을 수행하려는 중 다른 스레드가 작업중인 것을 인지하고 서로 양보한다. 이러한 공명 때문에 스레드들은 작업을 계속 수행하려 하지만 장시간 혹은 영원히 작업을 수행하지 못하게 된다. |
+| Livelock<sup> [6](#fn6)</sup>| 스레드들이 서로 작업을 수행하려는 중 다른 스레드가 작업중인 것을 인지하고 서로 양보한다. 이러한 공명 때문에 스레드들은 작업을 계속 수행하려 하지만 장시간 혹은 영원히 작업을 수행하지 못하게 된다. |
 
 <a name="6-1"></a>
 #### 생산자-소비자 ####
@@ -352,7 +352,7 @@ Synchronized로 수행되는 잠금은 딜레이와 오버해드를 만들기 �
 Concurrency 지원 코드를 아래아 같이 여러 설정으로 실행될 수 있게 만들어라.
 
 - 단일 스레드, 여러 스레드 환경에서 동작하게 구현
-- 실제 사용될 객체 혹은 Test Double<sup> [6](#fn6)</sup>과 상호작용할 수 있는 스레드 코드로 구현
+- 실제 사용될 객체 혹은 Test Double<sup> [7](#fn7)</sup>과 상호작용할 수 있는 스레드 코드로 구현
 - 수행 속도를 조절할 수 있는 Test Double을 구현
 - 지정된 횟수만큼 반복 수행할 수 있게 구현
 
@@ -406,7 +406,7 @@ yield() 메서드를 호출함으로써 코드의 실행 경로를 변경할 수
 - 테스트할 부분을 직접 찾아야 한다.
 - 어디에 어느 메서드를 호출해야 할지 알기 어렵다.
 - 이와 같은 코드를 제품에 포함해 배포하는 것인 불필요하게 퍼포먼스를 저하시킬 뿐이다.
-- Shotgun approach<sup> [7](#fn7)</sup>이기 때문에 반드시 문제가 발생한다는 보장을 얻을 수 없다.
+- Shotgun approach<sup> [8](#fn8)</sup>이기 때문에 반드시 문제가 발생한다는 보장을 얻을 수 없다.
 
 우리는 실제 제품에 포함되지 않으며 여러 조합으로 실행해 에러를 찾기 쉽게 만들 방법이 필요하다.
 
@@ -436,7 +436,7 @@ public synchronized String nextUrlOrNull() {
 }
 ```
 
-위와 같이 구현한 후 간단한 Aspect<sup> [8](#fn8)</sup>를 이용해 '아무 것도 안하기', 'sleep', 'yield'등을 무작위로 선택하게 할 수 있다.
+위와 같이 구현한 후 간단한 Aspect<sup> [9](#fn9)</sup>를 이용해 '아무 것도 안하기', 'sleep', 'yield'등을 무작위로 선택하게 할 수 있다.
 
 혹은 ThreadJigglePoint가 두 가지 구현을 가지게 할 수도 있다. 첫 번째 구현은 배포용 코드를 위한 '아무 것도 안하기'를 수행하며 두 번째 구현은 'sleep, yield, 아무 것도 안하기' 중의 하나를 무작위로 선택하는 것이다. 다소 간단하긴 하지만 좀 더 정교한 툴을 사용하는 대신 이 정도로 구현하는 것도 적절한 선택일 것이다.
 
@@ -480,26 +480,31 @@ https://en.wikipedia.org/wiki/Concurrency_(computer_science)
 <a name="fn4">
 ##### 4. SRP(Single Responsibility Principle) #####
 </a>
-https://en.wikipedia.org/wiki/Single_responsibility_principle
+참조: https://en.wikipedia.org/wiki/Single_responsibility_principle
 
 <a name="fn5">
-##### 5. Livelock #####
+##### 5. Critical Section: 둘 이상의 스레드가 동시에 접근해서는 안되는 공유 자원(자료 구조 또는 장치)을 접근하는 코드의 일부 #####
+</a>
+출처: https://ko.m.wikipedia.org/wiki/%EC%9E%84%EA%B3%84_%EA%B5%AC%EC%97%AD
+
+<a name="fn6">
+##### 6. Livelock #####
 </a>
 실생활에서 발생할 수 있는 상황을 예로 들면 아래와 같다.  
 두 사람이 좁은 길목에서 만나 서로 비켜가기 위해 한 쪽으로 걷는다. 하지만 우연히도 두 사람은 계속 같은 방향으로 피하게 된다. 따라서 두 사람 모두 앞으로 진행하지 못하게 된다.  
 출처: http://stackoverflow.com/a/6155978/2279149
 
-<a name="fn6">
-##### 6. Test Double #####
+<a name="fn7">
+##### 7. Test Double #####
 </a>
 https://en.wikipedia.org/wiki/Test_double
 
-<a name="fn7">
-##### 7. Shotgun approach: 산탄총으로 목표를 향해 발사하는 것처럼 되는 대로 시도해 보는 방법 #####
+<a name="fn8">
+##### 8. Shotgun approach: 산탄총으로 목표를 향해 발사하는 것처럼 되는 대로 시도해 보는 방법 #####
 </a>
 출처: http://dictionary.reference.com/browse/shotgun-approach
 
-<a name="fn8">
-##### 8. Aspect: Chapter 11의 AOP 참조 #####
+<a name="fn9">
+##### 9. Aspect: Chapter 11의 AOP 참조 #####
 </a>
 참조: https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2011%20-%20시스템.md#4-2
