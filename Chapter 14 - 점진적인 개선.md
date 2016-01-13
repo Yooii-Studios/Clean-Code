@@ -821,7 +821,8 @@ public class Args {
       throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
   } 
   
-  private boolean setArgument(char argChar) throws ArgsException { ArgumentMarshaler m = marshalers.get(argChar);
+  private boolean setArgument(char argChar) throws ArgsException { 
+    ArgumentMarshaler m = marshalers.get(argChar);
     if (m == null)
       return false; 
     try {
