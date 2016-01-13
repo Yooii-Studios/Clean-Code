@@ -751,9 +751,9 @@ public class ArgsException extends Exception {
 ```java
 public class Args {
   private String schema;
-  private Map<Character, ArgumentMarshaler> marshalers =
-  new HashMap<Character, ArgumentMarshaler>();
-  private Set<Character> argsFound = new HashSet<Character>(); private Iterator<String> currentArgument;
+  private Map<Character, ArgumentMarshaler> marshalers =  new HashMap<Character, ArgumentMarshaler>();
+  private Set<Character> argsFound = new HashSet<Character>(); 
+  private Iterator<String> currentArgument;
   private List<String> argsList;
   
   public Args(String schema, String[] args) throws ArgsException { 
