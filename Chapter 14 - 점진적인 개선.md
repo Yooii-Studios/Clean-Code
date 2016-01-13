@@ -67,7 +67,8 @@ public class Args {
         parseSchemaElement(element.trim());
   }
   
-  private void parseSchemaElement(String element) throws ArgsException { char elementId = element.charAt(0);
+  private void parseSchemaElement(String element) throws ArgsException { 
+    char elementId = element.charAt(0);
     String elementTail = element.substring(1); validateSchemaElementId(elementId);
     if (elementTail.length() == 0)
       marshalers.put(elementId, new BooleanArgumentMarshaler());
