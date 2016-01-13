@@ -221,7 +221,8 @@ java.util.concurrent 패키지는 멀티 스레드 환경에서 사용할 수 �
 
 ```java
 /* Code 2-1 */
-public class IntegerIterator implements Iterator<Integer>{
+
+public class IntegerIterator implements Iterator<Integer> {
     private Integer nextValue = 0;
     
     public synchronized boolean hasNext() {
