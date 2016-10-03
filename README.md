@@ -1,5 +1,6 @@
 ## Clean Code ##
-Clean Code 스터디의 결과물 정리를 위해 만든 저장소입니다. 
+Clean Code 스터디의 결과물 정리를 위해 만든 저장소입니다. 다음 gitbook 링크에서 편하게 살펴보실 수 있습니다.
+[https://kwosu87.gitbooks.io/clean-code/content/](https://kwosu87.gitbooks.io/clean-code/content/)
 
 ## 목차##
 ####[ 1장 - 깨끗한 코드(진행중)](Chapter 01 - 깨끗한 코드.md)
