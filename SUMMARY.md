@@ -7,5 +7,5 @@
 * [Chapter 04 - 주석](Chapter 04 - 주석.md)
 * [Chapter 05 - 형식 맞추기](Chapter 05 - 형식 맞추기.md)
 * [Chapter 06 - 객체와 자료 구조](Chapter 06 - 객체와 자료 구조.md)
-* Chapter 07 - 에러 핸들링
+* [Chapter 07 - 에러 핸들링](Chapter 07 - 에러 핸들링.md)
 
