@@ -14,4 +14,5 @@
 * [Chapter 11 - 시스템](Chapter 11 - 시스템.md)
 * [Chapter 12 - 창발성](Chapter 12 - 창발성.md)
 * [Chapter 13 - 동시성](Chapter 13 - 동시성.md)
+* Chapter 14 - 점진적인 개선
 
