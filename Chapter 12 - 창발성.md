@@ -192,16 +192,11 @@ public class EUVacationPolicy extends VacationPolicy {
 경험을 대신할 단순한 개발 기법이 있을까? 당연히 없다. 하지만 이 장, 아니 이 책에서 소개하는 기법은 저자들이 수십 년 동안 쌓은 경험의 정수다. 단순한 설계 규칙을 따른다면 (오랜 경험 후에야 익힐) 우수한 기법과 원칙을 단번에 활용할 수 있다.
 
 ## <a name="8">참조</a>
-<a name="fn1">
-##### [1. SRP](#FN1) #####
-</a>
+##### <a name="fn1">[1. SRP](#FN1)</a> #####
 Single Responsibility Principle, 단일 책임 원칙
 
-<a name="fn2">
-##### [2. DIP](#FN2) #####
-</a>
+##### <a name="fn2">[2. DIP](#FN2)</a> #####
 Dependency Inversion Principle, 의존 관계 역전 원칙
 
-<a name="fn3">
-##### [3. GOF](#FN3) #####
+##### <a name="fn3">[3. GOF](#FN3)</a> #####
 Gang of Four의 디자인 패턴 중 하나
