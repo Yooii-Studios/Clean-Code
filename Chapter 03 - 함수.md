@@ -232,7 +232,7 @@ if (deletePage(page) == E_OK) {
 
 정상 작동과 오류 처리 동작을 뒤섞는 추한 구조이므로 if/else와 마찬가지로 블록을 별도 함수로 뽑아내는 편이 좋다.
 
-````java
+```java
 public void delete(Page page) {
 	try {
 		deletePageAndAllReferences(page);
