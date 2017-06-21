@@ -74,7 +74,7 @@ public static String renderPageWithSetupsAndTeardowns( PageData pageData, boolea
 
 
 ## 함수 당 추상화 수준은 하나로
-함수가 ‘한가지’ 작업만 하려면 함수 내 모든 문장의 추상화 수준이 동일해야된다.  
+함수가 ‘한가지’ 작업만 하려면 함수 내 모든 문장의 추상화 수준이 동일해야 된다.  
 만약 한 함수 내에 추상화 수준이 섞이게 된다면 읽는 사람이 헷갈린다.
 
 #### 위에서 아래로 코드 읽기:내려가기 규칙  
