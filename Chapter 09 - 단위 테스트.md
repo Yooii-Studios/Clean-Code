@@ -10,7 +10,7 @@
 - F.I.R.S.T
 - 결론
 
-======================================================
+---
 
 지난 10년 동안 우리 분야는 눈부신 성장을 이뤘다. 1997년만 해도 TDD(Test Driven Development)라는 개념을 아무도 몰랐다. 우리들 대다수에게 단위 테스트란 자기 프로그램이 '돌아간다'는 사실만 확인하는 일회성 코드에 불과했다.   
   
@@ -54,7 +54,7 @@
 
 목록 9-1은 FitNess에서 가져온 코드다. 아래 테스트 케이스 세 개는 이해하기 어렵기에 개선할 여지가 충분하다. 첫째, addPage와 assertSubString을 부르느라 중복되는 코드가 매우 많다. 좀 더 중요하게는 자질구레한 사항이 너무 많아 테스트 코드의 표현력이 떨어진다. 
 
-######목록 9-1 SerializedPageResponderTest.java
+###### 목록 9-1 SerializedPageResponderTest.java
 ```java
 public void testGetPageHieratchyAsXml() throws Exception {
   crawler.addPage(root, PathParser.parse("PageOne"));
@@ -120,7 +120,7 @@ public void testGetDataAsHtml() throws Exception {
 
 이제 목록 9-2를 살펴보자. 목록 9-1을 개선한 코드로, 목록 9-1과 정확히 동일한 테스트를 수행한다. 하지만 목록 9-2는 좀 더 깨끗하고 좀 더 이해하기 쉽다. 
 
-######목록 9-2 SerializedPageResponderTest.java (refactored)
+###### 목록 9-2 SerializedPageResponderTest.java (refactored)
 ```java
 public void testGetPageHierarchyAsXml() throws Exception {
   makePages("PageOne", "PageOne.ChildOne", "PageTwo");
@@ -170,7 +170,7 @@ public void testGetDataAsXml() throws Exception {
 
 목록 9-3을 살펴보자. 온도가 '급격하게 떨어지면' 경보, 온풍기, 송풍기가 모두 가동되는지 확인하는 코드이다. 
 
-######목록 9-3 EnvironmentControllerTest.java
+###### 목록 9-3 EnvironmentControllerTest.java
 ```java
 @Test
 public void turnOnLoTempAlarmAtThreashold() throws Exception {
@@ -188,7 +188,7 @@ public void turnOnLoTempAlarmAtThreashold() throws Exception {
 
 목록 9-3을 읽으면 점검하는 상태 이름과 상태 값을 확인하느라 눈길이 이리저리 흩어진다. heaterState라는 상태 이름을 확인하고 왼쪽으로 눈길을 돌려 assertTrue를 읽는다. 이런식으로 모든 state를 확인해야 하면 따분하고 미덥잖다. 읽기가 어렵다. 그래서 목록 9-4와 같이 변환해 코드 가독성을 크게 높였다. 
 
-######목록 9-4 EnvironmentControllerTest.java(리팩터링)
+###### 목록 9-4 EnvironmentControllerTest.java(리팩터링)
 ```java
 @Test
 public void turnOnLoTempAlarmAtThreshold() throws Exception {
@@ -201,7 +201,7 @@ public void turnOnLoTempAlarmAtThreshold() throws Exception {
 
 비롯 위 방식이 그릇된 정보를 피하라는 규칙의 위반에 가깝지만 여기서는 적절해 보인다. 일단 의미만 안다면 눈길이 문자열을 따라 움직이며 결과를 재빨리 판단한다. 테스트 코드를 읽기가 사뭇 즐거워진다. 목록 9-5를 살펴보면 테스트 코드를 이해하기 너무도 쉽다는 사실이 분명히 드러난다. 
 
-######목록 9-5 EnvironmentControllerTest.java (bigger selection)
+###### 목록 9-5 EnvironmentControllerTest.java (bigger selection)
 ```java
 @Test
 public void turnOnCoolerAndBlowerIfTooHot() throws Exception {
@@ -230,7 +230,7 @@ public void turnOnLoTempAlarmAtThreshold() throws Exception {
 
 목록 9-6은 'getState' 함수를 보여준다. 코드가 그리 효율적이지 못하다는 사실에 주목한다. 효율을 높이려면 StringBuffer가 더 적합하다. 
 
-######목록 9-6 MockControlHardware.java
+###### 목록 9-6 MockControlHardware.java
 ```java
 public String getState() {
   String state = "";
@@ -252,7 +252,7 @@ JUnit으로 테스트 코드를 짤 때 함수마다 assert를 단 하나만 사
 
 하지만 목록 9-2는 어떨까? "출력이 XML이다"라는 assert문과 "특정 문자열을 포함한다"는 assert문을 하나로 병합하는 방식이 불합리해 보인다. 하지만 목록 9-7에서 보듯이 테스트를 쪼개 각자가 assert를 수행하면 된다. 
 
-######목록 9-7 SerializedPageResponderTest.java (단일 Assert)
+###### 목록 9-7 SerializedPageResponderTest.java (단일 Assert)
 ```java 
 public void testGetPageHierarchyAsXml() throws Exception { 
   givenPages("PageOne", "PageOne.ChildOne", "PageTwo");
@@ -282,7 +282,7 @@ TEMPLATE METHOD 패턴을 사용하면 중복을 제거할 수 있다. given/whe
 #### 테스트당 개념 하나
 어쩌면 "테스트 함수마다 한 개념만 테스트하라"는 규칙이 더 낫겠다. 이것저것 잡다한 개념을 연속으로 테스트하는 긴 함수는 피한다. 목록 9-8은 바람직하지 못한 테스트 함수다. 독자적인 개념 세 개를 테스트하므로 독자적인 테스트 세 개로 쪼개야 마땅하다. 이를 한 함수로 몰아넣으면 **독자가 각 절이 거기에 존재하는 이유와 각 절이 테스트하는 개념을 모두 이해해야 한다.**  
 
-######목록 9-8
+###### 목록 9-8
 ```java
 /**
  * addMonth() 메서드를 테스트하는 장황한 코드
