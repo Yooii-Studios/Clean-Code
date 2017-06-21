@@ -16,7 +16,7 @@
 - [시스템에는 DSL(도메인 영역 언어)이 필요하다](#8)
 - [결론](#9)
 
-======================================================
+---
 
 > Complexity kills. It sucks the life out of developers, it makes products difficult to plan, build, and test.
 
@@ -408,43 +408,44 @@ AOP에 대한 더 자세한 내용은 [AspectJ], [Colyer], [Spring]를 참조하
 의도는 모든 레벨의 추상화에서 명확해야 한다. 이는 각각의 concern들을 POJO로 작성된 코드와 aspect-like 메커니즘을 통해 구성할 때 비로소 실현될 수 있다.  
 당신이 시스템을 디자인하든 독자적인 모듈을 디자인하든, *동작하는 범위에서 가장 간단한 것*을 사용하는 것을 잊어서는 안된다.
 
-======================================================
+---
 
-#### 참조 ####
-<a name="fn1">
-##### 1. Test Double #####
-</a>
-https://en.wikipedia.org/wiki/Test_double
-
-<a name="fn2">
-##### 2. Abstract Factory Pattern #####
-</a>
+#### 참조 ####  
+<a name="fn1">  
+1. Test Double
+</a>  
+https://en.wikipedia.org/wiki/Test_double  
+      
+<a name="fn2">  
+2. Abstract Factory Pattern
+</a>  
 A factory is the location of a concrete class in the code at which objects are constructed. The intent in employing the pattern is to insulate the creation of objects from their usage and to create families of related objects without having to depend on their concrete classes.[2]This allows for new derived types to be introduced with no change to the code that uses the base class.
 Use of this pattern makes it possible to interchange concrete implementations without changing the code that uses them, even at runtime. However, employment of this pattern, as with similar design patterns, may result in unnecessary complexity and extra work in the initial writing of code. Additionally, higher levels of separation and abstraction can result in systems which are more difficult to debug and maintain.  
-참조: https://en.m.wikipedia.org/wiki/Abstract_factory_pattern
-
-<a name="fn3">
-##### 3. Dependency Injection and Inversion of Control #####
-</a>
-http://greatkim91.tistory.com/41 
-
-<a name="fn4">
-##### 4. AOP #####
-</a>
-읽기 좋은 정리: http://isstory83.tistory.com/90  
-그림: http://addio3305.tistory.com/86  
-사전적 설명(개요): http://seulkom.tistory.com/18  
-
-<a name="fn5">
-##### 5. 해당 섹션은 독자의 이해를 돕기 위해 역자 임의로 추가된 섹션 #####
-</a>
-
-<a name="fn6">
-##### 6. Java Proxy API sample #####
-</a>
-https://github.com/crowjdh/DatabaseProxySample
-
-<a name="fn7">
-##### 7. Spring Framework example #####
-</a>
-https://github.com/crowjdh/DatabaseProxyUsingAOPSample 
+참조: https://en.m.wikipedia.org/wiki/Abstract_factory_pattern  
+      
+<a name="fn3">  
+3. Dependency Injection and Inversion of Control
+</a>  
+http://greatkim91.tistory.com/41   
+      
+<a name="fn4">  
+4. AOP
+</a>  
+읽기 좋은 정리: http://isstory83.tistory.com/90    
+그림: http://addio3305.tistory.com/86    
+사전적 설명(개요): http://seulkom.tistory.com/18    
+          
+<a name="fn5">  
+5. 해당 섹션은 독자의 이해를 돕기 위해 역자 임의로 추가된 섹션
+</a>  
+     
+<a name="fn6">  
+6. Java Proxy API sample
+</a>  
+https://github.com/crowjdh/DatabaseProxySample  
+       
+<a name="fn7">  
+7. Spring Framework example
+</a>  
+https://github.com/crowjdh/DatabaseProxyUsingAOPSample   
+       
