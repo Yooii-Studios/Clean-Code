@@ -435,7 +435,7 @@ http://greatkim91.tistory.com/41
 <br/>  
 읽기 좋은 정리: http://isstory83.tistory.com/90<br/>  
 그림: http://addio3305.tistory.com/86<br/>    
-사전적 설명(개요): http://seulkom.tistory.com/18<br/>
+사전적 설명(개요): http://seulkom.tistory.com/18
 <br /><br/>
 <a name="fn5">  
 5. 해당 섹션은 독자의 이해를 돕기 위해 역자 임의로 추가된 섹션
