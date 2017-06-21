@@ -9,7 +9,7 @@
 - Null을 넘기지 마라
 - 결론
 
-======================================================
+---
 
 > 오류 처리는 중요하다. 하지만 로직을 헷갈리게 만드는 오류처리는 나쁘다.  
 (Error handling is important, but if it obscures logic, it's wrong.)
@@ -328,7 +328,7 @@ public class MetricsCalculator {
 ## 결론 ##
 깨끗한 코드와 견고한 코드는 대립되는 목표가 아니다. 예외처리를 로직에서 제거하면 각각에 대해 독립적인 사고가 가능해진다.
 
-======================================================
+---
 
 #### 참조 ####
 ##### 1. Checked exception VS Unchecked Exception #####
