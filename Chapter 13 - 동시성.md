@@ -29,7 +29,7 @@
     - [자동화](#10-7-2)
 - [결론](#11)
 
-======================================================
+---
 
 > “Objects are abstractions of processing. Threads are abstractions of schedule.”
 <p align="right">—James O. Coplien</p>
@@ -475,51 +475,33 @@ Concurrent 코드는 제대로 작성하기 어렵다. 이해하기 쉬운 코�
 
 Clean한 접근 방식을 사용한다면, 제대로 된 코드를 만들어낼 가능성은 급격히 올라갈 것이다.
 
-======================================================
+---
 
-#### 참조 ####
-<a name="fn1">
-##### 1. Concurrency #####
-</a>
+#### 참조
+##### <a name="fn1">1. Concurrency</a>
 https://en.wikipedia.org/wiki/Concurrency_(computer_science)
 
-<a name="fn2">
-##### 2. One-off #####
-</a>
+##### <a name="fn2">2. One-off</a>
 사전적 의미는 "한 번만 일어나는"이며, 여기에서는 "고칠 수 없는"이라는 의미도 포함하고 있다.
 
-<a name="fn3">
-##### 3. 더 자세한 내용은 원문의 [부록 A: Concurrency II]를 참고하길 바란다. #####
-</a>
+##### <a name="fn3">3. 더 자세한 내용은 원문의 [부록 A: Concurrency II]를 참고하길 바란다.</a>
 
-<a name="fn4">
-##### 4. SRP(Single Responsibility Principle) #####
-</a>
+##### <a name="fn4">4. SRP(Single Responsibility Principle)</a>
 참조: https://en.wikipedia.org/wiki/Single_responsibility_principle
 
-<a name="fn5">
-##### 5. Critical Section: 둘 이상의 스레드가 동시에 접근해서는 안되는 공유 자원(자료 구조 또는 장치)을 접근하는 코드의 일부 #####
-</a>
+##### <a name="fn5">5. Critical Section: 둘 이상의 스레드가 동시에 접근해서는 안되는 공유 자원(자료 구조 또는 장치)을 접근하는 코드의 일부</a>
 출처: https://ko.m.wikipedia.org/wiki/%EC%9E%84%EA%B3%84_%EA%B5%AC%EC%97%AD
 
-<a name="fn6">
-##### 6. Livelock #####
-</a>
+##### <a name="fn6">6. Livelock</a>
 실생활에서 발생할 수 있는 상황을 예로 들면 아래와 같다.  
 두 사람이 좁은 길목에서 만나 서로 비켜가기 위해 한 쪽으로 걷는다. 하지만 우연히도 두 사람은 계속 같은 방향으로 피하게 된다. 따라서 두 사람 모두 앞으로 진행하지 못하게 된다.  
 출처: http://stackoverflow.com/a/6155978/2279149
 
-<a name="fn7">
-##### 7. Test Double: 테스트용으로 만들어진 비교적 단순한 구조를 가지는 객체 #####
-</a>
+##### <a name="fn7">7. Test Double: 테스트용으로 만들어진 비교적 단순한 구조를 가지는 객체</a>
 https://en.wikipedia.org/wiki/Test_double
 
-<a name="fn8">
-##### 8. Shotgun approach: 산탄총으로 목표를 향해 발사하는 것처럼 되는 대로 시도해 보는 방법 #####
-</a>
+##### <a name="fn8">8. Shotgun approach: 산탄총으로 목표를 향해 발사하는 것처럼 되는 대로 시도해 보는 방법</a>
 출처: http://dictionary.reference.com/browse/shotgun-approach
 
-<a name="fn9">
-##### 9. Aspect: Chapter 11의 AOP 참조 #####
-</a>
+##### <a name="fn9">9. Aspect: Chapter 11의 AOP 참조</a>
 참조: https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2011%20-%20시스템.md#4-2
