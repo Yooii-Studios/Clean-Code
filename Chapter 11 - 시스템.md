@@ -414,11 +414,12 @@ AOP에 대한 더 자세한 내용은 [AspectJ], [Colyer], [Spring]를 참조하
 <a name="fn1">  
 1. Test Double
 </a>  
-https://en.wikipedia.org/wiki/Test_double    
+<br/>https://en.wikipedia.org/wiki/Test_double    
 <br /><br/>  
 <a name="fn2">  
 2. Abstract Factory Pattern
 </a>  
+<br/>
 A factory is the location of a concrete class in the code at which objects are constructed. The intent in employing the pattern is to insulate the creation of objects from their usage and to create families of related objects without having to depend on their concrete classes.[2]This allows for new derived types to be introduced with no change to the code that uses the base class.
 Use of this pattern makes it possible to interchange concrete implementations without changing the code that uses them, even at runtime. However, employment of this pattern, as with similar design patterns, may result in unnecessary complexity and extra work in the initial writing of code. Additionally, higher levels of separation and abstraction can result in systems which are more difficult to debug and maintain.<br />
 참조: https://en.m.wikipedia.org/wiki/Abstract_factory_pattern  
@@ -434,7 +435,7 @@ http://greatkim91.tistory.com/41
 읽기 좋은 정리: http://isstory83.tistory.com/90<br/>  
 그림: http://addio3305.tistory.com/86<br/>    
 사전적 설명(개요): http://seulkom.tistory.com/18<br/>    
-<br /><br/>  
+<br /><br/>
 <a name="fn5">  
 5. 해당 섹션은 독자의 이해를 돕기 위해 역자 임의로 추가된 섹션
 </a>  
@@ -442,9 +443,9 @@ http://greatkim91.tistory.com/41
 <a name="fn6">  
 6. Java Proxy API sample
 </a>  
-https://github.com/crowjdh/DatabaseProxySample  
+<br/>https://github.com/crowjdh/DatabaseProxySample  
 <br /><br/>  
 <a name="fn7">  
 7. Spring Framework example
 </a>  
-https://github.com/crowjdh/DatabaseProxyUsingAOPSample   
+<br/>https://github.com/crowjdh/DatabaseProxyUsingAOPSample   
