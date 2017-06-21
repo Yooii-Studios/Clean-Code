@@ -35,7 +35,7 @@
 
 ## 작게 만들어라!
 
-####함수를 만들 때 최대한 ‘작게!’ 만들어라.
+#### 함수를 만들 때 최대한 ‘작게!’ 만들어라.
 ```java
 public static String renderPageWithSetupsAndTeardowns( PageData pageData, boolean isSuite) throws Exception {
 	boolean isTestPage = pageData.hasAttribute("Test"); 
@@ -59,7 +59,7 @@ public static String renderPageWithSetupsAndTeardowns( PageData pageData, boolea
 }
 ```
 
-####블록과 들여쓰기  
+#### 블록과 들여쓰기  
 중첩구조(if/else, while문 등)에 들어가는 블록은 한 줄이어야 한다. 각 함수 별 들여쓰기 수준이 2단을 넘어서지 않고,  각 함수가 명백하다면 함수는 더욱 읽고 이해하기 쉬워진다.
 
 
