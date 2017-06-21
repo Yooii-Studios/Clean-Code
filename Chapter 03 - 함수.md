@@ -213,6 +213,7 @@ public class UserValidator {
 try/catch를 사용하면 오류 처리 코드가 원래 코드에서 분리되므로 코드가 깔끔해 진다.
 
 #### Try/Catch 블록 뽑아내기  
+
 ```java
 if (deletePage(page) == E_OK) {
 	if (registry.deleteReference(page.name) == E_OK) {
@@ -228,7 +229,9 @@ if (deletePage(page) == E_OK) {
 	logger.log("delete failed"); return E_ERROR;
 }
 ```
+
 정상 작동과 오류 처리 동작을 뒤섞는 추한 구조이므로 if/else와 마찬가지로 블록을 별도 함수로 뽑아내는 편이 좋다.
+
 ````java
 public void delete(Page page) {
 	try {
@@ -248,9 +251,11 @@ private void logError(Exception e) {
 	logger.log(e.getMessage());
 }
 ```
+
 오류 처리도 한가지 작업이다.
 
 Error.java 의존성 자석
+
 ```java
 public enum Error { 
 	OK,
