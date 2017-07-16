@@ -170,19 +170,19 @@
 어쩌면 당신은 코드를 읽는 시간보다 작성하는 데에 더 많은 시간이 필요하다고 생각할지 모른다. 하지만 실상은 그 반대이다. 아래의 예를 보자.
 
 ```
-Bob enters the module.
-He scrolls down to the function needing change.
-He pauses, considering his options.
-Oh, he’s scrolling up to the top of the module to check the initialization of a variable. Now he scrolls back down and begins to type. 
-Ooops, he’s erasing what he typed!
-He types it again.
-He erases it again!
-He types half of something else but then erases that!
-He scrolls down to another function that calls the function he’s changing to see how it is called. 
-He scrolls back up and types the same code he just erased.
-He pauses.
-He erases that code again!
-He pops up another window and looks at a subclass. Is that function overridden? 
+Bob이 모듈을 열었다.
+수정이 필요한 함수로 스크롤한다.
+잠시 멈춘 뒤, 어떻게 할지 고민한다.
+음, 그가 모듈의 최상단으로 스크롤해 변수의 초기화를 확인한다. 그리고는 다시 돌아가 타이핑하기 시작한다.
+앗, 쓰고 있던 내용을 지운다!
+그 내용을 다시 적는다.
+적은 내용을 또 다시 지운다!
+다른 무언가를 적다가 또 다시 지운다!
+지금 수정하고 있는 함수를 부르는 다른 함수로 스크롤해 수정중인 함수가 어떻게 호출되는지 확인한다.
+다시 수정중인 함수로 돌아가서는, 방금 전에 지운 내용을 다시 적는다.
+잠시 멈춘다.
+적던 코드를 또 다시 지운다!
+다른 창을 띄워서 subclass를 확인한다. 이 함수 override된 함수인가? 
 ...
 ```
 
