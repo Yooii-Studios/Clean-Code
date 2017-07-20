@@ -3,7 +3,7 @@ Clean Code 스터디의 결과물 정리를 위해 만든 저장소입니다. �
 [https://kwosu87.gitbooks.io/clean-code/content/](https://kwosu87.gitbooks.io/clean-code/content/)
 
 ## 목차
-- [1장 - 깨끗한 코드(진행중)](https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2001%20-%20깨끗한%20코드.md)  
+- [1장 - 클린코드](https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2001%20-%20깨끗한%20코드.md) 
 - [2장 - 의미 있는 이름](https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2002%20-%20의미%20있는%20이름.md)  
 - [3장 - 함수](https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2003%20-%20함수.md)  
 - [4장 - 주석](https://github.com/Yooii-Studios/Clean-Code/blob/master/Chapter%2004%20-%20주석.md)  
