@@ -209,17 +209,20 @@ public class GuessStatisticsMessage {
         }
     }
 
-    private void thereAreManyLetters(int count) { number = Integer.toString(count);
+    private void thereAreManyLetters(int count) {
+        number = Integer.toString(count);
         verb = "are";
         pluralModifier = "s";
     }
 
-    private void thereIsOneLetter() { number = "1";
+    private void thereIsOneLetter() {
+        number = "1";
         verb = "is";
         pluralModifier = "";
     }
 
-    private void thereAreNoLetters() { number = "no";
+    private void thereAreNoLetters() {
+        number = "no";
         verb = "are";
         pluralModifier = "s";
     }
