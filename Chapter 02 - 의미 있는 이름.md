@@ -70,7 +70,7 @@ public List<int[]> getFlaggedCells() {
 - 클래스 이름에 Info, Data와 같은 불용어를 붙이지 말자. 정확한 개념 구분이 되지 않음  
 - 예시  
  - `Name` VS `NameString`
- - `getActiveAccount()` VS `getActiveAccounts()` VS `getActiveAccountInfo()`
+ - `getActiveAccount()` VS `getActiveAccounts()` VS `getActiveAccountInfo()` (이들이 혼재할 경우 서로의 역할을 정확히 구분하기 어렵다.)
  - `money` VS `moneyAmount`
  - `message` VS `theMessage`
 
