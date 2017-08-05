@@ -70,7 +70,7 @@ public List<int[]> getFlaggedCells() {
 - 클래스 이름에 Info, Data와 같은 불용어를 붙이지 말자. 정확한 개념 구분이 되지 않음  
 - 예시  
  - `Name` VS `NameString`
- - `getActiveAccount()` VS `getActiveAccounts()` VS `getActiveAccountInfo()`
+ - `getActiveAccount()` VS `getActiveAccounts()` VS `getActiveAccountInfo()` (이들이 혼재할 경우 서로의 역할을 정확히 구분하기 어렵다.)
  - `money` VS `moneyAmount`
  - `message` VS `theMessage`
 
@@ -126,9 +126,10 @@ class Customer {
 ## 메서드 이름  
 - 동사 혹은 동사구를 사용하라.(postPayment, deletePayment, deletePage, save 등)  
 - 접근자, 변경자, 조건자는 get, set, is로 시작하자.  (추가: should, has 등도 가능)
-- 생성자를 오버로드할 경우 정적 팩토리 메서드를 사용하고 해당 생성자를 private으로 선언한다. 첫번째 보다 두 번째 방법이 더 좋다.
+- 생성자를 오버로드할 경우 정적 팩토리 메서드를 사용하고 해당 생성자를 private으로 선언한다.
 
 ```java 
+// 첫번째 보다 두 번째 방법이 더 좋다.  
 Complex fulcrumPoint = new Complex(23.0);  
 Complex fulcrumPoint = Complex.FromRealNumber(23.0);  
 ```
@@ -167,14 +168,18 @@ private void printGuessStatistics(char candidate, int count) {
     String number;
     String verb;
     String pluralModifier;
-    if (count == 0) {
-        number = "no";
-        verb = "are"; pluralModifier = "s";
-    }  else if (count == 1) { number = "1";
-        verb = "is"; pluralModifier = "";
+    if (count == 0) {  
+        number = "no";  
+        verb = "are";  
+        pluralModifier = "s";  
+    }  else if (count == 1) {
+        number = "1";  
+        verb = "is";  
+        pluralModifier = "";  
     }  else {
-        number = Integer.toString(count); verb = "are";
-        pluralModifier = "s";
+        number = Integer.toString(count);  
+        verb = "are";  
+        pluralModifier = "s";  
     }
     String guessMessage = String.format("There %s %s %s%s", verb, number, candidate, pluralModifier );
 
@@ -204,17 +209,20 @@ public class GuessStatisticsMessage {
         }
     }
 
-    private void thereAreManyLetters(int count) { number = Integer.toString(count);
+    private void thereAreManyLetters(int count) {
+        number = Integer.toString(count);
         verb = "are";
         pluralModifier = "s";
     }
 
-    private void thereIsOneLetter() { number = "1";
+    private void thereIsOneLetter() {
+        number = "1";
         verb = "is";
         pluralModifier = "";
     }
 
-    private void thereAreNoLetters() { number = "no";
+    private void thereAreNoLetters() {
+        number = "no";
         verb = "are";
         pluralModifier = "s";
     }
