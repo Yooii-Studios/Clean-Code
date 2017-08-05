@@ -83,6 +83,7 @@ service필드에 대입해야 하며, 이는 기존의 runtime 로직에 관여�
 #### 팩토리 기법 ####
 <p align="center"><img src="/images/figure 11-2.png" width="500" /></p>
 객체의 생성 시기를 직접 결정하려면 main에서 완성된 객체를 던져주기 보다 factory 객체를 만들어서 던져주자.
+
 만약 자세한 구현을 숨기고 싶다면 Abstract Factory 패턴을 사용하자.<sup> [2](#fn2)</sup>
 
 <a name="2-3"></a>
