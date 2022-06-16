@@ -1,6 +1,6 @@
 ## Clean Code
 
-Clean Code 스터디의 결과물을 정리하기 위해 만든 저장소입니다. 다음 gitbook 링크에서 편하게 살펴보실 수 있습니다.[https://app.gitbook.com/@innocarpe/s/clean-code](https://app.gitbook.com/@innocarpe/s/clean-code)
+Clean Code 스터디의 결과물을 정리하기 위해 만든 저장소입니다. [gitbook 링크](https://app.gitbook.com/@innocarpe/s/clean-code)에서 편하게 살펴보실 수 있습니다.
 
 하단의 목차는 이 레포 내의 탐색을 위해 제공되고 있습니다. 
 
