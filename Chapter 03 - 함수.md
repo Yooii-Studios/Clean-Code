@@ -69,6 +69,8 @@ public static String renderPageWithSetupsAndTeardowns( PageData pageData, boolea
 
 지정된 함수 이름 아래에서 추상화 수준이 하나인 단계만 수행한다면 그 함수는 한 가지 작업만 하는 것이다.
 
+함수가 한 가지 이상의 일을 하는지 확인할 수 있는 좋은 방법은, `했던 말을 거의 다시 되뇌이지 않는` 단계로 더 추상화할 수 있는지 확인하는 것이다.
+
 #### 함수 내 섹션  
 함수를 여러 섹션으로 나눌 수 있다면 그 함수는 여러작업을 하는 셈이다.
 
