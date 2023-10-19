@@ -252,9 +252,12 @@ private void logError(Exception e) {
 }
 ```
 
-오류 처리도 한가지 작업이다.
+## 오류 처리도 한가지 작업이다.
+함수는 한 가지 일만 해야 한다. 에러처리도 한 가지 일이므로 에러처리를 하는 함수는 에러처리 외의 일을 해서는 안된다.
 
-Error.java 의존성 자석
+만약 함수에 `try` 키워드가 존재한다면, 이 키워드가 이 함수의 첫 키워드여야 하며 `catch/finally` 뒤에는 어떤 코드도 없어야 함을 의미한다.
+
+## Error.java 의존성 자석
 
 ```java
 public enum Error { 
