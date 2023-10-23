@@ -215,7 +215,7 @@ if (module.getDependSubsystems().contains(subSysMod.getSubSystem()))
 주석을 제거하고 다시 표현하면 다음과 같다.
 
 ```java
-ArrayList moduleDependencies = smodule.getDependSubSystems();
+ArrayList moduleDependees = smodule.getDependSubsystems();
 String ourSubSystem = subSysMod.getSubSystem();
 if (moduleDependees.contains(ourSubSystem))
 ```
@@ -230,7 +230,7 @@ if (moduleDependees.contains(ourSubSystem))
 이런 주석은 가독성만 낮추므로 제거해야 마땅하다. 특히 뒷부분에 슬래시로 이어지는 잡음은 제거하는 편이 좋다. 너무 자주 사용하지 않을때만 배너는 눈에 띄며 주위를 환기한다. 그러므로 반드시 필요할 때 아주 드몰게 사용하는 편이 좋다. 
 
 #### 닫는 괄호에 다는 주석    
-중첩이 심하고 장황한 함수라면 의미가 있을지도 모르지만 작고 캡슐화면 함수에는 잡음일 뿐이다. 그러므로 닫는 괄호에 주석을 달아야겠다는 생각이 든다면 대신에 함수를 줄이려 시도하자. 
+중첩이 심하고 장황한 함수라면 의미가 있을지도 모르지만 작고 캡슐화된 함수에는 잡음일 뿐이다. 그러므로 닫는 괄호에 주석을 달아야겠다는 생각이 든다면 대신에 함수를 줄이려 시도하자. 
 
 #### 공로를 돌리거나 저자를 표시하는 주석    
 소스 코드 관리 시스템은 누가 언제 무엇을 추가했는지 귀신처럼 기억하기 때문에 저자 이름으로 코드를 오염시킬 필요가 없음. 
